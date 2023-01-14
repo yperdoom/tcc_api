@@ -15,5 +15,7 @@ api.all('/*', authentication)
 api.get('/ping', apiController.ping)
 api.get('/status', apiController.status)
 api.post('/user', userController.create)
+api.put('/user', userController.modify)
+api.delete('/user', userController.delete)
 
 module.exports = api

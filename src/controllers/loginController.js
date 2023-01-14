@@ -1,4 +1,4 @@
-const users = require('../../config/database/models/users')
+const userModel = require('../../config/database/models/user')
 
 module.exports.login = async (requisition, response, next) => {
   let responseMessage = {sucess: false, message:'search failed'}
@@ -15,7 +15,7 @@ module.exports.login = async (requisition, response, next) => {
     }
   }
 
-  const res = await users.login(requisition.body)
+  const res = await userModel.login(requisition.body)
 
   if (!res) {
     responseMessage = {sucess: false, message:'data not found'}

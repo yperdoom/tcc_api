@@ -1,10 +1,13 @@
-const users = require('./models/users')
-const clients = require('./models/client')
+const userModel = require('./models/user')
+const clientModel = require('./models/client')
 
 module.exports.init = async () => {
 
-  const res = await users.createTable()
-  console.log(res)
+  const user = await userModel.createTable()
+  const client = await clientModel.createTable()
+  
+  console.log(user)
+  console.log(client)
 
-  return res
+  return 'sim'
 }
