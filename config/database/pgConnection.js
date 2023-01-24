@@ -34,7 +34,7 @@ module.exports.connect = async () => {
 module.exports.close = async () => {
   try {
     delete global.connect
-    return 'disconectado'
+    return 'desconectado'
   } catch (error) {
     console.log(error)
   }
