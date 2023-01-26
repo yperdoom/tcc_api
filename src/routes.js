@@ -13,6 +13,7 @@ api.all('/*', authentication)
 
 api.get('/ping', apiController.ping)
 api.get('/status', apiController.status)
+api.get('/user/:user_id', userController.getUser)
 api.get('/user', userController.getAll)
 api.post('/user', userController.create)
 api.put('/user/:user_id', userController.modify)

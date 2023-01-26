@@ -22,8 +22,5 @@ module.exports = async (user_id, body) => {
 
   await database.close()
 
-  // if (res.rowCount > 0) {
-  //   return true
-  // }
   return res
 }

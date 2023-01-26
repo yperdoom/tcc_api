@@ -4,10 +4,10 @@ const verifyFields = require('../../config/verify/verifyFields')
 const crypt = require('../../config/auth/functions/password')
 
 const createUser = require('../services/user/createUser')
+const getUser = require('../services/user/getUser')
 const getAllUsers = require('../services/user/getAllUsers')
 const modifyUser = require('../services/user/modifyUser')
 const deleteUser = require('../services/user/deleteUser')
-const getUserByEmail = require('../services/user/getUserByEmail')
 
 const createClient = require('../services/client/createClient')
 
@@ -19,8 +19,8 @@ module.exports.create = async (requisition, response, next) => {
   if (!fields.sucess) {
     return response.send(fields)
   }
-  const verifyEmailExists = await getUserByEmail(body.email)
-  console.log(verifyEmailExists)
+
+  const verifyEmailExists = await getUser('email', body.email)
   if (verifyEmailExists) {
     return response.send({sucess: false, message:'email already registered'})
   }
@@ -83,7 +83,7 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send({sucess: false, message:"it's not's possible to modify a user"})
   }
   
-  return response.send({sucess: true, message:'user modified'})
+  return response.send({sucess: true, message:'user modified', body: user})
 }
 
 module.exports.delete = async (requisition, response, next) => {
@@ -96,6 +96,18 @@ module.exports.delete = async (requisition, response, next) => {
   }
 
   response.send({sucess: true, message:'user deleted'})
+}
+
+module.exports.getUser = async (requisition, response, next) => {
+  const { user_id } = requisition.params
+
+  const user = await getUser('user_id', user_id)
+
+  if (!user) {
+    return response.send({sucess: false, message:"user not found"})
+  }
+
+  response.send({sucess: true, message:'user founded', body: user})
 }
 
 module.exports.getAll = async (requisition, response, next) => {
@@ -117,7 +129,7 @@ module.exports.login = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const user = await getUserByEmail(body.email)
+  const user = await getUser('email', body.email)
 
   console.log(user)
   if (!user) {

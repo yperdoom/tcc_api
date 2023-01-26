@@ -19,7 +19,7 @@ const global = {}
 
 module.exports.connect = async () => {
   if(global.connection){
-    console.log('conexao já existente')
+    //conexao já existe
     return global.connection.connect()
   }
   try {

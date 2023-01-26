@@ -8,7 +8,8 @@ module.exports = async (user_id, body) => {
     const query = {
       text: `UPDATE users
         SET name=$2, password=$3, phone=$4, city=$5, state=$6, birthday=$7, updated_at=$8
-        WHERE user_id = $1`,
+        WHERE user_id = $1
+        RETURNING *`,
       values: [user_id, body.name, body.password, body.phone, body.city, body.state, body.birthday, body.updated_at]
     }
 
@@ -23,8 +24,5 @@ module.exports = async (user_id, body) => {
 
   await database.close()
 
-  if (res.rowCount > 0) {
-    return true
-  }
-  return false
+  return res.rows
 }
