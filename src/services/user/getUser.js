@@ -11,7 +11,6 @@ module.exports = async (field, value) => {
     }
 
     res = await client.query(query)
-
   } catch (error) {
     res = null
     console.log(error.message)

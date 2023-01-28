@@ -1,6 +1,6 @@
 const database = require('../../../config/database/pgConnection')
 
-module.exports = async (user_id, body) => {
+module.exports = async (userId, body) => {
   const client = await database.connect()
   let res = {}
 
@@ -8,11 +8,10 @@ module.exports = async (user_id, body) => {
     const query = {
       text: `DELETE FROM users
         WHERE user_id = $1`,
-      values: [user_id]
+      values: [userId]
     }
 
     res = await client.query(query)
-
   } catch (error) {
     res = null
     console.log(error.message)

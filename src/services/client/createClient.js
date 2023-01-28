@@ -13,7 +13,6 @@ module.exports = async (body) => {
     }
 
     res = await client.query(query)
-
   } catch (error) {
     console.log(error.message)
   }

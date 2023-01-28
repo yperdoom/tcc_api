@@ -8,7 +8,6 @@ module.exports = async () => {
     const query = 'SELECT * FROM clients'
 
     res = await client.query(query)
-
   } catch (error) {
     console.log(error.message)
   }

@@ -1,22 +1,26 @@
-
-const api = require('../config/apiConfiguration')
+let api = require('../config/apiConfiguration')
 
 // import controllers and auth
 const { authentication } = require('../config/auth/authentication')
-const apiController = require('./controllers/apiController')
-const userController = require('./controllers/userController')
 
-api.get('/init', apiController.init)
-api.post('/login', userController.login)
+const { readdir } = require('fs').promises
+const routesDirectory = './src/routes'
 
 api.all('/*', authentication)
 
-api.get('/ping', apiController.ping)
-api.get('/status', apiController.status)
-api.get('/user/:user_id', userController.getUser)
-api.get('/user', userController.getAll)
-api.post('/user', userController.create)
-api.put('/user/:user_id', userController.modify)
-api.delete('/user/:user_id', userController.delete)
+const loadingRouteFiles = async (files) => {
+  if (!files) {
+    files = []
+  }
+
+  const listFiles = await readdir(routesDirectory)
+  for (const file of listFiles) {
+    const fileImport = require(`./routes/${file}`)
+    api = fileImport(api)
+  }
+  return listFiles
+}
+
+loadingRouteFiles()
 
 module.exports = api

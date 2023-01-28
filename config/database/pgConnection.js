@@ -18,8 +18,7 @@ const pool = new Pool({
 const global = {}
 
 module.exports.connect = async () => {
-  if(global.connection){
-    //conexao já existe
+  if (global.connection) { // conexao já existe
     return global.connection.connect()
   }
   try {

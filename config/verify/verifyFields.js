@@ -1,8 +1,8 @@
 
 module.exports = (body, fields) => {
-  const response = {sucess: true}
+  const response = { sucess: true }
 
-  for (field of fields ) {
+  for (const field of fields) {
     if (!body[field]) {
       response.message = `${field} not found`
       response.sucess = false
