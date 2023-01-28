@@ -118,7 +118,7 @@ module.exports.getAll = async (requisition, response, next) => {
     return response.send({sucess: false, message:'Users not found'})
   }
 
-  return response.send({sucess: true, message:'Users located', body: users})
+  return response.send({sucess: true, message:'Users located', body: {users_found: users.length, users: users}})
 }
 
 module.exports.login = async (requisition, response, next) => {
