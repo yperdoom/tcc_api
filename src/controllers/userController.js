@@ -1,8 +1,7 @@
-const { DateTime } = require('luxon')
-
 const verifyFields = require('../../config/verify/verifyFields')
 const crypt = require('../../config/auth/functions/password')
 
+const getTimeNow = require('../services/api/getTimeNow')
 const createUser = require('../services/user/createUser')
 const getUser = require('../services/user/getUser')
 const getAllUsers = require('../services/user/getAllUsers')
@@ -25,15 +24,15 @@ module.exports.create = async (requisition, response, next) => {
     return response.send({ sucess: false, message: 'email already registered' })
   }
 
-  body.created_at = DateTime.now().setZone('America/Sao_Paulo')
-  body.updated_at = DateTime.now().setZone('America/Sao_Paulo')
+  body.created_at = getTimeNow()
+  body.updated_at = getTimeNow()
 
   if (!body.scope) {
     body.scope = 'user'
   }
 
   if (body.scope === 'client') {
-    const clientFields = verifyFields(body.client, ['age', 'height', 'weigth', 'fat_percentage', 'sex'])
+    const clientFields = verifyFields(body.client, ['age', 'height', 'weight', 'fat_percentage', 'sex'])
 
     if (!clientFields.sucess) {
       return response.send(clientFields)
@@ -48,8 +47,8 @@ module.exports.create = async (requisition, response, next) => {
     return response.send({ sucess: false, message: "it's not's possible to create a user account" })
   }
   if (body.scope === 'client') {
-    body.client.created_at = body.created_at
-    body.client.updated_at = body.updated_at
+    body.client.created_at = getTimeNow()
+    body.client.updated_at = getTimeNow()
     body.client.user_id = user.user_id
 
     const client = await createClient(body.client)
@@ -58,7 +57,7 @@ module.exports.create = async (requisition, response, next) => {
       return response.send({ sucess: false, message: "it's not's possible to create a client account" })
     }
 
-    return response.send({ sucess: true, message: 'user and client created', body: { ...user, client } })
+    return response.send({ sucess: true, message: 'user and client created', body: { ...user, client: client } })
   }
 
   return response.send({ sucess: true, message: 'user created', body: user })
@@ -74,7 +73,7 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.updated_at = DateTime.now().setZone('America/Sao_Paulo')
+  body.updated_at = getTimeNow()
   body.password = await crypt.hashPassword(body.password)
 
   const user = await modifyUser(userId, body)

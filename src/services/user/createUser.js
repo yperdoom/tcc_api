@@ -22,5 +22,8 @@ module.exports = async (body) => {
 
   await database.close()
 
-  return res.rows
+  if (res.rows) {
+    return res.rows[0]
+  }
+  return null
 }
