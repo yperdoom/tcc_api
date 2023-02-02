@@ -52,13 +52,13 @@ module.exports.create = async (requisition, response, next) => {
     body.client.updated_at = getTimeNow()
     body.client.user_id = user.user_id
 
-    const client = await createClient(body.client)
+    const dataClient = await createClient(body.client)
 
-    if (!client) {
+    if (!dataClient) {
       return response.send({ sucess: false, message: "it's not's possible to create a client account" })
     }
 
-    return response.send({ sucess: true, message: 'user and client created', body: { ...user, client: client } })
+    return response.send({ sucess: true, message: 'user and client created', body: { ...user, client: dataClient } })
   }
 
   return response.send({ sucess: true, message: 'user created', body: user })
