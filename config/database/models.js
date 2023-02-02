@@ -1,12 +1,21 @@
-const userModel = require('./models/user')
-const clientModel = require('./models/client')
+
+const { readdir } = require('fs').promises
+const routesDirectory = './config/database'
 
 module.exports.init = async () => {
-  const user = await userModel.createTable()
-  const client = await clientModel.createTable()
+  const loadingModelsFiles = async (files) => {
+    if (!files) {
+      files = []
+    }
 
-  console.log(user)
-  console.log(client)
+    const listFiles = await readdir(routesDirectory)
+    for (const file of listFiles) {
+      const fileImport = require(`./models/${file}`)
+      await fileImport.createTable()
+    }
+    return listFiles
+  }
 
+  loadingModelsFiles()
   return 'sim'
 }
