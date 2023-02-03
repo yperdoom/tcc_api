@@ -10,20 +10,20 @@ module.exports.createTable = async () => {
       description varchar(60) NOT NULL,
       type varchar(30) NOT NULL,
       color varchar(20) NOT NULL,
-      weight integer NOT NULL,
-      portion integer,
-      mililiter integer,
-      calorie double NOT NULL,
-      protein double NOT NULL,
-      lipid double NOT NULL,
-      carbohydrate double NOT NULL,
+      weight int NOT NULL,
+      portion int,
+      mililiter int,
+      calorie numeric(3,2) NOT NULL,
+      protein numeric(3,2) NOT NULL,
+      lipid numeric(3,2) NOT NULL,
+      carbohydrate numeric(3,2) NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
-      PRIMARY KEY (user_id)
+      PRIMARY KEY (food_id)
     );`
   )
-  console.log(create)
-
   client.release()
   await database.close()
+
+  return create
 }

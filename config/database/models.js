@@ -1,21 +1,35 @@
 
-const { readdir } = require('fs').promises
-const routesDirectory = './config/database'
+const User = require('./models/User')
+const Client = require('./models/Client')
+const Food = require('./models/Food')
+const Meal = require('./models/Meal')
+const Prescription = require('./models/Prescription')
 
 module.exports.init = async () => {
-  const loadingModelsFiles = async (files) => {
-    if (!files) {
-      files = []
-    }
+  const response = await _initTables()
 
-    const listFiles = await readdir(routesDirectory)
-    for (const file of listFiles) {
-      const fileImport = require(`./models/${file}`)
-      await fileImport.createTable()
+  if (response.sucess) {
+    return { sucess: true }
+  }
+  return response
+}
+
+const _initTables = async () => {
+  try {
+    await User.createTable()
+    await Client.createTable()
+    await Food.createTable()
+    await Meal.createTable()
+    await Prescription.createTable()
+  } catch (error) {
+    return {
+      sucess: false,
+      message: error.message,
+      body: error
     }
-    return listFiles
   }
 
-  loadingModelsFiles()
-  return 'sim'
+  return {
+    sucess: true
+  }
 }

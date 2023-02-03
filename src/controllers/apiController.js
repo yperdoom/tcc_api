@@ -14,5 +14,9 @@ module.exports.status = async (requisition, response, next) => {
 module.exports.init = async (requisition, response, next) => {
   const res = await init()
 
-  response.send(res)
+  if (!res.sucess) {
+    response.send({ sucess: false, message: res.message, body: res.body })
+  }
+
+  response.send({ sucess: true, message: 'all tables were created successfully' })
 }
