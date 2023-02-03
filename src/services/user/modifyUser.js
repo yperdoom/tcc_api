@@ -10,7 +10,16 @@ module.exports = async (userId, body) => {
         SET name=$2, password=$3, phone=$4, city=$5, state=$6, birthday=$7, updated_at=$8
         WHERE user_id = $1
         RETURNING *`,
-      values: [userId, body.name, body.password, body.phone, body.city, body.state, body.birthday, body.updated_at]
+      values: [
+        userId,
+        body.name,
+        body.password,
+        body.phone,
+        body.city,
+        body.state,
+        body.birthday,
+        body.updated_at
+      ]
     }
 
     res = await client.query(query)
