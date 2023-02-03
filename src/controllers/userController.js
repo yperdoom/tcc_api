@@ -99,7 +99,6 @@ module.exports.modify = async (requisition, response, next) => {
 
   const fields = verifyFields(body, [
     'name',
-    'password',
     'phone',
     'birthday'
   ])
@@ -109,7 +108,6 @@ module.exports.modify = async (requisition, response, next) => {
   }
 
   body.updated_at = getTimeNow()
-  body.password = await crypt.hashPassword(body.password)
 
   const user = await modifyUser(userId, body)
 

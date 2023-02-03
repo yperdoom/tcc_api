@@ -1,14 +1,13 @@
 const database = require('../../../config/database/pgConnection')
 
-module.exports = async (userId) => {
+module.exports = async (field, value) => {
   const client = await database.connect()
   let res = {}
 
   try {
     const query = {
-      text: `DELETE FROM users
-        WHERE user_id = $1`,
-      values: [userId]
+      text: `SELECT * FROM clients WHERE ${field} = $1`,
+      values: [value]
     }
 
     res = await client.query(query)
@@ -18,7 +17,8 @@ module.exports = async (userId) => {
   }
 
   client.release()
+
   await database.close()
 
-  return res
+  return res.rows[0]
 }

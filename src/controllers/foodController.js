@@ -2,16 +2,26 @@ const verifyFields = require('../services/factory/verifyFields')
 const getTimeNow = require('../services/api/getTimeNow')
 
 const createFood = require('../services/food/createFood')
+const modifyFood = require('../services/food/modifyFood')
+const deleteFood = require('../services/food/deleteFood')
+const getFood = require('../services/food/getFood')
+const getAllFoods = require('../services/food/getAllFoods')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
 
   const fields = verifyFields(body, [
     'name',
-    'email',
-    'password',
-    'phone',
-    'birthday'
+    'description',
+    'type',
+    'calorie',
+    'protein',
+    'lipid',
+    'carbohydrate'
+  ], [
+    'weight',
+    'portion',
+    'mililiter'
   ])
 
   if (!fields.sucess) {
@@ -38,10 +48,22 @@ module.exports.create = async (requisition, response, next) => {
 }
 
 module.exports.modify = async (requisition, response, next) => {
-  // const foodId = requisition.params.food_id
+  const foodId = requisition.params.food_id
   const { body } = requisition
 
-  const fields = { sucess: false } // verifyFields(body, ['name', 'password', 'phone', 'birthday'])
+  const fields = verifyFields(body, [
+    'name',
+    'description',
+    'type',
+    'calorie',
+    'protein',
+    'lipid',
+    'carbohydrate'
+  ], [
+    'weight',
+    'portion',
+    'mililiter'
+  ])
 
   if (!fields.sucess) {
     return response.send(fields)
@@ -49,7 +71,7 @@ module.exports.modify = async (requisition, response, next) => {
 
   body.updated_at = getTimeNow()
 
-  const food = 'sim' // criar service de atualizar alimento
+  const food = await modifyFood(foodId, body)
 
   if (!food) {
     return response.send({
@@ -66,9 +88,9 @@ module.exports.modify = async (requisition, response, next) => {
 }
 
 module.exports.delete = async (requisition, response, next) => {
-  // const foodId = requisition.params.food_id
+  const foodId = requisition.params.food_id
 
-  const food = 'sim'// criar service para deletar alimento
+  const food = await deleteFood(foodId)
 
   if (!food) {
     return response.send({
@@ -83,10 +105,10 @@ module.exports.delete = async (requisition, response, next) => {
   })
 }
 
-module.exports.getUser = async (requisition, response, next) => {
-  // const foodId = requisition.params.food_id
+module.exports.getFood = async (requisition, response, next) => {
+  const foodId = requisition.params.food_id
 
-  const food = 'sim'// criar service para pegar alimento
+  const food = await getFood('food_id', foodId)
 
   if (!food) {
     return response.send({
@@ -103,7 +125,7 @@ module.exports.getUser = async (requisition, response, next) => {
 }
 
 module.exports.getAll = async (requisition, response, next) => {
-  const foods = 'sim'// criar service para pegar todos os alimentos
+  const foods = await getAllFoods()
 
   if (!foods) {
     return response.send({
