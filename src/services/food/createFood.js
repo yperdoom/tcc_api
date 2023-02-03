@@ -7,18 +7,35 @@ module.exports = async (body) => {
   try {
     const query = {
       text: `INSERT INTO 
-        users(name, email, password, scope, phone, city, state, birthday, created_at, updated_at)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        foods(
+          name,
+          description,
+          type,
+          color,
+          weight,
+          portion,
+          mililiter,
+          calorie,
+          protein,
+          lipid,
+          carbohydrate,
+          created_at,
+          updated_at
+        )
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         RETURNING *`,
       values: [
         body.name,
-        body.email,
-        body.password,
-        body.scope,
-        body.phone,
-        body.city,
-        body.state,
-        body.birthday,
+        body.description,
+        body.type,
+        body.color,
+        body.weight,
+        body.portion,
+        body.mililiter,
+        body.calorie,
+        body.protein,
+        body.lipid,
+        body.carbohydrate,
         body.created_at,
         body.updated_at
       ]
