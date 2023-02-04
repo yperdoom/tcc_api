@@ -19,8 +19,6 @@ module.exports.createTable = async () => {
       FOREIGN KEY (client_id) REFERENCES clients(client_id)
     );`
   )
-  console.log('Prescription create database', create)
-
   client.release()
   await database.close()
 

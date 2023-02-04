@@ -1,3 +1,4 @@
+const logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/pgConnection')
 
 module.exports = async (field, value) => {
@@ -12,12 +13,11 @@ module.exports = async (field, value) => {
 
     res = await client.query(query)
   } catch (error) {
-    res = null
-    console.log(error.message)
+    res.rows[0] = null
+    logger.log({ type: 'error', message: error.message, body: error })
   }
 
   client.release()
-
   await database.close()
 
   return res.rows[0]

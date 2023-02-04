@@ -20,8 +20,6 @@ module.exports.createTable = async () => {
       PRIMARY KEY (user_id)
     );`
   )
-  console.log('User create database', create)
-
   client.release()
   await database.close()
 

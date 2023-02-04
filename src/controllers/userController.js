@@ -89,7 +89,11 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   if (body.scope === 'manager') {
-    const dataManager = await createManager(dataUser.user_id)
+    body.manager.created_at = getTimeNow()
+    body.manager.updated_at = getTimeNow()
+    body.manager.user_id = dataUser.user_id
+
+    const dataManager = await createManager(body.manager)
 
     if (!dataManager) {
       return response.send({

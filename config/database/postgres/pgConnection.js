@@ -1,5 +1,7 @@
+const saveLog = require('../../../src/services/factory/saveLog')
 const { Pool } = require('pg')
 require('dotenv/config')
+
 const {
   PGUSER,
   PGHOST,
@@ -26,7 +28,7 @@ module.exports.connect = async () => {
     global.connection = pool
     return pool.connect()
   } catch (error) {
-    console.log(error)
+    saveLog('pgconnection', 'error', error.message, error)
   }
 }
 
@@ -35,6 +37,6 @@ module.exports.close = async () => {
     delete global.connect
     return 'desconectado'
   } catch (error) {
-    console.log(error)
+    saveLog('pgconnection', 'error', error.message, error)
   }
 }

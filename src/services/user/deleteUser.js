@@ -1,3 +1,4 @@
+const logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/pgConnection')
 
 module.exports = async (userId) => {
@@ -7,18 +8,19 @@ module.exports = async (userId) => {
   try {
     const query = {
       text: `DELETE FROM users
-        WHERE user_id = $1`,
+        WHERE user_id = $1
+        RETURNING *`,
       values: [userId]
     }
 
     res = await client.query(query)
   } catch (error) {
-    res = null
-    console.log(error.message)
+    res.rows = null
+    logger.log({ type: 'error', message: error.message, body: error })
   }
 
   client.release()
   await database.close()
 
-  return res
+  return res.rows
 }
