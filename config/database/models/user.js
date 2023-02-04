@@ -11,6 +11,7 @@ module.exports.createTable = async () => {
       password varchar(80) NOT NULL,
       scope varchar(10) NOT NULL,
       phone varchar(15) NOT NULL,
+      document varchar(15),
       city varchar(30),
       state varchar(30),
       birthday date NOT NULL,

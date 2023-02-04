@@ -10,6 +10,7 @@ const modifyUser = require('../services/user/modifyUser')
 const deleteUser = require('../services/user/deleteUser')
 
 const createClient = require('../services/client/createClient')
+const createManager = require('../services/manager/createManager')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
@@ -47,7 +48,8 @@ module.exports.create = async (requisition, response, next) => {
       'height',
       'weight',
       'fat_percentage',
-      'sex'
+      'sex',
+      'manager_id'
     ])
 
     if (!clientFields.sucess) {
@@ -57,9 +59,9 @@ module.exports.create = async (requisition, response, next) => {
 
   body.password = await crypt.hashPassword(body.password)
 
-  const user = await createUser(body)
+  const dataUser = await createUser(body)
 
-  if (!user) {
+  if (!dataUser) {
     return response.send({
       sucess: false,
       message: "it's not's possible to create a user account"
@@ -68,7 +70,7 @@ module.exports.create = async (requisition, response, next) => {
   if (body.scope === 'client') {
     body.client.created_at = getTimeNow()
     body.client.updated_at = getTimeNow()
-    body.client.user_id = user.user_id
+    body.client.user_id = dataUser.user_id
 
     const dataClient = await createClient(body.client)
 
@@ -82,14 +84,31 @@ module.exports.create = async (requisition, response, next) => {
     return response.send({
       sucess: true,
       message: 'user and client created',
-      body: { ...user, client: dataClient }
+      body: { ...dataUser, client: dataClient }
+    })
+  }
+
+  if (body.scope === 'manager') {
+    const dataManager = await createManager(dataUser.user_id)
+
+    if (!dataManager) {
+      return response.send({
+        sucess: false,
+        message: "it's not's possible to create a manager account"
+      })
+    }
+
+    return response.send({
+      sucess: true,
+      message: 'user and manager created',
+      body: { ...dataUser, manager: dataManager }
     })
   }
 
   return response.send({
     sucess: true,
     message: 'user created',
-    body: user
+    body: dataUser
   })
 }
 

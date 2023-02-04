@@ -1,5 +1,6 @@
 
 const User = require('./models/User')
+const Manager = require('./models/Manager')
 const Client = require('./models/Client')
 const Food = require('./models/Food')
 const Meal = require('./models/Meal')
@@ -17,6 +18,7 @@ module.exports.init = async () => {
 const _initTables = async () => {
   try {
     await User.createTable()
+    await Manager.createTable()
     await Client.createTable()
     await Food.createTable()
     await Meal.createTable()

@@ -12,10 +12,12 @@ module.exports.createTable = async () => {
       fat_percentage numeric(2,2) NOT NULL,
       sex varchar(15) NOT NULL,
       user_id int NOT NULL,
+      manager_id int NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (client_id),
       FOREIGN KEY (user_id) REFERENCES users(user_id)
+      FOREIGN KEY (manager_id) REFERENCES managers(manager_id)
     );`
   )
   client.release()
