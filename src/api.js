@@ -13,5 +13,5 @@ const logger = require('./controllers/loggerController')
 const api = require('./routes')
 
 api.listen(PORT, () => {
-  logger.log({ message: `Api rodando na porta: ${PORT}.` })
+  logger.log(`Api rodando na porta: ${PORT}.`)
 })

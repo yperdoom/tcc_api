@@ -1,4 +1,4 @@
-const { init } = require('../../config/database/models')
+const { init } = require('../../config/database/postgres/models')
 
 require('dotenv/config')
 const { API_IN_FUNCTION } = process.env

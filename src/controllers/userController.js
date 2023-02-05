@@ -1,7 +1,7 @@
 const crypt = require('../../config/auth/functions/password')
 
 const verifyFields = require('../services/factory/verifyFields')
-const getTimeNow = require('../services/api/getTimeNow')
+const getTimeNow = require('../services/factory/getTimeNow')
 
 const createUser = require('../services/user/createUser')
 const getUser = require('../services/user/getUser')
