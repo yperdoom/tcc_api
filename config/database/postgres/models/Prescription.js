@@ -13,10 +13,12 @@ module.exports.createTable = async () => {
       recommended_carbohydrate numeric(3,2) NOT NULL,
       meal_amount int NOT NULL,
       client_id int NOT NULL,
+      manager_id int NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (prescription_id),
-      FOREIGN KEY (client_id) REFERENCES clients(client_id)
+      FOREIGN KEY (client_id) REFERENCES clients(client_id),
+      FOREIGN KEY (manager_id) REFERENCES managers(manager_id)
     );`
   )
   client.release()

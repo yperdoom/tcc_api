@@ -16,7 +16,7 @@ module.exports.createTable = async () => {
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (client_id),
-      FOREIGN KEY (user_id) REFERENCES users(user_id)
+      FOREIGN KEY (user_id) REFERENCES users(user_id),
       FOREIGN KEY (manager_id) REFERENCES managers(manager_id)
     );`
   )

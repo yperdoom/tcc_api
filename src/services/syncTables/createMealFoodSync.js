@@ -1,27 +1,22 @@
 const logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
-module.exports = async (body) => {
+module.exports = async (mealId, foodId) => {
   const client = await database.connect()
   let res = {}
 
   try {
     const query = {
-      text: `INSERT INTO 
-        users(name, email, password, scope, phone, city, state, birthday, created_at, updated_at)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      text: `INSERT INTO
+        meal_food(
+          meal_id
+          food_id,
+        )
+        VALUES($1, $2)
         RETURNING *`,
       values: [
-        body.name,
-        body.email,
-        body.password,
-        body.scope,
-        body.phone,
-        body.city,
-        body.state,
-        body.birthday,
-        body.created_at,
-        body.updated_at
+        mealId,
+        foodId
       ]
     }
 

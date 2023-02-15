@@ -9,7 +9,7 @@ module.exports.createTable = async () => {
       meal_id int NOT NULL,
       food_id int NOT NULL,
       PRIMARY KEY (meal_food_id),
-      FOREIGN KEY (meal_id) REFERENCES meals(meal_id)
+      FOREIGN KEY (meal_id) REFERENCES meals(meal_id),
       FOREIGN KEY (food_id) REFERENCES foods(food_id)
     );`
   )

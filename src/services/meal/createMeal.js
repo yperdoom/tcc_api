@@ -20,7 +20,6 @@ module.exports = async (body) => {
           recommended_carbohydrate,
           carbohydrate,
           food_multiplier,
-          foods_ids
           created_at,
           updated_at
         )
