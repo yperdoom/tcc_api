@@ -1,10 +1,10 @@
 require('dotenv/config')
 const { SIZE_POPULATION } = process.env
 
-module.exports = (foods, population) => {
+module.exports = (foods, generation) => {
   const evaluation = []
 
-  population.forEach((chromosome, index) => {
+  generation.forEach((chromosome, index) => {
     let percentageSum = 0
 
     for (let foodIterator = 0; foodIterator < Math.floor(SIZE_POPULATION); foodIterator++) {
@@ -17,7 +17,7 @@ module.exports = (foods, population) => {
 
     if (Math.abs(percentageOfChromosome) >= 75) {
       return {
-        sucess: true,
+        success: true,
         chromosome,
         evaluation: evaluation[index]
       }
@@ -25,7 +25,7 @@ module.exports = (foods, population) => {
   })
 
   return {
-    sucess: false,
+    success: false,
     evaluation
   }
 }

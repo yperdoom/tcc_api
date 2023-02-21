@@ -1,4 +1,5 @@
 
+const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
 const getTimeNow = require('../services/factory/getTimeNow')
 
@@ -7,6 +8,8 @@ const createPrescription = require('../services/prescription/createPrescription'
 const createMeal = require('../services/meal/createMeal')
 const createPrescriptionMealSync = require('../services/syncTables/createPrescriptionMealSync')
 const createMealFoodSync = require('../services/syncTables/createMealFoodSync')
+
+const aiController = require('./aiController')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
@@ -69,21 +72,27 @@ module.exports.create = async (requisition, response, next) => {
 module.exports.adapter = async (requisition, response, next) => {
   const { body } = requisition
 
+  const fields = verifyFields(body, ['foods'])
+
+  if (!fields.sucess) {
+    return response.send(fields)
+  }
+
   body.created_at = getTimeNow()
   body.updated_at = getTimeNow()
 
-  const prescription = null // await adapter service
+  const prescription = aiController.newAdapter(body.foods)
 
   if (!prescription) {
     return response.send({
       sucess: false,
-      message: "it's not's possible to prescribe"
+      message: "it's not's possible to adapter prescribe"
     })
   }
 
   return response.send({
     sucess: true,
-    message: 'prescription created',
+    message: 'prescription adapted',
     body: prescription
   })
 }
