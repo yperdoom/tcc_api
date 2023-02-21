@@ -8,7 +8,7 @@ module.exports = (foods, population) => {
     let percentageSum = 0
 
     for (let foodIterator = 0; foodIterator < Math.floor(SIZE_POPULATION); foodIterator++) {
-      evaluation[index][foodIterator].diference = (chromosome[foodIterator] * 100) / foods[foodIterator].quant
+      evaluation[index][foodIterator].diference = (chromosome[foodIterator] * 100) / foods[foodIterator].quantity
 
       percentageSum += evaluation[index][foodIterator].diference
     }
