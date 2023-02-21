@@ -10,7 +10,7 @@ module.exports.createTable = async () => {
       description varchar(60) NOT NULL,
       type varchar(30) NOT NULL,
       color varchar(20) NOT NULL,
-      weight int NOT NULL,
+      weight int,
       portion int,
       mililiter int,
       calorie numeric(3,2) NOT NULL,
