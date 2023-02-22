@@ -16,8 +16,10 @@ module.exports.newAdapter = async (foods) => {
   }
 
   while (stopLoop === false) {
+    // mutar geração
+
     const evaluatedGeneration = evaluateGeneration(preparedFoods, generation)
-    if (evaluatedGeneration) {
+    if (evaluatedGeneration.success) {
       chromosome = evaluatedGeneration.evaluation
       stopLoop = true
     }
