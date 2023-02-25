@@ -16,7 +16,9 @@ module.exports.newAdapter = async (foods) => {
   }
 
   while (stopLoop === false) {
-    // mutar geração
+    // selecionar cromossomos da geração atual
+    // mutar cromossomos selecionados
+    // gerar uma nova geração
 
     const evaluatedGeneration = evaluateGeneration(preparedFoods, generation)
     if (evaluatedGeneration.success) {
