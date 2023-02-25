@@ -17,6 +17,9 @@ module.exports.newAdapter = async (foods) => {
 
   while (stopLoop === false) {
     // selecionar cromossomos da geração atual
+    //   roleta russa
+    //   seleção do mais apto
+
     // mutar cromossomos selecionados
     // gerar uma nova geração
 
