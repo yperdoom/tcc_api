@@ -4,14 +4,14 @@ const { EXPECTED_EVALUATION } = process.env
 // Função que irá avaliar a geração de cromossomos informada
 module.exports = (foods, generation) => {
   // Percorre a geração iterando por cada cromossomo presente nela
-  generation.forEach((individual, index) => {
+  generation.forEach((individual) => {
     // Variável que será usada para a soma de porcentagens
     let percentageSum = 0
 
     // Percorre por todos os alimentos, iterando por cada um deles
     for (let foodIterator = 0; foodIterator < foods.length; foodIterator++) {
       // Soma a diferença de porcentagem
-      percentageSum += (individual[foodIterator] * 100) / foods[foodIterator].quantity
+      percentageSum += (individual.chromosome[foodIterator] * 100) / foods[foodIterator].quantity
     }
 
     // Adiciona a média de diferença em porcentagem ao indivíduo
