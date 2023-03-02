@@ -2,13 +2,13 @@ const prepareQuantityFood = require('../services/food/prepareQuantityFood')
 const generateGeneration = require('../services/geneticAlgorithm/generateGeneration')
 const evaluateGeneration = require('../services/geneticAlgorithm/evaluateGeneration')
 
-module.exports.newAdapter = async (foods) => {
+module.exports.newAdapter = async (foods, prescription) => {
   let stopLoop = false
 
   let individual = null
   const preparedFoods = prepareQuantityFood(foods)
   const generation = generateGeneration(preparedFoods)
-  const evaluatedGeneration = evaluateGeneration(preparedFoods, generation)
+  const evaluatedGeneration = evaluateGeneration(preparedFoods, generation, prescription)
 
   if (evaluatedGeneration.success) {
     individual = evaluatedGeneration.individual
