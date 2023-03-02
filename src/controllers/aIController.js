@@ -5,13 +5,13 @@ const evaluateGeneration = require('../services/geneticAlgorithm/evaluateGenerat
 module.exports.newAdapter = async (foods) => {
   let stopLoop = false
 
-  let chromosome = null
+  let individual = null
   const preparedFoods = prepareQuantityFood(foods)
   const generation = generateGeneration(preparedFoods)
   const evaluatedGeneration = evaluateGeneration(preparedFoods, generation)
 
   if (evaluatedGeneration.success) {
-    chromosome = evaluatedGeneration.evaluation
+    individual = evaluatedGeneration.individual
     stopLoop = true
   }
 
@@ -25,10 +25,10 @@ module.exports.newAdapter = async (foods) => {
 
     const evaluatedGeneration = evaluateGeneration(preparedFoods, generation)
     if (evaluatedGeneration.success) {
-      chromosome = evaluatedGeneration.evaluation
+      individual = evaluatedGeneration.individual
       stopLoop = true
     }
   }
 
-  return chromosome
+  return individual
 }
