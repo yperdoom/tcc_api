@@ -18,6 +18,7 @@ module.exports.init = async () => {
 
 const _initTables = async () => {
   try {
+    // todo adicionar as tabelas de relacionamentos
     await User.createTable()
     await Manager.createTable()
     await Client.createTable()
