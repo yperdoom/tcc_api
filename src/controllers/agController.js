@@ -1,3 +1,6 @@
+require('dotenv/config')
+const { MAX_GENERATIONS } = process.env
+
 const prepareQuantityFood = require('../services/food/prepareQuantityFood')
 const generateGeneration = require('../services/geneticAlgorithm/generateGeneration')
 const evaluateGeneration = require('../services/geneticAlgorithm/evaluateGeneration')
@@ -20,7 +23,9 @@ module.exports.newAdapter = async (foods, meal) => {
     stopLoop = true
   }
 
-  while (stopLoop === false) {
+  let generationCounter = 0
+  while (stopLoop === false || generationCounter === MAX_GENERATIONS) {
+    generationCounter += 1
     generation.generation = sortGeneration(generation.generation)
     generation.generation = setRouletteRange(generation.generation)
     const newGeneration = []
