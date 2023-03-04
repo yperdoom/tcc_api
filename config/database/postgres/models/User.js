@@ -14,7 +14,7 @@ module.exports.createTable = async () => {
       document varchar(15),
       city varchar(30),
       state varchar(30),
-      birthday date NOT NULL,
+      birthday date,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (user_id)

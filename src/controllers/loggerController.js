@@ -43,7 +43,8 @@ module.exports = ({
       message.body = error.body
     }
     
-    console.log(color.red + message)
+    console.log(color.red)
+    console.log(message)
     console.log(color.reset)
   }
 })

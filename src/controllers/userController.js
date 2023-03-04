@@ -1,3 +1,4 @@
+const createTokenJWT = require('../../config/auth/functions/createTokenJWT')
 const crypt = require('../../config/auth/functions/password')
 
 const verifyFields = require('../services/factory/verifyFields')
@@ -234,9 +235,19 @@ module.exports.login = async (requisition, response, next) => {
     })
   }
 
+  const objectToTokenize = {
+    user_id: user.user_id || '12345',
+    name: user.name || 'pedro',
+    email: user.email || 'pedro@mail',
+    scope: user.scope || 'admin',
+    phone: user.phone || '54996582060',
+  }
+
+  const token = createTokenJWT(objectToTokenize)
+
   return response.send({
     sucess: true,
-    message: 'user located',
-    body: user
+    message: 'login with success',
+    token
   })
 }
