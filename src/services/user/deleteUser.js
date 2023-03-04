@@ -1,4 +1,4 @@
-const logger = require('../../controllers/loggerController')
+const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
 module.exports = async (userId) => {
@@ -16,7 +16,12 @@ module.exports = async (userId) => {
     res = await client.query(query)
   } catch (error) {
     res.rows = null
-    logger.log(error.message, 'error', error)
+    
+    Logger.error({
+      ...error,
+      type:'database-error',
+      local: 'postgre-delete-user-service'
+    })
   }
 
   client.release()

@@ -1,4 +1,4 @@
-const logger = require('../../controllers/loggerController')
+const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
 module.exports = async () => {
@@ -11,7 +11,12 @@ module.exports = async () => {
     res = await client.query(query)
   } catch (error) {
     res.rows = null
-    logger.log(error.message, 'error', error)
+    
+    Logger.error({
+      ...error,
+      type:'database-error',
+      local: 'postgre-get-all-users-service'
+    })
   }
 
   client.release()

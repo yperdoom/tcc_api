@@ -17,13 +17,12 @@ module.exports.createTable = async () => {
       recommended_carbohydrate numeric(3,2) NOT NULL,
       carbohydrate numeric(3,2) NOT NULL,
       food_multiplier int NOT NULL,
-      foods_ids int[] NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (meal_id)
     );`
   )
-  // adicionar um array de id's apontando pra tabela de alimentos
+
   client.release()
   await database.close()
 

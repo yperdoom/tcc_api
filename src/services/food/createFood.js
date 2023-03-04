@@ -1,4 +1,4 @@
-const logger = require('../../controllers/loggerController')
+const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
 module.exports = async (body) => {
@@ -45,7 +45,12 @@ module.exports = async (body) => {
     res = await client.query(query)
   } catch (error) {
     res.rows[0] = null
-    logger.log(error.message, 'error', error)
+    
+    Logger.error({
+      ...error,
+      type:'database-error',
+      local: 'postgre-create-food-service'
+    })
   }
 
   client.release()

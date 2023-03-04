@@ -1,4 +1,4 @@
-const logger = require('../../../src/controllers/loggerController')
+const Logger = require('../../../src/controllers/loggerController')
 const { Pool } = require('pg')
 require('dotenv/config')
 
@@ -28,7 +28,11 @@ module.exports.connect = async () => {
     global.connection = pool
     return pool.connect()
   } catch (error) {
-    logger.log(error.message, 'error', error, 'pgconnection')
+    Logger.error({
+      ...error,
+      type: 'database-error',
+      local: 'postgre-connect'
+    })
   }
 }
 
@@ -37,6 +41,10 @@ module.exports.close = async () => {
     delete global.connect
     return 'desconectado'
   } catch (error) {
-    saveLog('pgconnection', 'error', error.message, error)
+    Logger.error({
+      ...error,
+      type: 'database-error',
+      local: 'postgre-disconnect'
+    })
   }
 }

@@ -1,49 +1,49 @@
+const color = require('../services/factory/terminalColors')
 
 module.exports = ({
-  log: (message, type, body, local) => {
-    const blue = '\u001b[34m'
-    console.log(blue + 'log instance =|')
+  log: (log) => {
+    const message = {}
 
-    if (message) {
-      console.log(message)
+    if (log.message) {
+      message.message = log.message
     }
 
-    if (type) {
-      console.log(type)
+    if (log.type) {
+      message.type = log.type
     }
 
-    if (body) {
-      console.log(body)
+    if (log.local) {
+      message.local = log.local
     }
 
-    if (local) {
-      console.log(local)
+    if (log.body) {
+      message.body = log.body
     }
 
-    const reset = '\u001b[0m'
-    console.log(reset + 'end log instance =|')
+    console.log(color.blue)
+    console.log(message)
+    console.log(color.reset)
   },
-  error: (message, type, body, local) => {
-    const red = '\u001b[31m'
-    console.log(red + 'error instance =|')
-
-    if (message) {
-      console.log(message)
+  error: (error) => {
+    const message = {}
+    
+    if (error.message) {
+      message.message = error.message
     }
-
-    if (type) {
-      console.log(type)
+    
+    if (error.type) {
+      message.type = error.type
     }
-
-    if (body) {
-      console.log(body)
+    
+    if (error.local) {
+      message.local = error.local
     }
-
-    if (local) {
-      console.log(local)
+    
+    if (error.body) {
+      message.body = error.body
     }
-
-    const reset = '\u001b[0m'
-    console.log(reset + 'end error instance =|')
+    
+    console.log(color.red + message)
+    console.log(color.reset)
   }
 })

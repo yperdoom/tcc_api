@@ -9,7 +9,7 @@ const createMeal = require('../services/meal/createMeal')
 const createPrescriptionMealSync = require('../services/syncTables/createPrescriptionMealSync')
 const createMealFoodSync = require('../services/syncTables/createMealFoodSync')
 
-const aiController = require('./aiController')
+const agController = require('./agController')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
@@ -81,7 +81,7 @@ module.exports.adapter = async (requisition, response, next) => {
   body.created_at = getTimeNow()
   body.updated_at = getTimeNow()
 
-  const prescription = aiController.newAdapter(body.foods)
+  const prescription = agController.newAdapter(body.foods)
 
   if (!prescription) {
     return response.send({

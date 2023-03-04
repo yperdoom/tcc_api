@@ -7,11 +7,11 @@
 // import and init libraryes
 require('dotenv/config')
 const { PORT } = process.env
-const logger = require('./controllers/loggerController')
+const Logger = require('./controllers/loggerController')
 
 // import routes api
 const api = require('./routes')
 
 api.listen(PORT, () => {
-  logger.log(`Api rodando na porta: ${PORT}.`)
+  Logger.log({ message: `Api rodando na porta: ${PORT}.` })
 })
