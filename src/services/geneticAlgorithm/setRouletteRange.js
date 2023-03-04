@@ -15,5 +15,5 @@ module.exports = (generation) => {
   sumOfPercentages += generation[0].fitness
   generation[0].rouletteRange = [(sumOfPercentages - generation[SIZE_GENERATION].fitness), sumOfPercentages]
 
-  return generation
+  return { generation, sumOfPercentages }
 }
