@@ -1,15 +1,21 @@
+// ||||| ALL IMPORTS |||||
+// config and auth
 const createTokenJWT = require('../../config/auth/functions/createTokenJWT')
 const crypt = require('../../config/auth/functions/password')
 
+// factoryes services
 const verifyFields = require('../services/factory/verifyFields')
 const getTimeNow = require('../services/factory/getTimeNow')
+const setUserToTokenize = require('../services/factory/setUserToTokenize')
 
+// user services
 const createUser = require('../services/user/createUser')
 const getUser = require('../services/user/getUser')
 const getAllUsers = require('../services/user/getAllUsers')
 const modifyUser = require('../services/user/modifyUser')
 const deleteUser = require('../services/user/deleteUser')
 
+// other services
 const createClient = require('../services/client/createClient')
 const createManager = require('../services/manager/createManager')
 
@@ -62,6 +68,9 @@ module.exports.create = async (requisition, response, next) => {
 
   const dataUser = await createUser(body)
 
+  const objectToToken = setUserToTokenize(body)
+  const token = createTokenJWT(objectToToken)
+
   if (!dataUser) {
     return response.send({
       sucess: false,
@@ -85,7 +94,7 @@ module.exports.create = async (requisition, response, next) => {
     return response.send({
       sucess: true,
       message: 'user and client created',
-      body: { ...dataUser, client: dataClient }
+      body: { ...dataUser, client: dataClient, token }
     })
   }
 
@@ -106,14 +115,15 @@ module.exports.create = async (requisition, response, next) => {
     return response.send({
       sucess: true,
       message: 'user and manager created',
-      body: { ...dataUser, manager: dataManager }
+      body: { ...dataUser, manager: dataManager, token }
     })
   }
 
   return response.send({
     sucess: true,
     message: 'user created',
-    body: dataUser
+    body: dataUser,
+    token
   })
 }
 
@@ -203,51 +213,5 @@ module.exports.getAll = async (requisition, response, next) => {
       count_users_found: users.length,
       users_found: users
     }
-  })
-}
-
-module.exports.login = async (requisition, response, next) => {
-  const body = requisition.body
-
-  const fields = verifyFields(body, [
-    'email',
-    'password'
-  ])
-  if (!fields.sucess) {
-    return response.send(fields)
-  }
-
-  const user = await getUser('email', body.email)
-
-  if (!user) {
-    return response.send({
-      sucess: false,
-      message: 'user not found'
-    })
-  }
-
-  const pass = await crypt.comparePassword(body.password, user.password)
-
-  if (!pass) {
-    return response.send({
-      sucess: false,
-      message: 'password incorrect'
-    })
-  }
-
-  const objectToTokenize = {
-    user_id: user.user_id || '12345',
-    name: user.name || 'pedro',
-    email: user.email || 'pedro@mail',
-    scope: user.scope || 'admin',
-    phone: user.phone || '54996582060',
-  }
-
-  const token = createTokenJWT(objectToTokenize)
-
-  return response.send({
-    sucess: true,
-    message: 'login with success',
-    token
   })
 }

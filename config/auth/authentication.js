@@ -1,6 +1,5 @@
 'use strict'
 
-// const createTokenJwt = require('./functions/createTokenJwt')
 const decodeTokenJwt = require('./functions/decodeTokenJWT')
 
 module.exports.authentication = (requisition, response, next) => {
@@ -12,8 +11,11 @@ module.exports.authentication = (requisition, response, next) => {
       message: 'token not found'
     })
   }
-
   requisition.auth = decodeTokenJwt(token.replace('Bearer ', ''))
+
+  if (!requisition.auth) {
+    response.send({ success: false, message: 'Invalid token' })
+  }
 
   next()
 }

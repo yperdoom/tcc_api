@@ -1,8 +1,8 @@
 require('dotenv/config')
-const { MAX_CHROMOSOME_SIZE } = process.env
+const { MAX_CHROMOSOME_SIZE, MUTATION_RATE } = process.env
 
-module.exports = (chromosome, mutationRate = 80) => {
-  if ((Math.floor(Math.random() * 100)) <= mutationRate) {
+module.exports = (chromosome) => {
+  if ((Math.floor(Math.random() * 100)) <= MUTATION_RATE) {
     const random = Math.floor(Math.random() * chromosome.length)
 
     chromosome[random] = Math.floor(Math.random() * MAX_CHROMOSOME_SIZE)

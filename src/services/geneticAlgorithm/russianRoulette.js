@@ -1,12 +1,21 @@
 
 module.exports = (generation) => {
-  const drawNumber = Math.floor(Math.random() * generation.sumOfPercentages)
+  let chromosome = null
 
-  const individual = generation.forEach((individual) => {
-    if (drawNumber >= individual.rouletteRange[0] && drawNumber <= individual.rouletteRange[1]) {
+  while (chromosome != null) {
+    const drawNumber = Math.floor(Math.random() * generation.sumOfPercentages)
+    generation = generation.forEach((individual) => {
+      if (drawNumber >= individual.rouletteRange[0] && drawNumber <= individual.rouletteRange[1]) {
+        individual.rouletteRange = [-1, -1]
+
+        chromosome = individual
+      }
       return individual
-    }
-  })
+    })
+  }
 
-  return individual
+  return {
+    generation,
+    chromosome
+  }
 }

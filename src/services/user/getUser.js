@@ -13,11 +13,11 @@ module.exports = async (field, value) => {
 
     res = await client.query(query)
   } catch (error) {
-    res.rows[0] = null
-    
+    res.rows = []
+
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-get-user-service'
     })
   }
@@ -25,5 +25,5 @@ module.exports = async (field, value) => {
   client.release()
   await database.close()
 
-  return res.rows[0]
+  return res.rows[0] || null
 }

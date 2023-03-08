@@ -2,8 +2,6 @@
 const userController = require('../controllers/userController')
 
 module.exports = (api) => {
-  api.post('/login', userController.login)
-
   api.get('/user/:user_id', userController.getUser)
 
   api.get('/user', userController.getAll)

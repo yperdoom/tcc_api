@@ -1,5 +1,7 @@
+require('dotenv/config')
+const { CROSSOVER_RATE } = process.env
 
-module.exports = (fatherChromosome, motherChromosome, crossoverRate = 80) => {
+module.exports = (fatherChromosome, motherChromosome) => {
   const fatherBuffer = fatherChromosome
   const motherBuffer = motherChromosome
 
@@ -8,7 +10,7 @@ module.exports = (fatherChromosome, motherChromosome, crossoverRate = 80) => {
     motherOffspring: motherBuffer
   }
 
-  if ((Math.floor(Math.random() * 100)) <= crossoverRate) {
+  if ((Math.floor(Math.random() * 100)) <= CROSSOVER_RATE) {
     const cutoff = Math.floor(Math.random() * fatherChromosome.length)
     for (let i = cutoff; i < fatherChromosome.length; i++) {
       sonChromosome.fatherOffspring[i] = motherBuffer[i]
