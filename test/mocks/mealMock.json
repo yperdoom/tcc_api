@@ -2,7 +2,7 @@
   "meal_id": 1,
   "name": "almoçin",
   "type": "almoço",
-  "recommended_calorie": 950,
+  "recommended_calorie": 1000,
   "recommended_protein": 100,
   "recommended_lipid": 50,
   "recommended_carbohydrate": 100

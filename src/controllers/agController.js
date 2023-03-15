@@ -15,8 +15,8 @@ module.exports.newAdapter = async (foods, meal) => {
 
   let individual = null
   const preparedFoods = await prepareQuantityFood(foods)
-  const generation = await generateGeneration(preparedFoods)
-  const evaluated = await evaluateGeneration(preparedFoods, generation, meal)
+  const generation = generateGeneration(preparedFoods)
+  const evaluated = evaluateGeneration(preparedFoods, generation, meal)
 
   if (evaluated.individual) {
     individual = evaluated.individual
@@ -24,27 +24,32 @@ module.exports.newAdapter = async (foods, meal) => {
   }
 
   let generationCounter = 0
-  while (stopLoop === false || generationCounter === MAX_GENERATIONS) {
-    generationCounter += 1
+  while (stopLoop === false && generationCounter <= MAX_GENERATIONS) {
     const sortedGeneration = await sortGeneration(evaluated.generation)
     const rouledGeneration = await setRouletteRange(sortedGeneration)
     const newGeneration = []
 
-    for (let i = 0; i < SIZE_GENERATION; i++) {
+    while (newGeneration.length < SIZE_GENERATION) {
       const fatherGeneration = await russianRoulette(rouledGeneration, true)
       const mother = await russianRoulette(fatherGeneration.generation)
 
       const sons = await crossoverProcess(fatherGeneration.chromosome, mother)
 
-      newGeneration.push(mutateChromosome(sons.fatherSon))
-      newGeneration.push(mutateChromosome(sons.motherSon))
+      if (newGeneration.length > SIZE_GENERATION) break
+
+      newGeneration.push(await mutateChromosome(sons.fatherSon))
+
+      if (newGeneration.length > SIZE_GENERATION) break
+
+      newGeneration.push(await mutateChromosome(sons.motherSon))
     }
 
-    const newEvaluated = evaluateGeneration(preparedFoods, generation, meal)
+    const newEvaluated = evaluateGeneration(preparedFoods, newGeneration, meal)
     if (newEvaluated.individual) {
       individual = newEvaluated.individual
       stopLoop = true
     }
+    generationCounter += 1
   }
 
   console.log(individual)
