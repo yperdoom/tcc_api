@@ -12,7 +12,6 @@ module.exports = (foods) => {
     const individual = {
       chromosome: [], // Array de inteiros que representa a quantidade (peso, porção ou litros) dos alimentos
       fitness: 0.00, // Campo que indica a nota de aptidão do indivíduo
-      quantityMultiplier: 0.00, // Porcentagem que representa o multiplicador deste individuo
       rouletteRange: [0, 0] // Faixa da fatia de pizza (em porcentagem aplicado na roleta russa) em que representa a chance desse indivíduo ser selecionado
     }
 

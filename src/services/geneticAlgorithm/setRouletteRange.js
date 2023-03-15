@@ -1,19 +1,19 @@
 require('dotenv/config')
 const { SIZE_GENERATION } = process.env
 
-module.exports = (generation) => {
-  let sumOfPercentages = 0
+module.exports = async (generation) => {
+  let lastPosition = 0
 
-  sumOfPercentages += generation[0].fitness
-  generation[0].rouletteRange = [0, sumOfPercentages]
+  generation[0].rouletteRange = [0, (1 / generation[0].fitness)]
+  lastPosition = (1 / generation[0].fitness)
 
-  for (let i = 1; i < (SIZE_GENERATION - 1); i++) {
-    sumOfPercentages += generation[i].fitness
-    generation[i].rouletteRange = [(sumOfPercentages - generation[i].fitness), sumOfPercentages]
+  for (let i = 1; i < SIZE_GENERATION; i++) {
+    generation[i].rouletteRange = [lastPosition, (1 / generation[i].fitness)]
+    lastPosition = (1 / generation[i].fitness)
   }
 
-  sumOfPercentages += generation[0].fitness
-  generation[0].rouletteRange = [(sumOfPercentages - generation[SIZE_GENERATION].fitness), sumOfPercentages]
-
-  return { generation, sumOfPercentages }
+  return {
+    generation,
+    lastPosition
+  }
 }

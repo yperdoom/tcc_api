@@ -1,5 +1,5 @@
 require('dotenv/config')
-const { MAX_GENERATIONS } = process.env
+const { MAX_GENERATIONS, SIZE_GENERATION } = process.env
 
 const prepareQuantityFood = require('../services/food/prepareQuantityFood')
 const generateGeneration = require('../services/geneticAlgorithm/generateGeneration')
@@ -15,36 +15,38 @@ module.exports.newAdapter = async (foods, meal) => {
 
   let individual = null
   const preparedFoods = await prepareQuantityFood(foods)
-  let generation = await generateGeneration(preparedFoods)
-  generation = await evaluateGeneration(preparedFoods, generation, meal)
+  const generation = await generateGeneration(preparedFoods)
+  const evaluated = await evaluateGeneration(preparedFoods, generation, meal)
 
-  if (generation.success) {
-    individual = generation.individual
+  if (evaluated.individual) {
+    individual = evaluated.individual
     stopLoop = true
   }
 
   let generationCounter = 0
   while (stopLoop === false || generationCounter === MAX_GENERATIONS) {
     generationCounter += 1
-    generation.generation = sortGeneration(generation.generation)
-    generation.generation = setRouletteRange(generation.generation)
+    const sortedGeneration = await sortGeneration(evaluated.generation)
+    const rouledGeneration = await setRouletteRange(sortedGeneration)
     const newGeneration = []
 
-    for (let i = 0; i < generation.generation.length; i++) {
-      const sons = crossoverProcess(russianRoulette(generation.generation), russianRoulette(generation.generation))
+    for (let i = 0; i < SIZE_GENERATION; i++) {
+      const fatherGeneration = await russianRoulette(rouledGeneration, true)
+      const mother = await russianRoulette(fatherGeneration.generation)
 
-      newGeneration.push(mutateChromosome(sons.son1))
-      newGeneration.push(mutateChromosome(sons.son2))
+      const sons = await crossoverProcess(fatherGeneration.chromosome, mother)
+
+      newGeneration.push(mutateChromosome(sons.fatherSon))
+      newGeneration.push(mutateChromosome(sons.motherSon))
     }
 
-    generation = newGeneration
-
-    generation = evaluateGeneration(preparedFoods, generation, meal)
-    if (generation.success) {
-      individual = generation.individual
+    const newEvaluated = evaluateGeneration(preparedFoods, generation, meal)
+    if (newEvaluated.individual) {
+      individual = newEvaluated.individual
       stopLoop = true
     }
   }
 
+  console.log(individual)
   return individual
 }

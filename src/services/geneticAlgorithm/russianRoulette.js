@@ -1,21 +1,28 @@
 
-module.exports = (generation) => {
+module.exports = async (generation, father = false) => {
   let chromosome = null
 
-  while (chromosome != null) {
-    const drawNumber = Math.floor(Math.random() * generation.sumOfPercentages)
-    generation = generation.forEach((individual) => {
-      if (drawNumber >= individual.rouletteRange[0] && drawNumber <= individual.rouletteRange[1]) {
-        individual.rouletteRange = [-1, -1]
+  while (chromosome == null) {
+    const drawNumber = Math.random() * generation.lastPosition
 
+    generation.generation.forEach((individual) => {
+      const min = individual.rouletteRange[0]
+      const max = individual.rouletteRange[1]
+
+      if (drawNumber >= min && drawNumber <= max) {
+        individual.rouletteRange = [-1, -1]
         chromosome = individual
       }
       return individual
     })
   }
 
-  return {
-    generation,
-    chromosome
+  if (father) {
+    return {
+      generation,
+      chromosome
+    }
   }
+
+  return chromosome
 }

@@ -1,7 +1,7 @@
 require('dotenv/config')
 const { SIZE_GENERATION } = process.env
 
-module.exports = (generation) => {
+module.exports = async (generation) => {
   let auxiliary = null
   for (let i = 0; i < SIZE_GENERATION; i++) {
     for (let j = 0; j < SIZE_GENERATION; j++) {
@@ -13,7 +13,5 @@ module.exports = (generation) => {
     }
   }
 
-  return {
-    generation
-  }
+  return generation
 }
