@@ -34,8 +34,6 @@ const _initTables = async () => {
     await PrescriptionMeal.createTable()
     await initAdminUser()
   } catch (error) {
-    console.log(error)
-
     Logger.error({
       ...error,
       type: 'database-error',
