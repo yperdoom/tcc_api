@@ -37,7 +37,7 @@ module.exports.create = async (requisition, response, next) => {
     'food_multiplier'
   ])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -57,13 +57,13 @@ module.exports.create = async (requisition, response, next) => {
 
   if (!prescription) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to prescribe"
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'prescription created',
     body: prescription
   })
@@ -74,7 +74,7 @@ module.exports.adapter = async (requisition, response, next) => {
 
   const fields = verifyFields(body, ['foods'])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -85,13 +85,13 @@ module.exports.adapter = async (requisition, response, next) => {
 
   if (!prescription) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to adapter prescribe"
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'prescription adapted',
     body: prescription
   })

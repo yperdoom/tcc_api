@@ -7,7 +7,7 @@ module.exports.authentication = (requisition, response, next) => {
 
   if (!token) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'token not found'
     })
   }

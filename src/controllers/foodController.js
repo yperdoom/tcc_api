@@ -24,7 +24,7 @@ module.exports.create = async (requisition, response, next) => {
     'mililiter'
   ])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -35,13 +35,13 @@ module.exports.create = async (requisition, response, next) => {
 
   if (!food) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to create a food account"
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'food created',
     body: food
   })
@@ -65,7 +65,7 @@ module.exports.modify = async (requisition, response, next) => {
     'mililiter'
   ])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -75,13 +75,13 @@ module.exports.modify = async (requisition, response, next) => {
 
   if (!food) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to modify a user"
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'food modified',
     body: food
   })
@@ -94,13 +94,13 @@ module.exports.delete = async (requisition, response, next) => {
 
   if (!food) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to delete a food"
     })
   }
 
   response.send({
-    sucess: true,
+    success: true,
     message: 'food deleted'
   })
 }
@@ -112,13 +112,13 @@ module.exports.getFood = async (requisition, response, next) => {
 
   if (!food) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'food not found'
     })
   }
 
   response.send({
-    sucess: true,
+    success: true,
     message: 'food founded',
     body: food
   })
@@ -129,13 +129,13 @@ module.exports.getAll = async (requisition, response, next) => {
 
   if (!foods) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'foods not found'
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'foods located',
     body: {
       count_foods_found: foods.length,

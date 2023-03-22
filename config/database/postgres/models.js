@@ -13,14 +13,16 @@ const initAdminUser = require('../../../src/services/user/initAdminUser')
 module.exports.init = async () => {
   const response = await _initTables()
 
-  if (response.sucess) {
+  if (response.success) {
     Logger.log({ message: 'Tables inits with success' })
-    return { sucess: true }
+    return { success: true }
   }
   return response
 }
 
 const _initTables = async () => {
+  const successObject = { success: true }
+
   try {
     await User.createTable()
     await Manager.createTable()
@@ -38,14 +40,10 @@ const _initTables = async () => {
       local: 'create-postgres-tables'
     })
 
-    return {
-      sucess: false,
-      message: error.message,
-      body: error
-    }
+    successObject.success = false
+    successObject.message = error.message
+    successObject.body = error
   }
 
-  return {
-    sucess: true
-  }
+  return successObject
 }

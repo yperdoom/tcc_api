@@ -1,11 +1,11 @@
 
 module.exports = (body, fields, orFields) => {
-  const response = { sucess: true }
+  const response = { success: true }
 
   for (const field of fields) {
     if (!body[field]) {
       response.message = `field ${field} not found`
-      response.sucess = false
+      response.success = false
     }
   }
   if (orFields) {
@@ -19,7 +19,7 @@ module.exports = (body, fields, orFields) => {
 
     if (!orComparation) {
       response.message = `none of the following fields: ${orFields} was found`
-      response.sucess = false
+      response.success = false
     }
   }
 

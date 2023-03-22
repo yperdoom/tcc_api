@@ -14,16 +14,16 @@ module.exports.status = async (requisition, response, next) => {
 module.exports.init = async (requisition, response, next) => {
   const res = await init()
 
-  if (!res.sucess) {
+  if (!res.success) {
     response.send({
-      sucess: false,
+      success: false,
       message: res.message,
       body: res.body
     })
   }
 
   response.send({
-    sucess: true,
+    success: true,
     message: 'all tables were created successfully'
   })
 }

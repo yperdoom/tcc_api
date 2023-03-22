@@ -4,7 +4,7 @@ module.exports = (body, prescriptionFields, mealFields) => {
     if (!body[field]) {
       return {
         message: `field ${field} not found`,
-        sucess: false
+        success: false
       }
     }
   }
@@ -14,11 +14,11 @@ module.exports = (body, prescriptionFields, mealFields) => {
       if (!body.meal[iterator][field]) {
         return {
           message: `field ${field} not found`,
-          sucess: false
+          success: false
         }
       }
     }
   }
 
-  return { sucess: true }
+  return { success: true }
 }

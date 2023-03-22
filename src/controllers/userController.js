@@ -30,14 +30,14 @@ module.exports.create = async (requisition, response, next) => {
     'birthday'
   ])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
   const verifyEmailExists = await getUser('email', body.email)
   if (verifyEmailExists) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'email already registered'
     })
   }
@@ -59,7 +59,7 @@ module.exports.create = async (requisition, response, next) => {
       'manager_id'
     ])
 
-    if (!clientFields.sucess) {
+    if (!clientFields.success) {
       return response.send(clientFields)
     }
   }
@@ -73,7 +73,7 @@ module.exports.create = async (requisition, response, next) => {
 
   if (!dataUser) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to create a user account"
     })
   }
@@ -86,13 +86,13 @@ module.exports.create = async (requisition, response, next) => {
 
     if (!dataClient) {
       return response.send({
-        sucess: false,
+        success: false,
         message: "it's not's possible to create a client account"
       })
     }
 
     return response.send({
-      sucess: true,
+      success: true,
       message: 'user and client created',
       body: { ...dataUser, client: dataClient, token }
     })
@@ -107,20 +107,20 @@ module.exports.create = async (requisition, response, next) => {
 
     if (!dataManager) {
       return response.send({
-        sucess: false,
+        success: false,
         message: "it's not's possible to create a manager account"
       })
     }
 
     return response.send({
-      sucess: true,
+      success: true,
       message: 'user and manager created',
       body: { ...dataUser, manager: dataManager, token }
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'user created',
     body: dataUser,
     token
@@ -137,7 +137,7 @@ module.exports.modify = async (requisition, response, next) => {
     'birthday'
   ])
 
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -147,13 +147,13 @@ module.exports.modify = async (requisition, response, next) => {
 
   if (!user) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to modify a user"
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'user modified',
     body: user
   })
@@ -166,13 +166,13 @@ module.exports.delete = async (requisition, response, next) => {
 
   if (!user) {
     return response.send({
-      sucess: false,
+      success: false,
       message: "it's not's possible to delete a user"
     })
   }
 
   response.send({
-    sucess: true,
+    success: true,
     message: 'user deleted'
   })
 }
@@ -184,13 +184,13 @@ module.exports.getUser = async (requisition, response, next) => {
 
   if (!user) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'user not found'
     })
   }
 
   response.send({
-    sucess: true,
+    success: true,
     message: 'user founded',
     body: user
   })
@@ -201,13 +201,13 @@ module.exports.getAll = async (requisition, response, next) => {
 
   if (!users) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'Users not found'
     })
   }
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'Users located',
     body: {
       count_users_found: users.length,

@@ -11,7 +11,7 @@ module.exports.login = async (requisition, response, next) => {
     'email',
     'password'
   ])
-  if (!fields.sucess) {
+  if (!fields.success) {
     return response.send(fields)
   }
 
@@ -19,7 +19,7 @@ module.exports.login = async (requisition, response, next) => {
 
   if (!user) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'user not found'
     })
   }
@@ -28,7 +28,7 @@ module.exports.login = async (requisition, response, next) => {
 
   if (!pass) {
     return response.send({
-      sucess: false,
+      success: false,
       message: 'password incorrect'
     })
   }
@@ -44,7 +44,7 @@ module.exports.login = async (requisition, response, next) => {
   const token = createTokenJWT(objectToTokenize)
 
   return response.send({
-    sucess: true,
+    success: true,
     message: 'login with success',
     body: token
   })
