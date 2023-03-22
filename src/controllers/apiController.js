@@ -15,7 +15,7 @@ module.exports.init = async (requisition, response, next) => {
   const res = await init()
 
   if (!res.success) {
-    response.send({
+    return response.send({
       success: false,
       message: res.message,
       body: res.body
