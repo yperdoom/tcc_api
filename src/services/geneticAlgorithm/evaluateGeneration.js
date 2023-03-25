@@ -15,6 +15,8 @@ module.exports = (foods, generation, meal) => {
     for (let foodIterator = 0; foodIterator < foods.length; foodIterator++) {
       const percentage = (individual.chromosome[foodIterator] * 100) / foods[foodIterator].quantity
       calorieSum += foods[foodIterator].calorie * (percentage / 100)
+
+      // TODO => adicionar soma de porcentagem olhando para proteina, carboidrato e gorduras
     }
     const quantityMultiplier = (calorieSum * 100) / meal.recommended_calorie
     individual.fitness = Math.abs(quantityMultiplier - 100)

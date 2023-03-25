@@ -1,15 +1,15 @@
 [
   {
     "food_id": 1,
-    "name": "banana",
-    "description": "bananainash",
-    "type": "fruta",
-    "color": "amarelo",
-    "portion": 1,
-    "calorie": 105,
-    "protein": 1.29,
-    "lipid": 0.39,
-    "carbohydrate": 26.95
+    "name": "feijão",
+    "description": "feijao branco cozido",
+    "type": "grão",
+    "color": "preto",
+    "weight": 100,
+    "calorie": 103,
+    "protein": 6.6,
+    "lipid": 0.5,
+    "carbohydrate": 14.6
   },
   {
     "food_id": 2,
@@ -27,7 +27,7 @@
     "food_id": 3,
     "name": "peito de frango",
     "description": "peito de frango cozido",
-    "type": "grão",
+    "type": "carne",
     "color": "branco",
     "weight": 100,
     "calorie": 165,
