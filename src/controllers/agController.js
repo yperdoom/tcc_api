@@ -16,7 +16,7 @@ module.exports.newAdapter = async (foods, meal) => {
   let individual = null
   const preparedFoods = await prepareQuantityFood(foods)
   const generation = generateGeneration(preparedFoods)
-  const evaluated = evaluateGeneration(preparedFoods, generation, meal)
+  let evaluated = evaluateGeneration(preparedFoods, generation, meal)
 
   if (evaluated.individual) {
     individual = evaluated.individual
@@ -44,11 +44,12 @@ module.exports.newAdapter = async (foods, meal) => {
       newGeneration.push(await mutateChromosome(sons.motherSon))
     }
 
-    const newEvaluated = evaluateGeneration(preparedFoods, newGeneration, meal)
-    if (newEvaluated.individual) {
-      individual = newEvaluated.individual
+    evaluated = evaluateGeneration(preparedFoods, newGeneration, meal)
+    if (evaluated.individual) {
+      individual = evaluated.individual
       stopLoop = true
     }
+
     generationCounter += 1
   }
 
