@@ -1,5 +1,12 @@
 require('dotenv/config')
-const { MAX_GENERATIONS, SIZE_GENERATION } = process.env
+const {
+  MAX_GENERATIONS,
+  SIZE_GENERATION,
+  MAX_CHROMOSOME_SIZE,
+  EXPECTED_EVALUATION,
+  CROSSOVER_RATE,
+  MUTATION_RATE
+} = process.env
 
 const prepareQuantityFood = require('../services/food/prepareQuantityFood')
 const generateGeneration = require('../services/geneticAlgorithm/generateGeneration')
@@ -9,22 +16,29 @@ const setRouletteRange = require('../services/geneticAlgorithm/setRouletteRange'
 const russianRoulette = require('../services/geneticAlgorithm/russianRoulette')
 const crossoverProcess = require('../services/geneticAlgorithm/crossoverProcess')
 const mutateChromosome = require('../services/geneticAlgorithm/mutateChromosome')
+const Logger = require('./loggerController')
+const prepareToSaveParamsInLog = require('../services/factory/prepareToSaveParamsInLog')
 
 module.exports.newAdapter = async (foods, meal) => {
+  const parameters = prepareToSaveParamsInLog({ MAX_GENERATIONS, MAX_CHROMOSOME_SIZE, MUTATION_RATE, CROSSOVER_RATE, SIZE_GENERATION, EXPECTED_EVALUATION })
   let stopLoop = false
-
   let individual = null
+
   const preparedFoods = await prepareQuantityFood(foods)
   const generation = generateGeneration(preparedFoods)
   let evaluated = evaluateGeneration(preparedFoods, generation, meal)
+
+  await Logger.openConnectToSaveLogs()
+  await Logger.saveLog({ ...evaluated, countGeneration: 1 }, parameters)
 
   if (evaluated.individual) {
     individual = evaluated.individual
     stopLoop = true
   }
 
-  let generationCounter = 0
+  let generationCounter = 1
   while (stopLoop === false && generationCounter <= MAX_GENERATIONS) {
+    generationCounter += 1
     const sortedGeneration = await sortGeneration(evaluated.generation)
     const rouledGeneration = await setRouletteRange(sortedGeneration)
     const newGeneration = []
@@ -45,14 +59,17 @@ module.exports.newAdapter = async (foods, meal) => {
     }
 
     evaluated = evaluateGeneration(preparedFoods, newGeneration, meal)
+
+    await Logger.saveLog({ ...evaluated, countGeneration: (generationCounter) }, parameters)
+
     if (evaluated.individual) {
       individual = evaluated.individual
       stopLoop = true
     }
-
-    generationCounter += 1
   }
 
-  console.log(individual)
+  await Logger.closeConnection()
+
+  // console.log(individual)
   return individual
 }

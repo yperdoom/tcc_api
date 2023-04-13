@@ -1,4 +1,6 @@
 const color = require('../services/factory/terminalColors')
+const GeneratioLog = require('../../config/database/mongo/models/GenerationLog')
+const mongoConnection = require('../../config/database/mongo/mongoConnection')
 
 module.exports = ({
   log: (log) => {
@@ -54,5 +56,19 @@ module.exports = ({
     console.log(color.red)
     console.log(message)
     console.log(color.reset)
+  },
+  saveLog: async (generationInfo, parameters) => {
+    const document = {
+      ...generationInfo,
+      parameters
+    }
+
+    await GeneratioLog.create(document)
+  },
+  openConnectToSaveLogs: async () => {
+    await mongoConnection.connect()
+  },
+  closeConnection: async () => {
+    await mongoConnection.disconnect()
   }
 })

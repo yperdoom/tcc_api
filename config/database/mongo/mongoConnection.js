@@ -11,7 +11,6 @@ module.exports.connect = async () => {
   if (conn == null) {
     try {
       conn = await mongoose.connect(MONGO_ENDPOINT)
-
     } catch (error) {
       Logger.error({
         ...error,
