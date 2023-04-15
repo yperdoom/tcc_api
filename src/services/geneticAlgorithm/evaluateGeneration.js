@@ -5,6 +5,7 @@ const { EXPECTED_EVALUATION, SIZE_GENERATION } = process.env
 module.exports = (foods, generation, meal) => {
   let averageFitnessGeneration = 0
   let chromosomeExcellent = null
+  let bestChromosome = { fitness: 100 }
 
   // Percorre a geração iterando por cada cromossomo presente nela
   generation.forEach((individual) => {
@@ -28,18 +29,25 @@ module.exports = (foods, generation, meal) => {
     const quantityCarbohydrateMultiplier = (carbohydrateSum * 100) / meal.recommended_carbohydrate
     const quantityLipidMultiplier = (lipidSum * 100) / meal.recommended_lipid
 
-    console.log('calorie ::', quantityCalorieMultiplier)
-    console.log('protein ::', quantityProteinMultiplier)
-    console.log('carbohydrate ::', quantityCarbohydrateMultiplier)
-    console.log('lipid ::', quantityLipidMultiplier)
+    const sumOfNutrients = Math.abs(quantityProteinMultiplier - 100) + Math.abs(quantityCarbohydrateMultiplier - 100) + Math.abs(quantityLipidMultiplier - 100)
 
-    console.log(individual)
-
-    individual.fitness = (Math.abs(quantityCalorieMultiplier - 100) + ((Math.abs(quantityProteinMultiplier - 100) + Math.abs(quantityCarbohydrateMultiplier - 100) + Math.abs(quantityLipidMultiplier - 100)) / 3)) / 2
+    individual.fitness = (Math.abs(quantityCalorieMultiplier - 100) + sumOfNutrients) / 4
     averageFitnessGeneration += individual.fitness
-    // Verifica se o individuo bate com a avaliação que se espera
+
+    if (Math.abs(individual.fitness) <= bestChromosome.fitness) {
+      bestChromosome = {
+        chromosome: individual.chromosome,
+        fitness: individual.fitness,
+        rouletteRange: individual.rouletteRange
+      }
+    }
+
     if (Math.abs(individual.fitness) <= EXPECTED_EVALUATION) {
-      chromosomeExcellent = individual
+      chromosomeExcellent = {
+        chromosome: individual.chromosome,
+        fitness: individual.fitness,
+        rouletteRange: individual.rouletteRange
+      }
     }
 
     return individual
@@ -50,6 +58,7 @@ module.exports = (foods, generation, meal) => {
   return {
     generation,
     individual: chromosomeExcellent,
+    bestChromosome,
     averageFitnessGeneration
   }
 }

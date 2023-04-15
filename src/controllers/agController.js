@@ -23,6 +23,7 @@ module.exports.newAdapter = async (foods, meal) => {
   const parameters = prepareToSaveParamsInLog({ MAX_GENERATIONS, MAX_CHROMOSOME_SIZE, MUTATION_RATE, CROSSOVER_RATE, SIZE_GENERATION, EXPECTED_EVALUATION })
   let stopLoop = false
   let individual = null
+  let bestIndividual = null
 
   const preparedFoods = await prepareQuantityFood(foods)
   const generation = generateGeneration(preparedFoods)
@@ -36,9 +37,12 @@ module.exports.newAdapter = async (foods, meal) => {
     stopLoop = true
   }
 
+  bestIndividual = evaluated.bestChromosome
+
   let generationCounter = 1
   while (stopLoop === false && generationCounter <= MAX_GENERATIONS) {
     generationCounter += 1
+
     const sortedGeneration = await sortGeneration(evaluated.generation)
     const rouledGeneration = await setRouletteRange(sortedGeneration)
     const newGeneration = []
@@ -66,7 +70,13 @@ module.exports.newAdapter = async (foods, meal) => {
       individual = evaluated.individual
       stopLoop = true
     }
+
+    if (evaluated.bestChromosome.fitness < bestIndividual.fitness) {
+      bestIndividual = evaluated.bestChromosome
+    }
   }
+  console.log('melhor: ', bestIndividual)
+  console.log('exelente: ', individual)
 
   await Logger.closeConnection()
 
