@@ -63,7 +63,7 @@ module.exports = ({
       parameters
     }
 
-    // await GeneratioLog.create(document)
+    await GeneratioLog.create(document)
   },
   openConnectToSaveLogs: async () => {
     await mongoConnection.connect()

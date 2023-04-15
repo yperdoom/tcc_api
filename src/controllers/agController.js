@@ -41,6 +41,8 @@ module.exports.newAdapter = async (foods, meal) => {
 
   let generationCounter = 1
   while (stopLoop === false && generationCounter <= MAX_GENERATIONS) {
+    console.log('melhor: ', bestIndividual)
+    console.log('geracao ', generationCounter)
     generationCounter += 1
 
     const sortedGeneration = await sortGeneration(evaluated.generation)
@@ -50,15 +52,12 @@ module.exports.newAdapter = async (foods, meal) => {
     while (newGeneration.length < SIZE_GENERATION) {
       const fatherGeneration = await russianRoulette(rouledGeneration, true)
       const mother = await russianRoulette(fatherGeneration.generation)
-
       const sons = await crossoverProcess(fatherGeneration.chromosome, mother)
 
       if (newGeneration.length > SIZE_GENERATION) break
-
       newGeneration.push(await mutateChromosome(sons.fatherSon))
 
       if (newGeneration.length > SIZE_GENERATION) break
-
       newGeneration.push(await mutateChromosome(sons.motherSon))
     }
 
@@ -76,10 +75,10 @@ module.exports.newAdapter = async (foods, meal) => {
     }
   }
   console.log('melhor: ', bestIndividual)
-  console.log('exelente: ', individual)
+  console.log('excelente: ', individual)
 
   await Logger.closeConnection()
 
-  // console.log(individual)
-  return individual
+  console.log(individual ?? bestIndividual)
+  return individual ?? bestIndividual
 }
