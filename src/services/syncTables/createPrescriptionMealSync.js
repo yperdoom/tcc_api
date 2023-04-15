@@ -26,7 +26,7 @@ module.exports = async (prescriptionId, mealId) => {
     
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-create-prescription-meal-sync-service'
     })
   }

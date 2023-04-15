@@ -1,29 +1,31 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
-module.exports = async (field, value) => {
+module.exports = async (infoId) => {
   const client = await database.connect()
   let res = {}
 
   try {
     const query = {
-      text: `SELECT * FROM foods WHERE ${field} = $1`,
-      values: [value]
+      text: `DELETE FROM infos
+        WHERE info_id = $1
+        RETURNING *`,
+      values: [infoId]
     }
 
     res = await client.query(query)
   } catch (error) {
-    res.rows[0] = null
+    res.rows = null
 
     Logger.error({
       ...error,
       type: 'database-error',
-      local: 'postgre-get-food-service'
+      local: 'postgre-delete-info-service'
     })
   }
 
   client.release()
   await database.close()
 
-  return res.rows[0]
+  return res.rows
 }

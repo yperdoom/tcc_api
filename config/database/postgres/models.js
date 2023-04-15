@@ -8,6 +8,7 @@ const Meal = require('./models/Meal')
 const MealFood = require('./models/MealFood')
 const Prescription = require('./models/Prescription')
 const PrescriptionMeal = require('./models/PrescriptionMeal')
+const Information = require('./models/Information')
 const initAdminUser = require('../../../src/services/user/initAdminUser')
 
 module.exports.init = async () => {
@@ -32,6 +33,7 @@ const _initTables = async () => {
     await MealFood.createTable()
     await Prescription.createTable()
     await PrescriptionMeal.createTable()
+    await Information.createTable()
     await initAdminUser()
   } catch (error) {
     Logger.error({

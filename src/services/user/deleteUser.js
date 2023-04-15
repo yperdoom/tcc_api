@@ -19,7 +19,7 @@ module.exports = async (userId) => {
     
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-delete-user-service'
     })
   }

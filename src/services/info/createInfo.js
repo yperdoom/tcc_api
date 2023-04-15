@@ -1,14 +1,27 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
-module.exports = async (field, value) => {
+module.exports = async (body) => {
   const client = await database.connect()
   let res = {}
 
   try {
     const query = {
-      text: `SELECT * FROM foods WHERE ${field} = $1`,
-      values: [value]
+      text: `INSERT INTO 
+        infos(
+          name,
+          description,
+          created_at,
+          updated_at
+        )
+        VALUES($1, $2, $3, $4)
+        RETURNING *`,
+      values: [
+        body.name,
+        body.description,
+        body.created_at,
+        body.updated_at
+      ]
     }
 
     res = await client.query(query)
@@ -18,7 +31,7 @@ module.exports = async (field, value) => {
     Logger.error({
       ...error,
       type: 'database-error',
-      local: 'postgre-get-food-service'
+      local: 'postgre-create-info-service'
     })
   }
 

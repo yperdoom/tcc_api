@@ -45,10 +45,10 @@ module.exports = async (body) => {
     res = await client.query(query)
   } catch (error) {
     res.rows[0] = null
-    
+
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-create-food-service'
     })
   }

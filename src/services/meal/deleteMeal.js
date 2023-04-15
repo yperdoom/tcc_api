@@ -19,7 +19,7 @@ module.exports = async (foodId) => {
     
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-delete-meal-service'
     })
   }

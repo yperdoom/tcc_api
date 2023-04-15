@@ -7,7 +7,7 @@ module.exports = async (field, value) => {
 
   try {
     const query = {
-      text: `SELECT * FROM foods WHERE ${field} = $1`,
+      text: `SELECT * FROM infos WHERE ${field} = $1`,
       values: [value]
     }
 
@@ -18,7 +18,7 @@ module.exports = async (field, value) => {
     Logger.error({
       ...error,
       type: 'database-error',
-      local: 'postgre-get-food-service'
+      local: 'postgre-get-info-service'
     })
   }
 

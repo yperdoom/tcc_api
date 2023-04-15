@@ -28,7 +28,7 @@ module.exports = async (userId, body) => {
     
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-modify-user-service'
     })
   }

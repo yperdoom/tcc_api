@@ -14,7 +14,7 @@ module.exports = async () => {
     
     Logger.error({
       ...error,
-      type:'database-error',
+      type: 'database-error',
       local: 'postgre-get-all-meals-service'
     })
   }
