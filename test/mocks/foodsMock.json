@@ -1,18 +1,6 @@
 [
   {
     "food_id": 1,
-    "name": "feijão",
-    "description": "feijao branco cozido",
-    "type": "grão",
-    "color": "preto",
-    "weight": 100,
-    "calorie": 103,
-    "protein": 6.6,
-    "lipid": 0.5,
-    "carbohydrate": 14.6
-  },
-  {
-    "food_id": 2,
     "name": "arroz",
     "description": "arroz branco cozido",
     "type": "grão",
@@ -22,6 +10,18 @@
     "protein": 2.5,
     "lipid": 0.23,
     "carbohydrate": 28.18
+  },
+  {
+    "food_id": 2,
+    "name": "feijão",
+    "description": "feijao branco cozido",
+    "type": "grão",
+    "color": "preto",
+    "weight": 100,
+    "calorie": 103,
+    "protein": 6.6,
+    "lipid": 0.5,
+    "carbohydrate": 14.6
   },
   {
     "food_id": 3,
