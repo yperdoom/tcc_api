@@ -6,9 +6,13 @@ const getTimeNow = require('../services/factory/getTimeNow')
 const createPrescription = require('../services/prescription/createPrescription')
 
 const createMeal = require('../services/meal/createMeal')
+const getMeal = require('../services/meal/getMeal')
 const createPrescriptionMealSync = require('../services/syncTables/createPrescriptionMealSync')
+const getPrescriptionMeal = require('../services/syncTables/getPrescriptionMeal')
 const createMealFoodSync = require('../services/syncTables/createMealFoodSync')
 
+const getClient = require('../services/client/getClient')
+const getPrescriptions = require('../services/prescription/getPrescriptions')
 const agController = require('./agController')
 
 module.exports.create = async (requisition, response, next) => {
@@ -94,5 +98,37 @@ module.exports.adapter = async (requisition, response, next) => {
     success: true,
     message: 'prescription adapted',
     body: prescription
+  })
+}
+
+module.exports.getByUser = async (requisition, response, next) => {
+  const userId = requisition.params.user_id
+
+  const client = await getClient('user_id', userId)
+
+  if (!client) {
+    return response.send({
+      success: false,
+      message: 'client not found'
+    })
+  }
+
+  const prescriptions = await getPrescriptions('client_id', client.client_id)
+
+  for (const i=0; i < prescriptions.length; i++) {
+    const prescriptionMeal = await getPrescriptionMeal('prescription_id', prescriptions[i].prescription_id)
+  
+    const meal = await getMeal('meal_id', prescriptionMeal.meal_id)
+
+    prescriptions.meal.push(meal)
+  }
+
+
+  response.send({
+    success: true,
+    message: 'user founded',
+    body: {
+      prescriptions
+    }
   })
 }
