@@ -46,6 +46,8 @@ module.exports.login = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'login with success',
-    body: token
+    scope: 'client',
+    userId: user.user_id,
+    token
   })
 }
