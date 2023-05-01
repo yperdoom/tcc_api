@@ -10,8 +10,6 @@ module.exports = async () => {
 
     res = await client.query(query)
   } catch (error) {
-    res.rows = null
-    
     Logger.error({
       ...error,
       type: 'database-error',
@@ -22,5 +20,8 @@ module.exports = async () => {
   client.release()
   await database.close()
 
-  return res.rows
+  if (res.rowCount >= 1) {
+    return res.rows
+  }
+  return null
 }

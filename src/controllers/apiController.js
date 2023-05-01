@@ -24,6 +24,6 @@ module.exports.init = async (requisition, response, next) => {
 
   response.send({
     success: true,
-    message: 'all tables were created successfully'
+    message: 'Todas as tabelas foram criadas com sucesso.'
   })
 }

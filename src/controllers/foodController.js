@@ -36,14 +36,14 @@ module.exports.create = async (requisition, response, next) => {
   if (!food) {
     return response.send({
       success: false,
-      message: "it's not's possible to create a food account"
+      message: 'Não foi possível criar este alimento!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'food created',
-    body: food
+    message: 'Alimento criado.',
+    body: food[0]
   })
 }
 
@@ -76,14 +76,14 @@ module.exports.modify = async (requisition, response, next) => {
   if (!food) {
     return response.send({
       success: false,
-      message: "it's not's possible to modify a user"
+      message: 'Não foi possível modificar este alimento!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'food modified',
-    body: food
+    message: 'Alimento deletado.',
+    body: food[0]
   })
 }
 
@@ -95,13 +95,13 @@ module.exports.delete = async (requisition, response, next) => {
   if (!food) {
     return response.send({
       success: false,
-      message: "it's not's possible to delete a food"
+      message: 'Não foi possível deletar este alimento!'
     })
   }
 
   response.send({
     success: true,
-    message: 'food deleted'
+    message: 'Alimento deletado.'
   })
 }
 
@@ -113,14 +113,14 @@ module.exports.getFood = async (requisition, response, next) => {
   if (!food) {
     return response.send({
       success: false,
-      message: 'food not found'
+      message: 'Alimento não encontrado!'
     })
   }
 
   response.send({
     success: true,
-    message: 'food founded',
-    body: food
+    message: 'Alimento encontrado.',
+    body: food[0]
   })
 }
 
@@ -130,13 +130,13 @@ module.exports.getAll = async (requisition, response, next) => {
   if (!foods) {
     return response.send({
       success: false,
-      message: 'foods not found'
+      message: 'Nenhum alimento encontrado!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'foods located',
+    message: 'Alimento(s) encontrados.',
     body: {
       count_foods_found: foods.length,
       foods_found: foods

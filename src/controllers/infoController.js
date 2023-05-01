@@ -27,14 +27,14 @@ module.exports.create = async (requisition, response, next) => {
   if (!info) {
     return response.send({
       success: false,
-      message: "it's not's possible to create a information"
+      message: 'Não foi possível criar esta informação!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'info created',
-    body: info
+    message: 'Informação criada.',
+    body: info[0]
   })
 }
 
@@ -58,14 +58,14 @@ module.exports.modify = async (requisition, response, next) => {
   if (!info) {
     return response.send({
       success: false,
-      message: "it's not's possible to modify a information"
+      message: 'Não foi possível modificar esta informação!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'info modified',
-    body: info
+    message: 'Informação modificada.',
+    body: info[0]
   })
 }
 
@@ -77,13 +77,13 @@ module.exports.delete = async (requisition, response, next) => {
   if (!info) {
     return response.send({
       success: false,
-      message: "it's not's possible to delete a info"
+      message: 'Não foi possível deletar esta informação!'
     })
   }
 
   response.send({
     success: true,
-    message: 'information deleted'
+    message: 'Informação deletada.'
   })
 }
 
@@ -95,14 +95,14 @@ module.exports.getInfo = async (requisition, response, next) => {
   if (!info) {
     return response.send({
       success: false,
-      message: 'info not found'
+      message: 'Informação não encontrada!'
     })
   }
 
   response.send({
     success: true,
-    message: 'info founded',
-    body: info
+    message: 'Informação encontrada.',
+    body: info[0]
   })
 }
 
@@ -112,13 +112,13 @@ module.exports.getAll = async (requisition, response, next) => {
   if (!infos) {
     return response.send({
       success: false,
-      message: 'infos not found'
+      message: 'Nenhuma informação encontrada!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'infos located',
+    message: 'Informação(s) encontrada(s).',
     body: {
       count_infos_found: infos.length,
       infos_found: infos

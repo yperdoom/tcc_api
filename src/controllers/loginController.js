@@ -20,7 +20,7 @@ module.exports.login = async (requisition, response, next) => {
   if (!user) {
     return response.send({
       success: false,
-      message: 'user not found'
+      message: 'Usuário não encontrado!'
     })
   }
 
@@ -29,7 +29,7 @@ module.exports.login = async (requisition, response, next) => {
   if (!pass) {
     return response.send({
       success: false,
-      message: 'password incorrect'
+      message: 'Senha incorreta!'
     })
   }
 
@@ -45,8 +45,8 @@ module.exports.login = async (requisition, response, next) => {
 
   return response.send({
     success: true,
-    message: 'login with success',
-    scope: 'client',
+    message: 'Login bem sucedido.',
+    scope: user.scope,
     userId: user.user_id,
     token
   })

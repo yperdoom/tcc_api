@@ -4,7 +4,7 @@ module.exports = (body, fields, orFields) => {
 
   for (const field of fields) {
     if (!body[field]) {
-      response.message = `field ${field} not found`
+      response.message = `Campo ${field} não encontrado`
       response.success = false
     }
   }
@@ -18,7 +18,7 @@ module.exports = (body, fields, orFields) => {
     }
 
     if (!orComparation) {
-      response.message = `none of the following fields: ${orFields} was found`
+      response.message = `Nenhum dos campos: ${orFields} foi encontrado`
       response.success = false
     }
   }

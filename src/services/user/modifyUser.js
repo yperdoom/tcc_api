@@ -24,8 +24,6 @@ module.exports = async (userId, body) => {
 
     res = await client.query(query)
   } catch (error) {
-    res.rows = null
-    
     Logger.error({
       ...error,
       type: 'database-error',
@@ -36,5 +34,8 @@ module.exports = async (userId, body) => {
   client.release()
   await database.close()
 
-  return res.rows
+  if (res.rowCount >= 1) {
+    return res.rows
+  }
+  return null
 }

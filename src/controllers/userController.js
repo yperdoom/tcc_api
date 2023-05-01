@@ -38,7 +38,7 @@ module.exports.create = async (requisition, response, next) => {
   if (verifyEmailExists) {
     return response.send({
       success: false,
-      message: 'email already registered'
+      message: 'E-mail já cadastrado!'
     })
   }
 
@@ -74,7 +74,7 @@ module.exports.create = async (requisition, response, next) => {
   if (!dataUser) {
     return response.send({
       success: false,
-      message: "it's not's possible to create a user account"
+      message: 'Não foi possível criar esta conta de usuário!'
     })
   }
   if (body.scope === 'client') {
@@ -87,14 +87,14 @@ module.exports.create = async (requisition, response, next) => {
     if (!dataClient) {
       return response.send({
         success: false,
-        message: "it's not's possible to create a client account"
+        message: 'Não foi possível criar esta conta de cliente!'
       })
     }
 
     return response.send({
       success: true,
-      message: 'user and client created',
-      body: { ...dataUser, client: dataClient, token }
+      message: 'Cliente cadastrado.',
+      body: { ...dataUser[0], client: dataClient[0], token }
     })
   }
 
@@ -108,21 +108,21 @@ module.exports.create = async (requisition, response, next) => {
     if (!dataManager) {
       return response.send({
         success: false,
-        message: "it's not's possible to create a manager account"
+        message: 'Não foi possível criar esta conta de gestor!'
       })
     }
 
     return response.send({
       success: true,
-      message: 'user and manager created',
-      body: { ...dataUser, manager: dataManager, token }
+      message: 'Gestor criado.',
+      body: { ...dataUser[0], manager: dataManager[0], token }
     })
   }
 
   return response.send({
     success: true,
-    message: 'user created',
-    body: dataUser,
+    message: 'Usuário criado.',
+    body: dataUser[0],
     token
   })
 }
@@ -148,14 +148,14 @@ module.exports.modify = async (requisition, response, next) => {
   if (!user) {
     return response.send({
       success: false,
-      message: "it's not's possible to modify a user"
+      message: 'Não foi possível modificar este usuário!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'user modified',
-    body: user
+    message: 'Usuário modificado.',
+    body: user[0]
   })
 }
 
@@ -167,13 +167,13 @@ module.exports.delete = async (requisition, response, next) => {
   if (!user) {
     return response.send({
       success: false,
-      message: "it's not's possible to delete a user"
+      message: 'Não foi possível deletar este usuário!'
     })
   }
 
   response.send({
     success: true,
-    message: 'user deleted'
+    message: 'Usuário deletado.'
   })
 }
 
@@ -185,14 +185,14 @@ module.exports.getUser = async (requisition, response, next) => {
   if (!user) {
     return response.send({
       success: false,
-      message: 'user not found'
+      message: 'Usuário não encontrado!'
     })
   }
 
   response.send({
     success: true,
-    message: 'user founded',
-    body: user
+    message: 'Usuário encontrado.',
+    body: user[0]
   })
 }
 
@@ -202,13 +202,13 @@ module.exports.getAll = async (requisition, response, next) => {
   if (!users) {
     return response.send({
       success: false,
-      message: 'Users not found'
+      message: 'Nenhum usuário encontrado!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'Users located',
+    message: 'Usuário(s) encontrado(s).',
     body: {
       count_users_found: users.length,
       users_found: users

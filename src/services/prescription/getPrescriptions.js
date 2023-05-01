@@ -23,5 +23,8 @@ module.exports = async (field, value) => {
   client.release()
   await database.close()
 
-  return res.rows[0] || null
+  if (res.rowCount >= 1) {
+    return res.rows
+  }
+  return null
 }

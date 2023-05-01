@@ -15,7 +15,7 @@ module.exports.init = async () => {
   const response = await _initTables()
 
   if (response.success) {
-    Logger.log({ message: 'Tables inits with success' })
+    Logger.log({ message: 'Tabelas iniciadas com sucesso' })
     return { success: true }
   }
   return response

@@ -125,14 +125,18 @@ module.exports.getByUser = async (requisition, response, next) => {
   for (let i = 0; i < prescriptions.length; i++) {
     const prescriptionMeal = await getPrescriptionMeal('prescription_id', prescriptions[i].prescription_id)
 
-    const meal = await getMeal('meal_id', prescriptionMeal.meal_id)
+    prescriptions[i].meals = []
 
-    prescriptions.meal.push(meal)
+    for (let j = 0; j < prescriptionMeal.length; j++) {
+      const meal = await getMeal('meal_id', prescriptionMeal[j].meal_id)
+
+      prescriptions[i].meals.push(meal)
+    }
   }
 
   response.send({
     success: true,
-    message: 'Prescrição encontrada.',
+    message: 'Prescrição(s) encontrada(s).',
     body: {
       prescriptions
     }
