@@ -3,7 +3,7 @@ module.exports = (body, prescriptionFields, mealFields) => {
   for (const field of prescriptionFields) {
     if (!body[field]) {
       return {
-        message: `field_${field}_not_found`,
+        message: `Campo: "${field}", não encontrado!`,
         success: false
       }
     }
@@ -13,7 +13,7 @@ module.exports = (body, prescriptionFields, mealFields) => {
     for (const field of mealFields) {
       if (!body.meal[iterator][field]) {
         return {
-          message: `field_meal_${field}_not_found`,
+          message: `Campo: "meal.${field}", não encontrado!`,
           success: false
         }
       }

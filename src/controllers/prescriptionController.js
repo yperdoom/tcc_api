@@ -62,13 +62,13 @@ module.exports.create = async (requisition, response, next) => {
   if (!prescription) {
     return response.send({
       success: false,
-      message: "it's_not's_possible_to_prescribe"
+      message: 'Não foi possível criar esta prescrição!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'prescription_created',
+    message: 'Prescrição criada.',
     body: prescription
   })
 }
@@ -90,13 +90,13 @@ module.exports.adapter = async (requisition, response, next) => {
   if (!prescription) {
     return response.send({
       success: false,
-      message: "it's_not's_possible_to_adapter_prescribe"
+      message: 'Não foi possível adaptar esta prescrição!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'prescription_adapted',
+    message: 'Prescrição adaptada.',
     body: prescription
   })
 }
@@ -109,7 +109,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   if (!client) {
     return response.send({
       success: false,
-      message: 'client_not_found'
+      message: 'Cliente não encontrado!'
     })
   }
 
@@ -118,7 +118,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   if (!prescriptions) {
     return response.send({
       success: false,
-      message: 'prescription_not_found'
+      message: 'Nenhuma prescrição encontrada!'
     })
   }
 
@@ -132,7 +132,7 @@ module.exports.getByUser = async (requisition, response, next) => {
 
   response.send({
     success: true,
-    message: 'prescription_founded',
+    message: 'Prescrição encontrada.',
     body: {
       prescriptions
     }
