@@ -113,7 +113,7 @@ module.exports.getByUser = async (requisition, response, next) => {
     })
   }
 
-  const prescriptions = await getPrescriptions('client_id', client.client_id)
+  const prescriptions = await getPrescriptions('client_id', client[0].client_id)
 
   if (!prescriptions) {
     return response.send({
@@ -139,6 +139,47 @@ module.exports.getByUser = async (requisition, response, next) => {
     message: 'Prescrição(s) encontrada(s).',
     body: {
       prescriptions
+    }
+  })
+}
+
+module.exports.getAllUserMeals = async (requisition, response, next) => {
+  const userId = requisition.params.user_id
+  const meals = []
+
+  const client = await getClient('user_id', userId)
+
+  if (!client) {
+    return response.send({
+      success: false,
+      message: 'Cliente não encontrado!'
+    })
+  }
+
+  const prescriptions = await getPrescriptions('client_id', client[0].client_id)
+
+  if (!prescriptions) {
+    return response.send({
+      success: false,
+      message: 'Nenhuma prescrição encontrada!'
+    })
+  }
+
+  for (let i = 0; i < prescriptions.length; i++) {
+    const prescriptionMeal = await getPrescriptionMeal('prescription_id', prescriptions[i].prescription_id)
+
+    for (let j = 0; j < prescriptionMeal.length; j++) {
+      const meal = await getMeal('meal_id', prescriptionMeal[j].meal_id)
+
+      meals.push(meal)
+    }
+  }
+
+  response.send({
+    success: true,
+    message: 'Prescrição(s) encontrada(s).',
+    body: {
+      meals
     }
   })
 }

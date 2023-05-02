@@ -5,6 +5,8 @@ module.exports = (api) => {
 
   api.get('/prescription/:user_id', prescriptionController.getByUser)
 
+  api.get('/meal/:user_id', prescriptionController.getAllUserMeals)
+
   // api.get('/prescription/:prescription_id', prescriptionController.getprescription)
 
   api.post('/prescription', prescriptionController.create)
