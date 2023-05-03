@@ -6,7 +6,7 @@ module.exports.createTable = async () => {
   await client.query(`
     CREATE TABLE IF NOT EXISTS managers (
       manager_id int NOT NULL GENERATED ALWAYS AS IDENTITY ( CYCLE INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 999999999 CACHE 1 ),
-      document varchar(15),
+      document varchar(15) NOT NULL,
       user_id int NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,

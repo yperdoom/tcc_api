@@ -64,6 +64,16 @@ module.exports.create = async (requisition, response, next) => {
     }
   }
 
+  if (body.scope === 'manager') {
+    const managerFields = verifyFields(body, [
+      'document'
+    ])
+
+    if (!managerFields.success) {
+      return response.send(managerFields)
+    }
+  }
+
   body.password = await crypt.hashPassword(body.password)
 
   const dataUser = await createUser(body)
@@ -99,9 +109,12 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   if (body.scope === 'manager') {
-    body.manager.created_at = getTimeNow()
-    body.manager.updated_at = getTimeNow()
-    body.manager.user_id = dataUser.user_id
+    body.manager = {
+      document: body.document,
+      user_id: dataUser[0].user_id,
+      created_at: getTimeNow(),
+      updated_at: getTimeNow()
+    }
 
     const dataManager = await createManager(body.manager)
 
