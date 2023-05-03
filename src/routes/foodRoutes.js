@@ -1,7 +1,7 @@
 const foodController = require('../controllers/foodController')
 
 module.exports = (api) => {
-  api.get('/food', foodController.getAll)
+  api.get('/foods', foodController.getAll)
 
   api.get('/food/:food_id', foodController.getFood)
 

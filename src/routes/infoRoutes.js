@@ -1,7 +1,7 @@
 const infoController = require('../controllers/infoController')
 
 module.exports = (api) => {
-  api.get('/info', infoController.getAll)
+  api.get('/infos', infoController.getAll)
 
   api.get('/info/:info_id', infoController.getInfo)
 
