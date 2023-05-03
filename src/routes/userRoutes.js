@@ -2,14 +2,22 @@
 const userController = require('../controllers/userController')
 
 module.exports = (api) => {
-  api.get('/user/:user_id', userController.getUser)
+  api.get('/user/client/:user_id', userController.getClient)
 
-  api.get('/user', userController.getAll)
+  api.get('/user/manager/:user_id', userController.getManager)
 
-  api.post('/user', userController.create)
+  api.get('/user/clients', userController.getAllClients)
 
-  api.put('/user/:user_id', userController.modify)
+  api.get('/user/managers', userController.getAllManagers)
 
+  api.post('/user/client', userController.createClient)
+
+  api.post('/user/manager', userController.createManager)
+
+  api.put('/user/client/:user_id', userController.modifyClient)
+
+  api.put('/user/manager/:user_id', userController.modifyManager)
+  
   api.delete('/user/:user_id', userController.delete)
 
   return api

@@ -17,9 +17,13 @@ const deleteUser = require('../services/user/deleteUser')
 
 // other services
 const createClient = require('../services/client/createClient')
+const getAllClients = require('../services/client/getAllClients')
+const getClient = require('../services/client/getClient')
 const createManager = require('../services/manager/createManager')
+const getAllManagers = require('../services/manager/getAllManagers')
+const getManager = require('../services/manager/getManager')
 
-module.exports.create = async (requisition, response, next) => {
+module.exports.createClient = async (requisition, response, next) => {
   const { body } = requisition
 
   const fields = verifyFields(body, [
@@ -27,7 +31,13 @@ module.exports.create = async (requisition, response, next) => {
     'email',
     'password',
     'phone',
-    'birthday'
+    'birthday',
+    'age',
+    'height',
+    'weight',
+    'fat_percentage',
+    'sex',
+    'manager_id'
   ])
 
   if (!fields.success) {
@@ -44,36 +54,7 @@ module.exports.create = async (requisition, response, next) => {
 
   body.created_at = getTimeNow()
   body.updated_at = getTimeNow()
-
-  if (!body.scope) {
-    body.scope = 'user'
-  }
-
-  if (body.scope === 'client') {
-    const clientFields = verifyFields(body.client, [
-      'age',
-      'height',
-      'weight',
-      'fat_percentage',
-      'sex',
-      'manager_id'
-    ])
-
-    if (!clientFields.success) {
-      return response.send(clientFields)
-    }
-  }
-
-  if (body.scope === 'manager') {
-    const managerFields = verifyFields(body, [
-      'document'
-    ])
-
-    if (!managerFields.success) {
-      return response.send(managerFields)
-    }
-  }
-
+  body.scope = 'client'
   body.password = await crypt.hashPassword(body.password)
 
   const dataUser = await createUser(body)
@@ -87,67 +68,116 @@ module.exports.create = async (requisition, response, next) => {
       message: 'Não foi possível criar esta conta de usuário!'
     })
   }
-  if (body.scope === 'client') {
-    body.client.created_at = getTimeNow()
-    body.client.updated_at = getTimeNow()
-    body.client.user_id = dataUser.user_id
 
-    const dataClient = await createClient(body.client)
-
-    if (!dataClient) {
-      return response.send({
-        success: false,
-        message: 'Não foi possível criar esta conta de cliente!'
-      })
-    }
-
-    return response.send({
-      success: true,
-      message: 'Cliente cadastrado.',
-      body: { ...dataUser[0], client: dataClient[0], token }
-    })
+  body.client = {
+    age: body.age,
+    height: body.height,
+    weight: body.weight,
+    fat_percentage: body.fat_percentage,
+    sex: body.sex,
+    manager_id: body.manager_id,
+    user_id: dataUser.user_id,
+    created_at: getTimeNow(),
+    updated_at: getTimeNow()
   }
 
-  if (body.scope === 'manager') {
-    body.manager = {
-      document: body.document,
-      user_id: dataUser[0].user_id,
-      created_at: getTimeNow(),
-      updated_at: getTimeNow()
-    }
+  const dataClient = await createClient(body.client)
 
-    const dataManager = await createManager(body.manager)
-
-    if (!dataManager) {
-      return response.send({
-        success: false,
-        message: 'Não foi possível criar esta conta de gestor!'
-      })
-    }
+  if (!dataClient) {
+    deleteUser(dataUser[0].user_id)
 
     return response.send({
-      success: true,
-      message: 'Gestor criado.',
-      body: { ...dataUser[0], manager: dataManager[0], token }
+      success: false,
+      message: 'Não foi possível criar esta conta de cliente!'
     })
   }
 
   return response.send({
     success: true,
-    message: 'Usuário criado.',
-    body: dataUser[0],
-    token
+    message: 'Cliente cadastrado.',
+    body: { ...dataUser[0], client: dataClient[0], token }
   })
 }
 
-module.exports.modify = async (requisition, response, next) => {
+module.exports.createManager = async (requisition, response, next) => {
+  const { body } = requisition
+
+  const fields = verifyFields(body, [
+    'name',
+    'email',
+    'password',
+    'phone',
+    'birthday',
+    'document'
+  ])
+
+  if (!fields.success) {
+    return response.send(fields)
+  }
+
+  const verifyEmailExists = await getUser('email', body.email)
+  if (verifyEmailExists) {
+    return response.send({
+      success: false,
+      message: 'E-mail já cadastrado!'
+    })
+  }
+
+  body.created_at = getTimeNow()
+  body.updated_at = getTimeNow()
+  body.scope = 'manager'
+  body.password = await crypt.hashPassword(body.password)
+
+  const dataUser = await createUser(body)
+
+  const objectToToken = setUserToTokenize(body)
+  const token = createTokenJWT(objectToToken)
+
+  if (!dataUser) {
+    return response.send({
+      success: false,
+      message: 'Não foi possível criar esta conta de usuário!'
+    })
+  }
+  
+  body.manager = {
+    document: body.document,
+    user_id: dataUser[0].user_id,
+    created_at: getTimeNow(),
+    updated_at: getTimeNow()
+  }
+
+  const dataManager = await createManager(body.manager)
+
+  if (!dataManager) {
+    deleteUser(dataUser[0].user_id)
+
+    return response.send({
+      success: false,
+      message: 'Não foi possível criar esta conta de gestor!'
+    })
+  }
+
+  return response.send({
+    success: true,
+    message: 'Gestor criado.',
+    body: { ...dataUser[0], manager: dataManager[0], token }
+  })
+}
+
+module.exports.modifyClient = async (requisition, response, next) => {
   const userId = requisition.params.user_id
   const { body } = requisition
 
   const fields = verifyFields(body, [
     'name',
     'phone',
-    'birthday'
+    'birthday',
+    'age',
+    'height',
+    'weight',
+    'fat_percentage',
+    'sex'
   ])
 
   if (!fields.success) {
@@ -157,6 +187,7 @@ module.exports.modify = async (requisition, response, next) => {
   body.updated_at = getTimeNow()
 
   const user = await modifyUser(userId, body)
+  const client = await modifyClient(userId, body)
 
   if (!user) {
     return response.send({
@@ -168,12 +199,53 @@ module.exports.modify = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Usuário modificado.',
-    body: user[0]
+    body: {
+      ...user[0],
+      ...client[0]
+    }
+  })
+}
+
+module.exports.modifyManager = async (requisition, response, next) => {
+  const userId = requisition.params.user_id
+  const { body } = requisition
+
+  const fields = verifyFields(body, [
+    'name',
+    'phone',
+    'birthday',
+    'document'
+  ])
+
+  if (!fields.success) {
+    return response.send(fields)
+  }
+
+  body.updated_at = getTimeNow()
+
+  const user = await modifyUser(userId, body)
+  const manager = await modifyManager(userId, body)
+
+  if (!user) {
+    return response.send({
+      success: false,
+      message: 'Não foi possível modificar este usuário!'
+    })
+  }
+
+  return response.send({
+    success: true,
+    message: 'Usuário modificado.',
+    body: {
+      ...user[0],
+      ...manager[0]
+    }
   })
 }
 
 module.exports.delete = async (requisition, response, next) => {
   const userId = requisition.params.user_id
+  const scope = requisition.body.scope
 
   const user = await deleteUser(userId)
 
@@ -190,12 +262,13 @@ module.exports.delete = async (requisition, response, next) => {
   })
 }
 
-module.exports.getUser = async (requisition, response, next) => {
+module.exports.getClient = async (requisition, response, next) => {
   const userId = requisition.params.user_id
 
   const user = await getUser('user_id', userId)
+  const client = await getClient('user_id', userId)
 
-  if (!user) {
+  if (!user || !client) {
     return response.send({
       success: false,
       message: 'Usuário não encontrado!'
@@ -205,14 +278,40 @@ module.exports.getUser = async (requisition, response, next) => {
   response.send({
     success: true,
     message: 'Usuário encontrado.',
-    body: user[0]
+    body: {
+      ...user[0],
+      client: client[0]
+    }
   })
 }
 
-module.exports.getAll = async (requisition, response, next) => {
-  const users = await getAllUsers()
+module.exports.getManager = async (requisition, response, next) => {
+  const userId = requisition.params.user_id
 
-  if (!users) {
+  const user = await getUser('user_id', userId)
+  const manager = await getManager('user_id', userId)
+
+  if (!user || !manager) {
+    return response.send({
+      success: false,
+      message: 'Usuário não encontrado!'
+    })
+  }
+
+  response.send({
+    success: true,
+    message: 'Usuário encontrado.',
+    body: {
+      ...user[0],
+      manager: manager[0]
+    }
+  })
+}
+
+module.exports.getAllClients = async (requisition, response, next) => {
+  const clients = await getAllClients()
+
+  if (!clients) {
     return response.send({
       success: false,
       message: 'Nenhum usuário encontrado!'
@@ -223,8 +322,28 @@ module.exports.getAll = async (requisition, response, next) => {
     success: true,
     message: 'Usuário(s) encontrado(s).',
     body: {
-      count_users_found: users.length,
-      users_found: users
+      count: clients.length,
+      clients
+    }
+  })
+}
+
+module.exports.getAllManagers = async (requisition, response, next) => {
+  const managers = await getAllManagers()
+
+  if (!managers) {
+    return response.send({
+      success: false,
+      message: 'Nenhum usuário encontrado!'
+    })
+  }
+
+  return response.send({
+    success: true,
+    message: 'Usuário(s) encontrado(s).',
+    body: {
+      count: managers.length,
+      managers
     }
   })
 }
