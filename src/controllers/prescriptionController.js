@@ -131,7 +131,7 @@ module.exports.adapter = async (requisition, response, next) => {
 
   const individual = await agController.newAdapter(foods, meal[0])
 
-  const nutrients = await _calculateNutrients({ individual, foods })
+  const nutrients = await _calculateNutrients({ quantity: individual.chromosome, foods })
 
   const payload = {
     ...body,
@@ -260,11 +260,17 @@ const _calculateNutrients = async (payload) => {
   const protein = 0
   const lipid = 0
   const carbohydrate = 0
-  const food = {}
 
-  for (const food of payload.foods) {
-    
-  }
+  payload.foods.map((food, index) => {
+    const foodQuantity = food.weight || food.portion || food.mililiter
+
+    const percentage = (payload.quantity[index] * 100) / foodQuantity
+
+    calorie += food.calorie * percentage
+    protein += food.protein * percentage
+    lipid += food.lipid * percentage
+    carbohydrate += food.carbohydrate * percentage
+  })
 
   return {
     calorie,
