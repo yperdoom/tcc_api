@@ -17,7 +17,7 @@ module.exports = (api) => {
   api.put('/user/client/:user_id', userController.modifyClient)
 
   api.put('/user/manager/:user_id', userController.modifyManager)
-  
+
   api.delete('/user/:user_id', userController.delete)
 
   return api

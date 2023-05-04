@@ -192,7 +192,7 @@ module.exports.modifyClient = async (requisition, response, next) => {
     message: 'Usuário modificado.',
     body: {
       ...user[0],
-      ...client[0]
+      client: client[0]
     }
   })
 }
@@ -229,14 +229,19 @@ module.exports.modifyManager = async (requisition, response, next) => {
     message: 'Usuário modificado.',
     body: {
       ...user[0],
-      ...manager[0]
+      manager: manager[0]
     }
   })
 }
 
 module.exports.delete = async (requisition, response, next) => {
   const userId = requisition.params.user_id
-  const scope = requisition.body.scope
+  let scope = requisition.body.scope
+
+  if (!scope) {
+    const user = await getUser('user_id', userId)
+    scope = user[0].scope
+  }
 
   if (scope === 'client' || scope === 'manager') {
     return response.send({
