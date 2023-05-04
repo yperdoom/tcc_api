@@ -29,8 +29,8 @@ module.exports = ({
   error: (error) => {
     const message = {}
 
-    if (error.message) {
-      message.message = error.message
+    if (error.error.message) {
+      message.message = error.error.message
     }
 
     if (error.type) {
@@ -39,18 +39,6 @@ module.exports = ({
 
     if (error.local) {
       message.local = error.local
-    }
-
-    if (error.body) {
-      message.body = error.body
-    }
-
-    if (error.data) {
-      message.data = error.data
-    }
-
-    if (error.response) {
-      message.response = error.response
     }
 
     console.log(color.red)

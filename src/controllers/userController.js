@@ -11,15 +11,16 @@ const setUserToTokenize = require('../services/factory/setUserToTokenize')
 // user services
 const createUser = require('../services/user/createUser')
 const getUser = require('../services/user/getUser')
-const getAllUsers = require('../services/user/getAllUsers')
 const modifyUser = require('../services/user/modifyUser')
 const deleteUser = require('../services/user/deleteUser')
 
 // other services
 const createClient = require('../services/client/createClient')
+const modifyClient = require('../services/client/modifyClient')
 const getAllClients = require('../services/client/getAllClients')
 const getClient = require('../services/client/getClient')
 const createManager = require('../services/manager/createManager')
+const modifyManager = require('../services/manager/modifyManager')
 const getAllManagers = require('../services/manager/getAllManagers')
 const getManager = require('../services/manager/getManager')
 
@@ -69,19 +70,9 @@ module.exports.createClient = async (requisition, response, next) => {
     })
   }
 
-  body.client = {
-    age: body.age,
-    height: body.height,
-    weight: body.weight,
-    fat_percentage: body.fat_percentage,
-    sex: body.sex,
-    manager_id: body.manager_id,
-    user_id: dataUser.user_id,
-    created_at: getTimeNow(),
-    updated_at: getTimeNow()
-  }
+  body.user_id = dataUser[0].user_id
 
-  const dataClient = await createClient(body.client)
+  const dataClient = await createClient(body)
 
   if (!dataClient) {
     deleteUser(dataUser[0].user_id)
@@ -139,7 +130,7 @@ module.exports.createManager = async (requisition, response, next) => {
       message: 'Não foi possível criar esta conta de usuário!'
     })
   }
-  
+
   body.manager = {
     document: body.document,
     user_id: dataUser[0].user_id,
@@ -246,6 +237,13 @@ module.exports.modifyManager = async (requisition, response, next) => {
 module.exports.delete = async (requisition, response, next) => {
   const userId = requisition.params.user_id
   const scope = requisition.body.scope
+
+  if (scope === 'client' || scope === 'manager') {
+    return response.send({
+      success: false,
+      message: `Não é possível deletar este usuário, pois ele tem uma conta de ${scope} vinculada!`
+    })
+  }
 
   const user = await deleteUser(userId)
 
