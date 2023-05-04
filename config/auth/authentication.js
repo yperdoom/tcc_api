@@ -14,7 +14,7 @@ module.exports.authentication = (requisition, response, next) => {
   requisition.auth = decodeTokenJwt(token.replace('Bearer ', ''))
 
   if (!requisition.auth) {
-    response.send({ success: false, message: 'Invalid token' })
+    return response.send({ success: false, message: 'Invalid token' })
   }
 
   next()
