@@ -10,7 +10,7 @@ module.exports = (objectToTokenize) => {
     return jwt.sign(objectToTokenize, AUTH_SECRET)
   } catch (error) {
     Logger.error({
-      ...error,
+      error,
       type: 'token-error',
       local: 'create-token-jwt'
     })

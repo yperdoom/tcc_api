@@ -11,7 +11,7 @@ module.exports = async () => {
     res = await client.query(query)
   } catch (error) {
     Logger.error({
-      ...error,
+      error,
       type: 'database-error',
       local: 'postgre-get-all-foods-service'
     })

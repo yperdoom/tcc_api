@@ -37,7 +37,7 @@ const _initTables = async () => {
     await initAdminUser()
   } catch (error) {
     Logger.error({
-      ...error,
+      error,
       type: 'database-error',
       local: 'create-postgres-tables'
     })
