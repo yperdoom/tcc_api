@@ -11,6 +11,8 @@ const createPrescriptionMealSync = require('../services/syncTables/createPrescri
 const getPrescriptionMeal = require('../services/syncTables/getPrescriptionMeal')
 const createMealFoodSync = require('../services/syncTables/createMealFoodSync')
 
+const getFood = require('../services/food/getFood')
+
 const getClient = require('../services/client/getClient')
 const getPrescriptions = require('../services/prescription/getPrescriptions')
 const agController = require('./agController')
@@ -19,14 +21,14 @@ module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
 
   const fields = verifyPrescriptionFields(body, [
-    'prescription.name',
-    'prescription.recommended_calorie',
-    'prescription.recommended_protein',
-    'prescription.recommended_lipid',
-    'prescription.recommended_carbohydrate',
-    'prescription.meal_amount',
-    'prescription.client_id',
-    'prescription.manager_id'
+    'name',
+    'recommended_calorie',
+    'recommended_protein',
+    'recommended_lipid',
+    'recommended_carbohydrate',
+    'meal_amount',
+    'client_id',
+    'manager_id'
   ], [
     'name',
     'type',
@@ -38,24 +40,27 @@ module.exports.create = async (requisition, response, next) => {
     'lipid',
     'recommended_carbohydrate',
     'carbohydrate',
-    'food_multiplier'
+    'food_amount',
+    'foods'
   ])
 
   if (!fields.success) {
     return response.send(fields)
   }
 
-  body.created_at = getTimeNow()
-  body.updated_at = getTimeNow()
+  body.prescription.created_at = getTimeNow()
+  body.prescription.updated_at = getTimeNow()
 
   const prescription = await createPrescription(body.prescription)
 
-  for (let iterator = 0; iterator > body.prescription.meal_amount; iterator++) {
+  for (let iterator = 0; iterator < body.prescription.meal_amount; iterator++) {
+    body.meal[iterator].created_at = body.prescription.created_at
+    body.meal[iterator].updated_at = body.prescription.updated_at
     const meal = await createMeal(body.meal[iterator])
-    await createPrescriptionMealSync(prescription._prescription_id, meal.meal_id)
+    await createPrescriptionMealSync(prescription[0].prescription_id, meal[0].meal_id)
 
-    for (let iterator = 0; iterator > body.meal.food_amount; iterator++) {
-      await createMealFoodSync(meal.meal_id, body.meal.foods[iterator].food_id)
+    for (let iterator = 0; iterator < body.meal.food_amount; iterator++) {
+      await createMealFoodSync(meal[0].meal_id, body.meal.foods[iterator].food_id)
     }
   }
 
@@ -69,23 +74,81 @@ module.exports.create = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Prescrição criada.',
-    body: prescription
+    body: {
+      ...prescription[0]
+    }
   })
 }
 
 module.exports.adapter = async (requisition, response, next) => {
   const { body } = requisition
 
-  const fields = verifyFields(body, ['foods'])
+  const fields = verifyFields(body, [
+    'foods',
+    'meal',
+    'name',
+    'type',
+    'recommended_calorie',
+    'recommended_protein',
+    'recommended_lipid',
+    'recommended_carbohydrate',
+    'client_id',
+    'manager_id'
+  ])
 
   if (!fields.success) {
     return response.send(fields)
   }
 
-  body.created_at = getTimeNow()
-  body.updated_at = getTimeNow()
+  const meal = await getMeal('meal_id', body.meal)
 
-  const prescription = agController.newAdapter(body.foods)
+  if (!meal) {
+    return response.send({
+      success: false,
+      message: 'Refeição não encontrada!'
+    })
+  }
+
+  if (body.foods.length !== meal[0].food_amount) {
+    return response.send({
+      success: false,
+      message: 'O número de alimentos não condiz com a receita!'
+    })
+  }
+
+  const foods = []
+
+  for (const foodId of body.foods) {
+    const food = await getFood('food_id', foodId)
+    if (!food) {
+      return response.send({
+        success: false,
+        message: 'Alimento não encontrado!'
+      })
+    }
+    foods.push(food[0])
+  }
+
+  const individual = await agController.newAdapter(foods, meal[0])
+
+  const nutrients = await _calculateNutrients({ individual, foods })
+
+  const payload = {
+    ...body,
+    ...nutrients,
+    food_amount: meal[0].food_amount,
+    created_at: getTimeNow(),
+    updated_at: getTimeNow(),
+    meal_amount: 1,
+    is_adapted_meal: true,
+    foods_multiplier: individual.chromosome
+  }
+
+  console.log(payload)
+
+  return response.send({ payload })
+  const prescription = await createPrescription(payload)
+  await createMeal(payload)
 
   if (!prescription) {
     return response.send({
@@ -124,6 +187,10 @@ module.exports.getByUser = async (requisition, response, next) => {
 
   for (let i = 0; i < prescriptions.length; i++) {
     const prescriptionMeal = await getPrescriptionMeal('prescription_id', prescriptions[i].prescription_id)
+
+    if (!prescriptionMeal) {
+      continue
+    }
 
     prescriptions[i].meals = []
 
@@ -168,6 +235,10 @@ module.exports.getAllUserMeals = async (requisition, response, next) => {
   for (let i = 0; i < prescriptions.length; i++) {
     const prescriptionMeal = await getPrescriptionMeal('prescription_id', prescriptions[i].prescription_id)
 
+    if (!prescriptionMeal) {
+      continue
+    }
+
     for (let j = 0; j < prescriptionMeal.length; j++) {
       const meal = await getMeal('meal_id', prescriptionMeal[j].meal_id)
 
@@ -182,4 +253,23 @@ module.exports.getAllUserMeals = async (requisition, response, next) => {
       meals
     }
   })
+}
+
+const _calculateNutrients = async (payload) => {
+  const calorie = 0
+  const protein = 0
+  const lipid = 0
+  const carbohydrate = 0
+  const food = {}
+
+  for (const food of payload.foods) {
+    
+  }
+
+  return {
+    calorie,
+    protein,
+    lipid,
+    carbohydrate
+  }
 }

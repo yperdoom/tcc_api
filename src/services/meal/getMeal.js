@@ -7,7 +7,7 @@ module.exports = async (field, value) => {
 
   try {
     const query = {
-      text: `SELECT * FROM foods WHERE ${field} = $1`,
+      text: `SELECT * FROM meals WHERE ${field} = $1`,
       values: [value]
     }
 

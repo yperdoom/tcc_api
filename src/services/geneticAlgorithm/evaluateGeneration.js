@@ -2,7 +2,7 @@ require('dotenv/config')
 const { EXPECTED_EVALUATION, SIZE_GENERATION } = process.env
 
 // Função que irá avaliar a geração de cromossomos informada
-module.exports = (foods, generation, meal) => {
+module.exports = async (foods, generation, meal) => {
   let averageFitnessGeneration = 0
   let chromosomeExcellent = null
   let bestChromosome = { fitness: 100 }

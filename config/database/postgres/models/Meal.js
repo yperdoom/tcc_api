@@ -8,6 +8,9 @@ module.exports.createTable = async () => {
       meal_id int NOT NULL GENERATED ALWAYS AS IDENTITY ( CYCLE INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 999999999 CACHE 1 ),
       name varchar(50) NOT NULL,
       type varchar(30) NOT NULL,
+      is_adapted_meal boolean NOT NULL,
+      foods int[],
+      foods_multiplier int[],
       recommended_calorie float NOT NULL,
       calorie float NOT NULL,
       recommended_protein float NOT NULL,
@@ -16,7 +19,7 @@ module.exports.createTable = async () => {
       lipid float NOT NULL,
       recommended_carbohydrate float NOT NULL,
       carbohydrate float NOT NULL,
-      food_multiplier int NOT NULL,
+      food_amount int NOT NULL,
       created_at timestamp NOT NULL,
       updated_at timestamp NOT NULL,
       PRIMARY KEY (meal_id)

@@ -3,18 +3,7 @@ module.exports = async (generation, father = false) => {
   let chromosome = null
 
   while (chromosome == null) {
-    const drawNumber = Math.random() * generation.lastPosition
-
-    generation.generation.forEach((individual) => {
-      const min = individual.rouletteRange[0]
-      const max = individual.rouletteRange[1]
-
-      if (drawNumber >= min && drawNumber <= max) {
-        individual.rouletteRange = [-1, -1]
-        chromosome = individual
-      }
-      return individual
-    })
+    chromosome = await _getChromosome(generation)
   }
 
   if (father) {
@@ -23,6 +12,29 @@ module.exports = async (generation, father = false) => {
       chromosome
     }
   }
+
+  return chromosome
+}
+
+const _getChromosome = async (generation) => {
+  let chromosome = null
+  const drawNumber = await Math.random() * generation.lastPosition
+
+  await generation.generation.map((individual) => {
+    const min = individual.rouletteRange[0]
+    const max = individual.rouletteRange[1]
+
+    if (drawNumber >= min && drawNumber <= max) {
+      if (!individual.selected) {
+        chromosome = {
+          ...individual,
+          selected: true
+        }
+      }
+    }
+
+    return individual
+  })
 
   return chromosome
 }

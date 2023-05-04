@@ -2,7 +2,7 @@ require('dotenv/config')
 const { SIZE_GENERATION, MAX_CHROMOSOME_SIZE } = process.env
 
 // Função que gera uma geração de indivíduos
-module.exports = (foods) => {
+module.exports = async (foods) => {
   // Declara a geração inicial de indivíduos
   const generation = []
 

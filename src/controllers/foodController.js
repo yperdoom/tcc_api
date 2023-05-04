@@ -82,7 +82,7 @@ module.exports.modify = async (requisition, response, next) => {
 
   return response.send({
     success: true,
-    message: 'Alimento deletado.',
+    message: 'Alimento modificado.',
     body: food[0]
   })
 }
@@ -138,8 +138,8 @@ module.exports.getAll = async (requisition, response, next) => {
     success: true,
     message: 'Alimento(s) encontrados.',
     body: {
-      count_foods_found: foods.length,
-      foods_found: foods
+      count: foods.length,
+      foods
     }
   })
 }

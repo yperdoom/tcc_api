@@ -11,6 +11,7 @@ module.exports.createTable = async () => {
       recommended_protein float NOT NULL,
       recommended_lipid float NOT NULL,
       recommended_carbohydrate float NOT NULL,
+      is_adapted_prescription boolean NOT NULL,
       meal_amount int NOT NULL,
       client_id int NOT NULL,
       manager_id int NOT NULL,

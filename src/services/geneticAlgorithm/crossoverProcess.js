@@ -3,8 +3,8 @@ const { CROSSOVER_RATE } = process.env
 
 module.exports = async (fatherChromosome, motherChromosome) => {
   const lengthOfChromosome = (fatherChromosome.chromosome.length + motherChromosome.chromosome.length) / 2
-  const fatherOffspring = fatherChromosome
-  const motherOffspring = motherChromosome
+  const fatherOffspring = { ...fatherChromosome, selected: false }
+  const motherOffspring = { ...motherChromosome, selected: false }
   const fatherBuffer = []
   const motherBuffer = []
 

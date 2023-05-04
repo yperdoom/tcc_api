@@ -120,6 +120,7 @@ module.exports.getAll = async (requisition, response, next) => {
     success: true,
     message: 'Informação(s) encontrada(s).',
     body: {
+      count: infos.length,
       infos
     }
   })

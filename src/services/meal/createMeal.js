@@ -8,22 +8,8 @@ module.exports = async (body) => {
   try {
     const query = {
       text: `INSERT INTO 
-        meal(
-          name,
-          type,
-          recommended_calorie,
-          calorie,
-          recommended_protein,
-          protein,
-          recommended_lipid,
-          lipid,
-          recommended_carbohydrate,
-          carbohydrate,
-          food_multiplier,
-          created_at,
-          updated_at
-        )
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        meals(name, type, recommended_calorie, calorie, recommended_protein, protein, recommended_lipid, lipid, recommended_carbohydrate, carbohydrate, food_amount, created_at, updated_at)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         RETURNING *`,
       values: [
         body.name,
@@ -36,7 +22,7 @@ module.exports = async (body) => {
         body.lipid,
         body.recommended_carbohydrate,
         body.carbohydrate,
-        body.food_multiplier,
+        body.food_amount,
         body.created_at,
         body.updated_at
       ]

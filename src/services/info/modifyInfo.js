@@ -10,7 +10,7 @@ module.exports = async (infoId, body) => {
       text: `UPDATE infos 
         SET name=$2,
           description=$3,
-          updated_at=$13
+          updated_at=$4
         WHERE info_id = $1
         RETURNING *`,
       values: [
