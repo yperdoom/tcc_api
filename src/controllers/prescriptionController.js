@@ -56,7 +56,16 @@ module.exports.create = async (requisition, response, next) => {
   for (let iterator = 0; iterator < body.prescription.meal_amount; iterator++) {
     body.meal[iterator].created_at = body.prescription.created_at
     body.meal[iterator].updated_at = body.prescription.updated_at
+    console.log(body.meal[iterator])
+
     const meal = await createMeal(body.meal[iterator])
+
+    if (!meal) {
+      return response.send({
+        success: false,
+        message: 'Não foi possível criar esta refeição!'
+      })
+    }
     await createPrescriptionMealSync(prescription[0].prescription_id, meal[0].meal_id)
 
     for (let iterator = 0; iterator < body.meal.food_amount; iterator++) {
@@ -88,10 +97,6 @@ module.exports.adapter = async (requisition, response, next) => {
     'meal',
     'name',
     'type',
-    'recommended_calorie',
-    'recommended_protein',
-    'recommended_lipid',
-    'recommended_carbohydrate',
     'client_id',
     'manager_id'
   ])
@@ -136,21 +141,24 @@ module.exports.adapter = async (requisition, response, next) => {
   const payload = {
     ...body,
     ...nutrients,
+    foods: { foods },
+    recommended_calorie: meal[0].recommended_calorie,
+    recommended_protein: meal[0].recommended_protein,
+    recommended_lipid: meal[0].recommended_lipid,
+    recommended_carbohydrate: meal[0].recommended_carbohydrate,
     food_amount: meal[0].food_amount,
-    created_at: getTimeNow(),
-    updated_at: getTimeNow(),
     meal_amount: 1,
-    is_adapted_meal: true,
-    foods_multiplier: individual.chromosome
+    is_adapted_meal: 1,
+    foods_multiplier: individual.chromosome,
+    fitness: individual.fitness
+    // created_at: getTimeNow(),
+    // updated_at: getTimeNow(),
   }
 
-  console.log(payload)
+  const prescriptionCreated = await createPrescription(payload)
+  const mealCreated = await createMeal(payload)
 
-  return response.send({ payload })
-  const prescription = await createPrescription(payload)
-  await createMeal(payload)
-
-  if (!prescription) {
+  if (!prescriptionCreated || !mealCreated) {
     return response.send({
       success: false,
       message: 'Não foi possível adaptar esta prescrição!'
@@ -160,7 +168,10 @@ module.exports.adapter = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Prescrição adaptada.',
-    body: prescription
+    body: {
+      ...prescriptionCreated[0],
+      meal: mealCreated[0]
+    }
   })
 }
 
@@ -256,15 +267,14 @@ module.exports.getAllUserMeals = async (requisition, response, next) => {
 }
 
 const _calculateNutrients = async (payload) => {
-  const calorie = 0
-  const protein = 0
-  const lipid = 0
-  const carbohydrate = 0
+  let calorie = 0
+  let protein = 0
+  let lipid = 0
+  let carbohydrate = 0
 
-  payload.foods.map((food, index) => {
+  payload.foods.forEach((food, index) => {
     const foodQuantity = food.weight || food.portion || food.mililiter
-
-    const percentage = (payload.quantity[index] * 100) / foodQuantity
+    const percentage = ((payload.quantity[index] * 100) / foodQuantity) / 100
 
     calorie += food.calorie * percentage
     protein += food.protein * percentage
