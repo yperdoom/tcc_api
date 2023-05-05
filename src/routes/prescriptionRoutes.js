@@ -1,4 +1,4 @@
-const prescriptionController = require('../controllers/prescriptionController')
+const prescriptionController = require('../controllers/mongoPrescriptionController')
 
 module.exports = (api) => {
   // api.get('/prescription', prescriptionController.getAll)
