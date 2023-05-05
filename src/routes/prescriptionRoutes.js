@@ -3,7 +3,7 @@ const prescriptionController = require('../controllers/mongoPrescriptionControll
 module.exports = (api) => {
   // api.get('/prescription', prescriptionController.getAll)
 
-  api.get('/prescription/:user_id', prescriptionController.getOne)
+  api.get('/prescription/:prescription_id', prescriptionController.getOne)
 
   api.get('/prescriptions/:user_id', prescriptionController.getByUser)
 

@@ -9,7 +9,7 @@ module.exports = (body, prescriptionFields, mealFields) => {
     }
   }
 
-  if (body.prescription.meal_amount !== body.meal.length) {
+  if (body.prescription.meal_amount !== body.meals.length) {
     return {
       message: 'Quantidade de refeições enviadas, não condizem com as esperadas!',
       success: false
@@ -17,7 +17,7 @@ module.exports = (body, prescriptionFields, mealFields) => {
   }
 
   for (let iterator = 0; iterator < body.prescription.meal_amount; iterator++) {
-    if (body.meal[iterator].food_amount !== body.meal[iterator].foods.length) {
+    if (body.meals[iterator].food_amount !== body.meals[iterator].foods.length) {
       return {
         message: 'Quantidade de alimentos enviados, não condizem com os esperados!',
         success: false
@@ -25,9 +25,9 @@ module.exports = (body, prescriptionFields, mealFields) => {
     }
 
     for (const field of mealFields) {
-      if (body.meal[iterator][field] === undefined) {
+      if (body.meals[iterator][field] === undefined) {
         return {
-          message: `Campo: "meal.${field}", não encontrado!`,
+          message: `Campo: "meals.${field}", não encontrado!`,
           success: false
         }
       }

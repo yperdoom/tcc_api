@@ -43,7 +43,7 @@ module.exports.create = async (requisition, response, next) => {
     is_adapted_prescription: false
   }
 
-  await payload.meals.map(async (meal) => {
+  const meals = payload.meals.map((meal, index) => {
     const foods = []
 
     for (const foodId of meal.foods) {
@@ -57,8 +57,26 @@ module.exports.create = async (requisition, response, next) => {
       foods.push(food[0])
     }
 
-    return foods
+    return 
   })
+  await payload.meals.map(async (meal, index) => {
+    const foods = []
+
+    for (const foodId of meal.foods) {
+      const food = await getFood('food_id', foodId)
+      if (!food) {
+        return response.send({
+          success: false,
+          message: 'Alimento não encontrado!'
+        })
+      }
+      foods.push(food[0])
+    }
+
+    payload.meals[index].foods = foods
+  })
+
+  console.log(payload.meals)
 
   await managementPrescription.openConnection()
 
@@ -99,7 +117,7 @@ module.exports.adapter = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const prescription = await managementPrescription.getOne(body.prescriptionId)
+  const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
   const meal = prescription.meals.filter(meal => meal._id === body.mealId)
 
   if (!meal) {
@@ -209,18 +227,9 @@ module.exports.getByUser = async (requisition, response, next) => {
 }
 
 module.exports.getOne = async (requisition, response, next) => {
-  const userId = requisition.params.user_id
+  const prescriptionId = requisition.params.prescription_id
 
-  const client = await getClient('user_id', userId)
-
-  if (!client) {
-    return response.send({
-      success: false,
-      message: 'Cliente não encontrado!'
-    })
-  }
-
-  const prescriptions = await managementPrescription.getOne({ client: client[0].client_id })
+  const prescriptions = await managementPrescription.getOne({ _id: prescriptionId })
 
   if (!prescriptions) {
     return response.send({

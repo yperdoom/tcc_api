@@ -1,11 +1,9 @@
-const Prescription = require('../../config/database/mongo/models/Prescription')
-const mongoConnection = require('../../config/database/mongo/mongoConnection')
+const Prescription = require('../../../config/database/mongo/models/Prescriptions')
+const mongoConnection = require('../../../config/database/mongo/mongoConnection')
 
 module.exports = ({
   create: async (document) => {
-    const prescription = await Prescription.create(document)
-
-    return prescription
+    return await Prescription.create(document)
   },
   modify: async (prescriptionId, payload) => {
     const filter = {
@@ -16,7 +14,7 @@ module.exports = ({
       $set: payload
     }
 
-    return await Prescription.findOneAndUpdate(filter, query)
+    return await Prescription.findOneAndUpdate(filter, query).lean()
   },
   delete: async (prescriptionId) => {
     const filter = {
@@ -27,13 +25,13 @@ module.exports = ({
   },
 
   getOne: async (filter) => {
-    return await Prescription.findOne(filter)
+    return await Prescription.findOne(filter).lean()
   },
   getAll: async (filter) => {
-    return await Prescription.find(filter)
+    return await Prescription.find(filter).lean()
   },
   getMany: async () => {
-    return await Prescription.find()
+    return await Prescription.find().lean()
   },
 
   openConnection: async () => {
