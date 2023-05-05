@@ -78,5 +78,8 @@ module.exports.newAdapter = async (foods, meal) => {
   // console.log(generationCounter)
   // await Logger.closeConnection()
 
-  return individual ?? bestIndividual
+  return {
+    ...individual ?? bestIndividual,
+    generationCounter
+  }
 }
