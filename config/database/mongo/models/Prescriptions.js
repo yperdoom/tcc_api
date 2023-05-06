@@ -48,7 +48,9 @@ const PrescriptionSchema = new Schema({
   is_adapted_prescription: Boolean,
   meal_amount: Number,
   client_id: Number,
-  manager_id: Number
+  manager_id: Number,
+  user_id: { type: Schema.Types.ObjectId },
+  user_name: String
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   id: false,

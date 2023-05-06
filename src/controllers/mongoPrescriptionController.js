@@ -7,12 +7,7 @@ const getClient = require('../services/client/getClient')
 const managementPrescription = require('../services/allPrescription/managementPrescription')
 
 module.exports.create = async (requisition, response, next) => {
-  const { body } = requisition
-  const userId = requisition.auth
-
-  console.log(userId)
-
-  return true
+  const { body, auth } = requisition
 
   const fields = verifyPrescriptionFields(body, [
     'name',
@@ -45,7 +40,8 @@ module.exports.create = async (requisition, response, next) => {
   const payload = {
     ...body.prescription,
     ...body,
-    user_id: userId,
+    user_id: auth.user_id,
+    user_name: auth.name,
     is_adapted_prescription: false
   }
 
@@ -80,7 +76,7 @@ module.exports.create = async (requisition, response, next) => {
 }
 
 module.exports.adapter = async (requisition, response, next) => {
-  const { body } = requisition
+  const { body, auth } = requisition
 
   const fields = verifyFields(body, [
     'foods',
@@ -152,7 +148,8 @@ module.exports.adapter = async (requisition, response, next) => {
     recommended_lipid: meal.recommended_lipid,
     is_adapted_prescription: true,
     meal_amount: 1,
-    user_id: userId,
+    user_id: auth.user_id,
+    user_name: auth.name,
     client_id: body.client_id,
     manager_id: body.manager_id
   }
