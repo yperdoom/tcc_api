@@ -8,6 +8,11 @@ const managementPrescription = require('../services/allPrescription/managementPr
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
+  const userId = requisition.auth
+
+  console.log(userId)
+
+  return true
 
   const fields = verifyPrescriptionFields(body, [
     'name',
@@ -40,6 +45,7 @@ module.exports.create = async (requisition, response, next) => {
   const payload = {
     ...body.prescription,
     ...body,
+    user_id: userId,
     is_adapted_prescription: false
   }
 
@@ -93,6 +99,7 @@ module.exports.adapter = async (requisition, response, next) => {
   await managementPrescription.openConnection()
 
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
+
   let meal = {}
   prescription.meals.forEach(mealActual => {
     if (mealActual._id.toString() === body.mealId.toString()) {
@@ -145,6 +152,7 @@ module.exports.adapter = async (requisition, response, next) => {
     recommended_lipid: meal.recommended_lipid,
     is_adapted_prescription: true,
     meal_amount: 1,
+    user_id: userId,
     client_id: body.client_id,
     manager_id: body.manager_id
   }
