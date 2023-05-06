@@ -43,40 +43,18 @@ module.exports.create = async (requisition, response, next) => {
     is_adapted_prescription: false
   }
 
-  const meals = payload.meals.map((meal, index) => {
-    const foods = []
+  for (const mealIndex in payload.meals) {
+    console.log(payload.meals[mealIndex])
+    for (const foodIndex in payload.meals[mealIndex]) {
+      console.log(payload.meals[mealIndex].foods[foodIndex])
 
-    for (const foodId of meal.foods) {
-      const food = await getFood('food_id', foodId)
-      if (!food) {
-        return response.send({
-          success: false,
-          message: 'Alimento não encontrado!'
-        })
-      }
-      foods.push(food[0])
+      const food = await getFood('food_id', payload.meals[mealIndex].foods[foodIndex])
+
+      payload.meals[mealIndex].foods[foodIndex] = food[0]
     }
+  }
 
-    return 
-  })
-  await payload.meals.map(async (meal, index) => {
-    const foods = []
-
-    for (const foodId of meal.foods) {
-      const food = await getFood('food_id', foodId)
-      if (!food) {
-        return response.send({
-          success: false,
-          message: 'Alimento não encontrado!'
-        })
-      }
-      foods.push(food[0])
-    }
-
-    payload.meals[index].foods = foods
-  })
-
-  console.log(payload.meals)
+  console.log('oi eu sou o goku :: ', payload.meals)
 
   await managementPrescription.openConnection()
 
