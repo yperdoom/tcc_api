@@ -55,4 +55,8 @@ const PrescriptionSchema = new Schema({
   versionKey: false
 })
 
+PrescriptionSchema.index({ user_id: 1 })
+PrescriptionSchema.index({ client_id: 1 })
+PrescriptionSchema.index({ manager_id: 1 })
+
 module.exports = mongoose.model('Prescription', PrescriptionSchema)

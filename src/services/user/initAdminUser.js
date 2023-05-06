@@ -31,7 +31,7 @@ module.exports = async () => {
     await client.query(query)
   } catch (error) {
     Logger.error({
-      error,
+      error: error.error,
       type: 'database-error',
       local: 'postgre-create-admin-user-service'
     })

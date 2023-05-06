@@ -1,9 +1,19 @@
 const Prescription = require('../../../config/database/mongo/models/Prescriptions')
 const mongoConnection = require('../../../config/database/mongo/mongoConnection')
+const Logger = require('../../controllers/loggerController')
+const mongoose = require('mongoose')
 
 module.exports = ({
   create: async (document) => {
-    return await Prescription.create(document)
+    try {
+      return await Prescription.create(document)
+    } catch (error) {
+      Logger.error({
+        error: error.error,
+        type: 'database-error',
+        local: 'mongo-create-prescription-service'
+      })
+    }
   },
   modify: async (prescriptionId, payload) => {
     const filter = {
@@ -14,30 +24,94 @@ module.exports = ({
       $set: payload
     }
 
-    return await Prescription.findOneAndUpdate(filter, query).lean()
+    try {
+      return await Prescription.findOneAndUpdate(filter, query).lean()
+    } catch (error) {
+      Logger.error({
+        error: error.error,
+        type: 'database-error',
+        local: 'mongo-modify-prescription-service'
+      })
+    }
   },
   delete: async (prescriptionId) => {
     const filter = {
       _id: prescriptionId
     }
 
-    return await Prescription.deleteOne(filter)
+    try {
+      return await Prescription.deleteOne(filter)
+    } catch (error) {
+      Logger.error({
+        error: error.error,
+        type: 'database-error',
+        local: 'mongo-delete-prescription-service'
+      })
+    }
   },
 
   getOne: async (filter) => {
-    return await Prescription.findOne(filter).lean()
+    try {
+      return await Prescription.findOne(filter).lean()
+    } catch (error) {
+      Logger.error({
+        error: error.error,
+        type: 'database-error',
+        local: 'mongo-get-one-prescription-on-filter-service'
+      })
+    }
   },
   getAll: async (filter) => {
-    return await Prescription.find(filter).lean()
+    try {
+      return await Prescription.find(filter).lean()
+    } catch (error) {
+      Logger.error({
+        error: error.error,
+        type: 'database-error',
+        local: 'mongo-get-all-prescriptions-on-filter-service'
+      })
+    }
   },
   getMany: async () => {
-    return await Prescription.find().lean()
+    try {
+      return await Prescription.find().lean()
+    } catch (error) {
+      Logger.error({
+        error,
+        type: 'database-error',
+        local: 'mongo-get-all-prescriptions-service'
+      })
+    }
+  },
+
+  toObjectId: (token) => {
+    if (!token) {
+      return new mongoose.Types.ObjectId()
+    }
+    return mongoose.Types.ObjectId(String(token))
   },
 
   openConnection: async () => {
-    await mongoConnection.connect()
+    try {
+      await mongoConnection.connect()
+    } catch (error) {
+      Logger.error({
+        error,
+        type: 'database-error',
+        local: 'mongo-connect-service'
+      })
+    }
   },
   closeConnection: async () => {
-    await mongoConnection.disconnect()
+    try {
+      Logger.log({ message: 'vo disconecta nao ieieieieie', local: 'da sua mãe' })
+      // await mongoConnection.disconnect()
+    } catch (error) {
+      Logger.error({
+        error,
+        type: 'database-error',
+        local: 'mongo-disconnect-service'
+      })
+    }
   }
 })

@@ -1,4 +1,3 @@
-
 const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
 const agController = require('./agController')
@@ -39,6 +38,7 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   const payload = {
+    ...body.prescription,
     ...body,
     is_adapted_prescription: false
   }
@@ -93,9 +93,12 @@ module.exports.adapter = async (requisition, response, next) => {
   await managementPrescription.openConnection()
 
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
-  const meal = prescription.meals.filter(meal => meal._id === body.mealId)
-
-  console.log(meal)
+  let meal = {}
+  prescription.meals.forEach(mealActual => {
+    if (mealActual._id.toString() === body.mealId.toString()) {
+      meal = mealActual
+    }
+  })
 
   if (!meal) {
     await managementPrescription.closeConnection()
@@ -114,8 +117,6 @@ module.exports.adapter = async (requisition, response, next) => {
       message: 'O número de alimentos não condiz com a receita!'
     })
   }
-
-  console.log(meal.foods)
 
   const individual = await agController.newAdapter(meal.foods, meal)
 
@@ -163,7 +164,7 @@ module.exports.adapter = async (requisition, response, next) => {
     success: true,
     message: 'Prescrição adaptada.',
     body: {
-      ...prescriptionCreated
+      ...prescriptionCreated._doc
     }
   })
 }

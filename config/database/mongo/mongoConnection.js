@@ -13,7 +13,7 @@ module.exports.connect = async () => {
       conn = await mongoose.connect(MONGO_ENDPOINT)
     } catch (error) {
       Logger.error({
-        ...error,
+        error: error.error,
         type: 'database-error',
         local: 'mongo-connect'
       })
@@ -29,7 +29,7 @@ module.exports.disconnect = async () => {
     return await mongoose.disconnect(MONGO_ENDPOINT)
   } catch (error) {
     Logger.error({
-      error,
+      error: error.error,
       type: 'database-error',
       local: 'mongo-disconnect'
     })

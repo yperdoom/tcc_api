@@ -56,7 +56,6 @@ module.exports.create = async (requisition, response, next) => {
   for (let iterator = 0; iterator < body.prescription.meal_amount; iterator++) {
     body.meal[iterator].created_at = body.prescription.created_at
     body.meal[iterator].updated_at = body.prescription.updated_at
-    console.log(body.meal[iterator])
 
     const meal = await createMeal(body.meal[iterator])
 

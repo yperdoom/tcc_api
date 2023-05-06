@@ -29,8 +29,8 @@ module.exports = ({
   error: (error) => {
     const message = {}
 
-    if (error.error.message) {
-      message.message = error.error.message
+    if (error.message) {
+      message.message = error.message
     }
 
     if (error.type) {

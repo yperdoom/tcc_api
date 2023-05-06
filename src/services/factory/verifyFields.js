@@ -4,7 +4,6 @@ module.exports = (body, fields, orFields) => {
 
   for (const field of fields) {
     if (body[field] === undefined) {
-      console.log(body[field])
       response.message = `Campo ${field} não encontrado`
       response.success = false
     }

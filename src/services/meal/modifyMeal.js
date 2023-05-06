@@ -42,7 +42,7 @@ module.exports = async (foodId, body) => {
     res = await client.query(query)
   } catch (error) {
     Logger.error({
-      error,
+      error: error.error,
       type: 'database-error',
       local: 'postgre-modify-meal-service'
     })
