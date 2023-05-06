@@ -44,21 +44,16 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   for (const mealIndex in payload.meals) {
-    console.log(payload.meals[mealIndex])
-    for (const foodIndex in payload.meals[mealIndex]) {
-      console.log(payload.meals[mealIndex].foods[foodIndex])
+    for (const foodId in payload.meals[mealIndex].foods) {
+      const food = await getFood('food_id', payload.meals[mealIndex].foods[foodId])
 
-      const food = await getFood('food_id', payload.meals[mealIndex].foods[foodIndex])
-
-      payload.meals[mealIndex].foods[foodIndex] = food[0]
+      payload.meals[mealIndex].foods[foodId] = food[0]
     }
   }
 
-  console.log('oi eu sou o goku :: ', payload.meals)
-
   await managementPrescription.openConnection()
 
-  const prescription = managementPrescription.create(payload)
+  const prescription = await managementPrescription.create(payload)
 
   await managementPrescription.closeConnection()
 
@@ -73,7 +68,7 @@ module.exports.create = async (requisition, response, next) => {
     success: true,
     message: 'Prescrição criada.',
     body: {
-      ...prescription
+      ...prescription._doc
     }
   })
 }
@@ -98,6 +93,8 @@ module.exports.adapter = async (requisition, response, next) => {
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
   const meal = prescription.meals.filter(meal => meal._id === body.mealId)
 
+  console.log(meal)
+
   if (!meal) {
     return response.send({
       success: false,
@@ -112,22 +109,11 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
-  const foods = []
+  console.log(meal.foods)
 
-  for (const foodId of meal.foods) {
-    const food = await getFood('food_id', foodId)
-    if (!food) {
-      return response.send({
-        success: false,
-        message: 'Alimento não encontrado!'
-      })
-    }
-    foods.push(food[0])
-  }
+  const individual = await agController.newAdapter(meal.foods, meal)
 
-  const individual = await agController.newAdapter(foods, meal)
-
-  const nutrients = await _calculateNutrients({ quantity: individual.chromosome, foods })
+  const nutrients = await _calculateNutrients({ quantity: individual.chromosome, foods: meal.foods })
 
   const payload = {
     meals: [
@@ -135,7 +121,7 @@ module.exports.adapter = async (requisition, response, next) => {
         name: body.name,
         type: body.type,
         countGenerations: individual.generationCounter,
-        foods,
+        foods: meal.foods,
         fitness: individual.fitness,
         ...nutrients,
         recommended_calorie: meal.recommended_calorie,
