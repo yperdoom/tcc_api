@@ -90,12 +90,16 @@ module.exports.adapter = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await managementPrescription.openConnection()
+
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
   const meal = prescription.meals.filter(meal => meal._id === body.mealId)
 
   console.log(meal)
 
   if (!meal) {
+    await managementPrescription.closeConnection()
+
     return response.send({
       success: false,
       message: 'Refeição não encontrada!'
@@ -103,6 +107,8 @@ module.exports.adapter = async (requisition, response, next) => {
   }
 
   if (body.foods.length !== meal.food_amount) {
+    await managementPrescription.closeConnection()
+
     return response.send({
       success: false,
       message: 'O número de alimentos não condiz com a receita!'
@@ -144,6 +150,8 @@ module.exports.adapter = async (requisition, response, next) => {
 
   const prescriptionCreated = await managementPrescription.create(payload)
 
+  await managementPrescription.closeConnection()
+
   if (!prescriptionCreated) {
     return response.send({
       success: false,
@@ -171,8 +179,11 @@ module.exports.getByUser = async (requisition, response, next) => {
       message: 'Cliente não encontrado!'
     })
   }
+  await managementPrescription.openConnection()
 
   const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id })
+
+  await managementPrescription.closeConnection()
 
   if (!prescriptions) {
     return response.send({
@@ -193,7 +204,11 @@ module.exports.getByUser = async (requisition, response, next) => {
 module.exports.getOne = async (requisition, response, next) => {
   const prescriptionId = requisition.params.prescription_id
 
+  await managementPrescription.openConnection()
+
   const prescriptions = await managementPrescription.getOne({ _id: prescriptionId })
+
+  await managementPrescription.closeConnection()
 
   if (!prescriptions) {
     return response.send({
