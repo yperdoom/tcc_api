@@ -49,7 +49,7 @@ const PrescriptionSchema = new Schema({
   meal_amount: Number,
   client_id: Number,
   manager_id: Number,
-  user_id: { type: Schema.Types.ObjectId },
+  user_id: Number,
   user_name: String
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
