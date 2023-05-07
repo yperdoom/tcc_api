@@ -84,8 +84,7 @@ module.exports.adapter = async (requisition, response, next) => {
     'mealId',
     'name',
     'type',
-    'client_id',
-    'manager_id'
+    'userId'
   ])
 
   if (!fields.success) {
@@ -95,6 +94,15 @@ module.exports.adapter = async (requisition, response, next) => {
   await managementPrescription.openConnection()
 
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
+
+  if (body.userId !== prescription.user_id) {
+    return response.send({
+      success: false,
+      message: 'Uepa!'
+    })
+  }
+  body.client_id = prescription.client_id
+  body.manager_id = prescription.manager_id
 
   let meal = {}
   prescription.meals.forEach(mealActual => {
