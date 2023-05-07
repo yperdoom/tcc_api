@@ -1,7 +1,7 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 
-module.exports = async (userId, body) => {
+module.exports = async (clientId, body) => {
   const client = await database.connect()
   let res = {}
 
@@ -9,10 +9,10 @@ module.exports = async (userId, body) => {
     const query = {
       text: `UPDATE clients
         SET age=$2, height=$3, weight=$4, fat_percentage=$5, sex=$6, updated_at=$7
-        WHERE user_id = $1
+        WHERE client_id = $1
         RETURNING *`,
       values: [
-        userId,
+        clientId,
         body.age,
         body.height,
         body.weight,
@@ -24,6 +24,7 @@ module.exports = async (userId, body) => {
 
     res = await client.query(query)
   } catch (error) {
+    console.log(error)
     Logger.error({
       error: error.error,
       type: 'database-error',

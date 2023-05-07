@@ -8,13 +8,14 @@ module.exports = async (userId, body) => {
   try {
     const query = {
       text: `UPDATE users
-        SET name=$2, phone=$3, city=$4, state=$5, birthday=$6, updated_at=$7
+        SET name=$2, phone=$3, document=$4, city=$5, state=$6, birthday=$7, updated_at=$8
         WHERE user_id = $1
         RETURNING *`,
       values: [
         userId,
         body.name,
         body.phone,
+        body.document,
         body.city,
         body.state,
         body.birthday,

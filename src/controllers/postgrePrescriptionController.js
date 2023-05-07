@@ -1,7 +1,7 @@
 
 const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
-const getTimeNow = require('../services/factory/getTimeNow')
+const time = require('../services/factory/getTimeNow')
 
 const createPrescription = require('../services/prescription/createPrescription')
 
@@ -48,8 +48,8 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.prescription.created_at = getTimeNow()
-  body.prescription.updated_at = getTimeNow()
+  body.prescription.created_at = time.now()
+  body.prescription.updated_at = time.now()
 
   const prescription = await createPrescription(body.prescription)
 
@@ -150,8 +150,8 @@ module.exports.adapter = async (requisition, response, next) => {
     is_adapted_meal: 1,
     foods_multiplier: individual.chromosome,
     fitness: individual.fitness
-    // created_at: getTimeNow(),
-    // updated_at: getTimeNow(),
+    // created_at: time.now(),
+    // updated_at: time.now(),
   }
 
   const prescriptionCreated = await createPrescription(payload)

@@ -5,7 +5,7 @@ const crypt = require('../../config/auth/functions/password')
 
 // factoryes services
 const verifyFields = require('../services/factory/verifyFields')
-const getTimeNow = require('../services/factory/getTimeNow')
+const time = require('../services/factory/getTimeNow')
 const setUserToTokenize = require('../services/factory/setUserToTokenize')
 
 // user services
@@ -53,8 +53,8 @@ module.exports.createClient = async (requisition, response, next) => {
     })
   }
 
-  body.created_at = getTimeNow()
-  body.updated_at = getTimeNow()
+  body.created_at = time.now()
+  body.updated_at = time.now()
   body.scope = 'client'
   body.password = await crypt.hashPassword(body.password)
 
@@ -114,8 +114,8 @@ module.exports.createManager = async (requisition, response, next) => {
     })
   }
 
-  body.created_at = getTimeNow()
-  body.updated_at = getTimeNow()
+  body.created_at = time.now()
+  body.updated_at = time.now()
   body.scope = 'manager'
   body.password = await crypt.hashPassword(body.password)
 
@@ -134,8 +134,8 @@ module.exports.createManager = async (requisition, response, next) => {
   body.manager = {
     document: body.document,
     user_id: dataUser[0].user_id,
-    created_at: getTimeNow(),
-    updated_at: getTimeNow()
+    created_at: time.now(),
+    updated_at: time.now()
   }
 
   const dataManager = await createManager(body.manager)
@@ -161,6 +161,7 @@ module.exports.modifyClient = async (requisition, response, next) => {
   const { body } = requisition
 
   const fields = verifyFields(body, [
+    'client_id',
     'name',
     'phone',
     'birthday',
@@ -175,12 +176,12 @@ module.exports.modifyClient = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.updated_at = getTimeNow()
+  body.updated_at = time.now()
 
   const user = await modifyUser(userId, body)
-  const client = await modifyClient(userId, body)
+  const client = await modifyClient(body.client_id, body)
 
-  if (!user) {
+  if (!user || !client) {
     return response.send({
       success: false,
       message: 'Não foi possível modificar este usuário!'
@@ -212,7 +213,7 @@ module.exports.modifyManager = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.updated_at = getTimeNow()
+  body.updated_at = time.now()
 
   const user = await modifyUser(userId, body)
   const manager = await modifyManager(userId, body)

@@ -1,5 +1,7 @@
 const { DateTime } = require('luxon')
 
-module.exports = () => {
-  return DateTime.now().setZone('America/Sao_Paulo')
-}
+module.exports = ({
+  now: () => {
+    return DateTime.now().setZone('America/Sao_Paulo')
+  }
+})

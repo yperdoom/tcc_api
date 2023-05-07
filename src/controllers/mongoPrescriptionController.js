@@ -202,6 +202,7 @@ module.exports.getByUser = async (requisition, response, next) => {
     success: true,
     message: 'Prescrição(s) encontrada(s).',
     body: {
+      count: prescriptions.length,
       prescriptions
     }
   })

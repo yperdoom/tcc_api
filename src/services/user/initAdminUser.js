@@ -1,7 +1,7 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 const password = require('../../../config/auth/functions/password')
-const getTimeNow = require('../factory/getTimeNow')
+const time = require('../factory/getTimeNow')
 
 const { DateTime } = require('luxon')
 
@@ -23,8 +23,8 @@ module.exports = async () => {
         'Rio dos Indios',
         'RS',
         DateTime.utc(2000, 9, 8),
-        getTimeNow(),
-        getTimeNow()
+        time.now(),
+        time.now()
       ]
     }
 

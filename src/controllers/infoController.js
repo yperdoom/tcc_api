@@ -1,5 +1,5 @@
 const verifyFields = require('../services/factory/verifyFields')
-const getTimeNow = require('../services/factory/getTimeNow')
+const time = require('../services/factory/getTimeNow')
 
 const createInfo = require('../services/info/createInfo')
 const modifyInfo = require('../services/info/modifyInfo')
@@ -19,8 +19,8 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.created_at = getTimeNow()
-  body.updated_at = getTimeNow()
+  body.created_at = time.now()
+  body.updated_at = time.now()
 
   const info = await createInfo(body)
 
@@ -51,7 +51,7 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.updated_at = getTimeNow()
+  body.updated_at = time.now()
 
   const info = await modifyInfo(infoId, body)
 
