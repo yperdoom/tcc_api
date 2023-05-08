@@ -40,8 +40,7 @@ module.exports.create = async (requisition, response, next) => {
   const payload = {
     ...body.prescription,
     ...body,
-    user_id: auth.user_id,
-    user_name: auth.name,
+    token: auth,
     is_adapted_prescription: false
   }
 
@@ -95,15 +94,6 @@ module.exports.adapter = async (requisition, response, next) => {
 
   const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
 
-  if (body.userId !== prescription.user_id) {
-    return response.send({
-      success: false,
-      message: 'Uepa!'
-    })
-  }
-  body.client_id = prescription.client_id
-  body.manager_id = prescription.manager_id
-
   let meal = {}
   prescription.meals.forEach(mealActual => {
     if (mealActual._id.toString() === body.mealId.toString()) {
@@ -136,7 +126,7 @@ module.exports.adapter = async (requisition, response, next) => {
   const payload = {
     meals: [
       {
-        name: body.name,
+        name: 'Refeição adaptada: ' + body.name,
         type: body.type,
         countGenerations: individual.generationCounter,
         foods: meal.foods,
@@ -149,17 +139,16 @@ module.exports.adapter = async (requisition, response, next) => {
         food_amount: meal.food_amount
       }
     ],
-    name: body.name,
+    name: 'Adaptação: ' + body.name,
     recommended_calorie: meal.recommended_calorie,
     recommended_carbohydrate: meal.recommended_carbohydrate,
     recommended_protein: meal.recommended_protein,
     recommended_lipid: meal.recommended_lipid,
     is_adapted_prescription: true,
     meal_amount: 1,
-    user_id: auth.user_id,
-    user_name: auth.name,
-    client_id: body.client_id,
-    manager_id: body.manager_id
+    token: auth,
+    client_id: prescription.client_id,
+    manager_id: prescription.manager_id
   }
 
   const prescriptionCreated = await managementPrescription.create(payload)

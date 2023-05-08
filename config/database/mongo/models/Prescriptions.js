@@ -49,8 +49,13 @@ const PrescriptionSchema = new Schema({
   meal_amount: Number,
   client_id: Number,
   manager_id: Number,
-  user_id: Number,
-  user_name: String
+  token: {
+    user_id: Number,
+    name: String,
+    email: String,
+    scope: String,
+    phone: String
+  }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   id: false,

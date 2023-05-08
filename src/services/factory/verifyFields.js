@@ -3,7 +3,7 @@ module.exports = (body, fields, orFields) => {
   const response = { success: true }
 
   for (const field of fields) {
-    if (body[field] === undefined) {
+    if (body[field] === undefined || body[field] === null) {
       response.message = `Campo ${field} não encontrado`
       response.success = false
     }
@@ -12,7 +12,7 @@ module.exports = (body, fields, orFields) => {
     let orComparation = false
 
     for (const field of orFields) {
-      if (body[field] !== undefined) {
+      if (body[field] !== undefined || body[field] === null) {
         orComparation = true
       }
     }
