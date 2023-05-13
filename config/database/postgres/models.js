@@ -10,6 +10,7 @@ const Food = require('./models/Food')
 // const PrescriptionMeal = require('./models/PrescriptionMeal')
 const Information = require('./models/Information')
 const initAdminUser = require('../../../src/services/user/initAdminUser')
+const initFoods = require('../../../src/services/food/initFoods')
 
 module.exports.init = async () => {
   const response = await _initTables()
@@ -35,6 +36,7 @@ const _initTables = async () => {
     // await PrescriptionMeal.createTable()
     await Information.createTable()
     await initAdminUser()
+    await initFoods()
   } catch (error) {
     Logger.error({
       error: error.error,

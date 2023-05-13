@@ -11,7 +11,6 @@ module.exports = async () => {
     return null
   }
 
-
   try {
     const query = {
       text: `INSERT INTO 
