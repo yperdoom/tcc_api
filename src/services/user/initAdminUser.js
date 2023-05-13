@@ -7,6 +7,10 @@ const { DateTime } = require('luxon')
 
 module.exports = async () => {
   const client = await database.connect()
+  if (!client) {
+    return null
+  }
+
 
   try {
     const query = {

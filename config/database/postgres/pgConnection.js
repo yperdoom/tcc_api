@@ -29,10 +29,12 @@ module.exports.connect = async () => {
     return pool.connect()
   } catch (error) {
     Logger.error({
-      error: error.error,
+      ...error,
       type: 'database-error',
       local: 'postgre-connect'
     })
+
+    return null
   }
 }
 
@@ -42,7 +44,7 @@ module.exports.close = async () => {
     return 'desconectado'
   } catch (error) {
     Logger.error({
-      error: error.error,
+      ...error,
       type: 'database-error',
       local: 'postgre-disconnect'
     })

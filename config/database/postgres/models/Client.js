@@ -2,6 +2,10 @@ const database = require('../pgConnection')
 
 module.exports.createTable = async () => {
   const client = await database.connect()
+  if (!client) {
+    return null
+  }
+
 
   const create = await client.query(`
     CREATE TABLE IF NOT EXISTS clients (

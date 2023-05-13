@@ -3,6 +3,10 @@ const database = require('../../../config/database/postgres/pgConnection')
 
 module.exports = async (body) => {
   const client = await database.connect()
+  if (!client) {
+    return null
+  }
+
   let res = {}
 
   try {

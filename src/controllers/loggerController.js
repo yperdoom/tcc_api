@@ -29,6 +29,14 @@ module.exports = ({
   error: (error) => {
     const message = {}
 
+    if (error.code) {
+      message.code = error.code
+    }
+
+    if (error.address) {
+      message.address = error.address
+    }
+
     if (error.message) {
       message.message = error.message
     }
