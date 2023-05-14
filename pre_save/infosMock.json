@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Calorias",
+    "description": "A caloria é uma medida de energia. Os alimentos têm calorias. Isto é, os alimentos fornecem energia ao organismo, que é liberada quando os alimentos se decompõem na digestão. A energia permite que as células realizem todas as suas funções, incluindo a síntese de proteínas e outras substâncias necessárias ao organismo."
+  },
+  {
+    "id": 2,
+    "name": "Proteínas",
+    "description": "Proteína é um tipo de substância formada a partir de um conjunto de aminoácidos ligados entre si (ligações denominadas de peptídicas). Em outras palavras, as proteínas são compostas por moléculas de carbono, hidrogênio, oxigênio e nitrogênio."
+  },
+  {
+    "id": 3,
+    "name": "Carboidratos",
+    "description": "Os carboidratos são moléculas formadas por unidades de carbono, hidrogênio e oxigênio. Apresentam várias funções no nosso organismo, dentre as quais: fornecimento de energia; atuam como sinalizadores, participam da estrutura da parede celular e da formação dos ácidos nucleicos."
+  },
+  {
+    "id": 4,
+    "name": "Lipídios",
+    "description": "Os lipídios, identificados como gorduras, são moléculas orgânicas geradas a partir da associação entre ácidos graxos e um álcool. Esses compostos são formados, essencialmente, por átomos de hidrogênio, carbono e oxigênio, mas também podem conter fósforo, nitrogênio e enxofre."
+  },
+  {
+    "id": 5,
+    "name": "Fibras",
+    "description": "Fibras são compostos vegetais presentes nos grãos, verduras, legumes e frutas que não são digeridos pelo nosso organismo, passam quase que intactos pelo sistema digestivo e terminam sendo eliminados pelas fezes."
+  },
+  {
+    "id": 6,
+    "name": "Vitaminas",
+    "description": "As vitaminas são compostos orgânicos não sintetizados pelo organismo, sendo incorporados através da alimentação. Elas são essenciais para o funcionamento de importantes processos bioquímicos do organismo, especialmente como catalisadoras de reações químicas."
+  },
+  {
+    "id": 7,
+    "name": "Importância do consumo de água",
+    "description": "Os benefícios do consumo regular de água são aparentemente infinitos, desde a melhoria da memória e da saúde mental até o aumento da energia e uma aparência melhor. Estar adequadamente hidratado é essencial para garantir que seu corpo funcione como deveria."
+  }
+]

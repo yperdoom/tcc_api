@@ -1,9 +1,9 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 const time = require('../factory/getTimeNow')
-const foodsMock = require('../../../pre_save/foodsMock.json')
+const infosMock = require('../../../pre_save/infosMock.json')
 
-module.exports = async () => {
+module.exports = async (body) => {
   const client = await connect()
   if (!client) {
     Logger.error({
@@ -12,16 +12,10 @@ module.exports = async () => {
     })
     return false
   } else {
-    for (let i = 0; i < foodsMock.length; i++) {
-      await createFoodOnLoop({
-        name: foodsMock[i].description,
-        description: foodsMock[i].description,
-        type: foodsMock[i].category,
-        weight: 100,
-        calorie: foodsMock[i].energy_kcal,
-        protein: foodsMock[i].protein_g,
-        lipid: foodsMock[i].lipid_g,
-        carbohydrate: foodsMock[i].carbohydrate_g,
+    for (let i = 0; i < infosMock.length; i++) {
+      await createInfoOnLoop({
+        name: infosMock[i].name,
+        description: infosMock[i].description,
         created_at: time.now(),
         updated_at: time.now()
       }, client)
@@ -48,39 +42,20 @@ const disconnect = async (client) => {
   await database.close()
 }
 
-const createFoodOnLoop = async (body, client) => {
+const createInfoOnLoop = async (body, client) => {
   try {
     const query = {
       text: `INSERT INTO 
-        foods(
+        infos(
           name,
           description,
-          type,
-          color,
-          weight,
-          portion,
-          mililiter,
-          calorie,
-          protein,
-          lipid,
-          carbohydrate,
           created_at,
           updated_at
         )
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-        RETURNING *`,
+        VALUES($1, $2, $3, $4)`,
       values: [
         body.name,
         body.description,
-        body.type,
-        body.color,
-        body.weight,
-        body.portion,
-        body.mililiter,
-        body.calorie,
-        body.protein,
-        body.lipid,
-        body.carbohydrate,
         body.created_at,
         body.updated_at
       ]
@@ -88,11 +63,10 @@ const createFoodOnLoop = async (body, client) => {
 
     await client.query(query)
   } catch (error) {
-    console.log(error)
     Logger.error({
-      ...error,
+      error: error.error,
       type: 'database-error',
-      local: 'postgre-create-food-service'
+      local: 'postgre-create-info-service'
     })
   }
 }
