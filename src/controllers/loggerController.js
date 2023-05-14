@@ -3,58 +3,42 @@ const GeneratioLog = require('../../config/database/mongo/models/GenerationLog')
 const mongoConnection = require('../../config/database/mongo/mongoConnection')
 
 module.exports = ({
-  log: (log) => {
+  log: async (log) => {
     const message = {}
 
-    if (log.message) {
-      message.message = log.message
-    }
+    if (log.message) { message.message = log.message }
 
-    if (log.type) {
-      message.type = log.type
-    }
+    if (log.type) { message.type = log.type }
 
-    if (log.local) {
-      message.local = log.local
-    }
+    if (log.local) { message.local = log.local }
 
-    if (log.body) {
-      message.body = log.body
-    }
+    if (log.body) { message.body = log.body }
 
     console.log(color.blue)
-    console.log(message)
+    await console.log(message)
     console.log(color.reset)
   },
-  error: (error) => {
+  error: async (error) => {
     const message = {}
+    let count = 0
 
-    if (error.code) {
-      message.code = error.code
-    }
+    if (error.code) { message.code = error.code } else { count += 1 }
 
-    if (error.address) {
-      message.address = error.address
-    }
+    if (error.address) { message.address = error.address } else { count += 1 }
 
-    if (error.detail) {
-      message.detail = error.detail
-    }
+    if (error.detail) { message.detail = error.detail } else { count += 1 }
 
-    if (error.message) {
-      message.message = error.message
-    }
+    if (error.message) { message.message = error.message }
 
-    if (error.type) {
-      message.type = error.type
-    }
+    if (error.type) { message.type = error.type }
 
-    if (error.local) {
-      message.local = error.local
-    }
+    if (error.local) { message.local = error.local }
 
     console.log(color.red)
-    console.log(message)
+    if (count === 3) {
+      console.log(error)
+    }
+    await console.log(message)
     console.log(color.reset)
   },
   saveLog: async (generationInfo, parameters) => {
