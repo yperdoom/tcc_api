@@ -34,11 +34,10 @@ module.exports = ({
 
     if (error.local) { message.local = error.local }
 
-    console.log(color.red)
     if (count === 3) {
-      console.log(error)
+      console.log(color.red, `count: ${count} :: `, error)
     }
-    await console.log(message)
+    console.log(color.red, message)
     console.log(color.reset)
   },
   saveLog: async (generationInfo, parameters) => {
