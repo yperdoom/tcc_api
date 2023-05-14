@@ -10,7 +10,7 @@ module.exports = (token) => {
     return jwt.verify(token, AUTH_SECRET)
   } catch (error) {
     Logger.error({
-      error: error.error,
+      error,
       type: 'token-error',
       local: 'decode-token-jwt'
     })

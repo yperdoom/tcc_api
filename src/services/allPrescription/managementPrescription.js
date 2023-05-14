@@ -9,7 +9,7 @@ module.exports = ({
       return await Prescription.create(document)
     } catch (error) {
       Logger.error({
-        error: error.error,
+        error,
         type: 'database-error',
         local: 'mongo-create-prescription-service'
       })
@@ -28,7 +28,7 @@ module.exports = ({
       return await Prescription.findOneAndUpdate(filter, query).lean()
     } catch (error) {
       Logger.error({
-        error: error.error,
+        error,
         type: 'database-error',
         local: 'mongo-modify-prescription-service'
       })
@@ -43,7 +43,7 @@ module.exports = ({
       return await Prescription.deleteOne(filter)
     } catch (error) {
       Logger.error({
-        error: error.error,
+        error,
         type: 'database-error',
         local: 'mongo-delete-prescription-service'
       })
@@ -55,7 +55,7 @@ module.exports = ({
       return await Prescription.findOne(filter).lean()
     } catch (error) {
       Logger.error({
-        error: error.error,
+        error,
         type: 'database-error',
         local: 'mongo-get-one-prescription-on-filter-service'
       })
@@ -66,7 +66,7 @@ module.exports = ({
       return await Prescription.find(filter).lean()
     } catch (error) {
       Logger.error({
-        error: error.error,
+        error,
         type: 'database-error',
         local: 'mongo-get-all-prescriptions-on-filter-service'
       })

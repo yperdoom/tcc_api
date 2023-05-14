@@ -38,7 +38,7 @@ const _initTables = async () => {
     await initInfos()
   } catch (error) {
     Logger.error({
-      error: error.error,
+      error,
       type: 'database-error',
       local: 'create-postgres-tables'
     })

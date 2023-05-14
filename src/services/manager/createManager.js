@@ -26,7 +26,7 @@ module.exports = async (body) => {
     res = await client.query(query)
   } catch (error) {
     Logger.error({
-      error: error.error,
+      error,
       type: 'database-error',
       local: 'postgre-create-manager-service'
     })

@@ -66,7 +66,7 @@ const _createInfoOnLoop = async (body, client) => {
     await client.query(query)
   } catch (error) {
     Logger.error({
-      error: error.error,
+      error,
       type: 'database-error',
       local: 'postgre-create-info-service'
     })

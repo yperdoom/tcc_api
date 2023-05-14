@@ -30,7 +30,7 @@ module.exports = async (clientId, body) => {
   } catch (error) {
     console.log(error)
     Logger.error({
-      error: error.error,
+      error,
       type: 'database-error',
       local: 'postgre-modify-client-service'
     })
