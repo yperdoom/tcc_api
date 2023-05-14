@@ -18,10 +18,10 @@ module.exports = async () => {
         description: foodsMock[i].description,
         type: foodsMock[i].category,
         weight: 100,
-        calorie: foodsMock[i].energy_kcal,
-        protein: foodsMock[i].protein_g,
-        lipid: foodsMock[i].lipid_g,
-        carbohydrate: foodsMock[i].carbohydrate_g,
+        calorie: foodsMock[i].energy_kcal.toFixed(2),
+        protein: foodsMock[i].protein_g.toFixed(2),
+        lipid: foodsMock[i].lipid_g.toFixed(2),
+        carbohydrate: foodsMock[i].carbohydrate_g.toFixed(2),
         created_at: time.now(),
         updated_at: time.now()
       }, client)
