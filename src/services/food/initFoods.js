@@ -87,8 +87,9 @@ const createFoodOnLoop = async (body, client) => {
 
     await client.query(query)
   } catch (error) {
+    console.log(error)
     Logger.error({
-      error: error.error,
+      ...error,
       type: 'database-error',
       local: 'postgre-create-food-service'
     })
