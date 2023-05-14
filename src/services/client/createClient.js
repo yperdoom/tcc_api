@@ -7,6 +7,8 @@ module.exports = async (body) => {
     return null
   }
 
+  console.log(body)
+
   let res = {}
 
   try {
