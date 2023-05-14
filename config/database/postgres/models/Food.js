@@ -10,8 +10,8 @@ module.exports.createTable = async () => {
     CREATE TABLE IF NOT EXISTS foods (
       food_id int NOT NULL GENERATED ALWAYS AS IDENTITY ( CYCLE INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 999999999 CACHE 1 ),
       name varchar(50) NOT NULL,
-      description varchar(60) NOT NULL,
-      type varchar(30) NOT NULL,
+      description varchar(70) NOT NULL,
+      type varchar(40) NOT NULL,
       color varchar(20),
       weight int,
       portion int,

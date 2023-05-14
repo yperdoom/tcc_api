@@ -4,37 +4,57 @@ const time = require('../factory/getTimeNow')
 const foodsMock = require('../../../pre_save/foodsMock.json')
 
 module.exports = async () => {
-  const client = await connect()
+  const client = await _connect()
   if (!client) {
     Logger.error({
       type: 'database-error',
       local: 'postgre-connect-init-foods-service'
     })
-    return false
+    return null
   } else {
     for (let i = 0; i < foodsMock.length; i++) {
-      const res = await createFoodOnLoop({
-        name: foodsMock[i].description,
+      const payload = await {
+        name: _refactorName(foodsMock[i].description),
         description: foodsMock[i].description,
         type: foodsMock[i].category,
         weight: 100,
-        calorie: foodsMock[i].energy_kcal.toFixed(2),
-        protein: foodsMock[i].protein_g.toFixed(2),
-        lipid: foodsMock[i].lipid_g.toFixed(2),
-        carbohydrate: foodsMock[i].carbohydrate_g.toFixed(2),
+        calorie: _refactorNutrients(foodsMock[i].energy_kcal),
+        protein: _refactorNutrients(foodsMock[i].protein_g),
+        lipid: _refactorNutrients(foodsMock[i].lipid_g),
+        carbohydrate: _refactorNutrients(foodsMock[i].carbohydrate_g),
         created_at: time.now(),
         updated_at: time.now()
-      }, client)
+      }
+
+      const res = await _createFoodOnLoop(payload, client)
       if (!res) { break }
     }
 
-    await disconnect()
+    await _disconnect(client)
   }
-
   return true
 }
 
-const connect = async () => {
+const _refactorNutrients = (nutrient) => {
+  if (typeof nutrient === 'number') {
+    nutrient = parseFloat(nutrient)
+  } else {
+    nutrient = 0
+  }
+
+  return nutrient.toFixed(2)
+}
+
+const _refactorName = (description) => {
+  const match = description.match(/,/)
+
+  if (match) {
+    return description.substring(0, match.index)
+  }
+  return description
+}
+
+const _connect = async () => {
   const client = await database.connect()
 
   if (!client) {
@@ -44,12 +64,12 @@ const connect = async () => {
   return client
 }
 
-const disconnect = async (client) => {
-  client.release()
+const _disconnect = async (client) => {
+  await client.release()
   await database.close()
 }
 
-const createFoodOnLoop = async (body, client) => {
+const _createFoodOnLoop = async (body, client) => {
   try {
     const query = {
       text: `INSERT INTO 
@@ -88,8 +108,6 @@ const createFoodOnLoop = async (body, client) => {
     }
 
     await client.query(query)
-
-    return true
   } catch (error) {
     console.log(error)
     Logger.error({
@@ -99,4 +117,5 @@ const createFoodOnLoop = async (body, client) => {
     })
     return false
   }
+  return true
 }

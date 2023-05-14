@@ -3,8 +3,8 @@ const database = require('../../../config/database/postgres/pgConnection')
 const time = require('../factory/getTimeNow')
 const infosMock = require('../../../pre_save/infosMock.json')
 
-module.exports = async (body) => {
-  const client = await connect()
+module.exports = async () => {
+  const client = await _connect()
   if (!client) {
     Logger.error({
       type: 'database-error',
@@ -13,21 +13,23 @@ module.exports = async (body) => {
     return false
   } else {
     for (let i = 0; i < infosMock.length; i++) {
-      await createInfoOnLoop({
+      const payload = await {
         name: infosMock[i].name,
         description: infosMock[i].description,
         created_at: time.now(),
         updated_at: time.now()
-      }, client)
+      }
+
+      const res = await _createInfoOnLoop(payload, client)
+      if (!res) { break }
     }
 
-    await disconnect()
+    await _disconnect(client)
   }
-
   return true
 }
 
-const connect = async () => {
+const _connect = async () => {
   const client = await database.connect()
 
   if (!client) {
@@ -37,12 +39,12 @@ const connect = async () => {
   return client
 }
 
-const disconnect = async (client) => {
+const _disconnect = async (client) => {
   client.release()
   await database.close()
 }
 
-const createInfoOnLoop = async (body, client) => {
+const _createInfoOnLoop = async (body, client) => {
   try {
     const query = {
       text: `INSERT INTO 
@@ -68,5 +70,7 @@ const createInfoOnLoop = async (body, client) => {
       type: 'database-error',
       local: 'postgre-create-info-service'
     })
+    return false
   }
+  return true
 }
