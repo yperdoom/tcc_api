@@ -37,6 +37,10 @@ module.exports = ({
       message.address = error.address
     }
 
+    if (error.detail) {
+      message.detail = error.detail
+    }
+
     if (error.message) {
       message.message = error.message
     }

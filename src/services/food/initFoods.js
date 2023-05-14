@@ -13,7 +13,7 @@ module.exports = async () => {
     return false
   } else {
     for (let i = 0; i < foodsMock.length; i++) {
-      await createFoodOnLoop({
+      const res = await createFoodOnLoop({
         name: foodsMock[i].description,
         description: foodsMock[i].description,
         type: foodsMock[i].category,
@@ -25,6 +25,7 @@ module.exports = async () => {
         created_at: time.now(),
         updated_at: time.now()
       }, client)
+      if (!res) { break }
     }
 
     await disconnect()
@@ -87,6 +88,8 @@ const createFoodOnLoop = async (body, client) => {
     }
 
     await client.query(query)
+
+    return true
   } catch (error) {
     console.log(error)
     Logger.error({
@@ -94,5 +97,6 @@ const createFoodOnLoop = async (body, client) => {
       type: 'database-error',
       local: 'postgre-create-food-service'
     })
+    return false
   }
 }
