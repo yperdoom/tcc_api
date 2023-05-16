@@ -17,7 +17,6 @@ const deleteUser = require('../services/user/deleteUser')
 // other services
 const createClient = require('../services/client/createClient')
 const modifyClient = require('../services/client/modifyClient')
-const getAllClients = require('../services/client/getAllClients')
 const getClient = require('../services/client/getClient')
 const createManager = require('../services/manager/createManager')
 const modifyManager = require('../services/manager/modifyManager')
@@ -313,7 +312,11 @@ module.exports.getManager = async (requisition, response, next) => {
 }
 
 module.exports.getAllClients = async (requisition, response, next) => {
-  const clients = await getAllClients()
+  const managerUserId = requisition.params.manager_user_id
+
+  const manager = await getManager('user_id', managerUserId)
+
+  const clients = await getClient('manager_id', manager[0].manager_id)
 
   if (!clients) {
     return response.send({

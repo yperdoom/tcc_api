@@ -2,7 +2,7 @@
 const userController = require('../controllers/userController')
 
 module.exports = (api) => {
-  api.get('/user/clients', userController.getAllClients)
+  api.get('/user/clients/:manager_user_id', userController.getAllClients)
 
   api.get('/user/managers', userController.getAllManagers)
 
