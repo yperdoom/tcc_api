@@ -173,6 +173,8 @@ module.exports.adapter = async (requisition, response, next) => {
 
 module.exports.getByUser = async (requisition, response, next) => {
   const userId = requisition.params.user_id
+  let search = null
+  if (requisition.query) { search = requisition.query.search }
 
   const client = await getClient('user_id', userId)
 
@@ -184,7 +186,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   }
   await managementPrescription.openConnection()
 
-  const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id })
+  const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id }, search)
 
   await managementPrescription.closeConnection()
 
