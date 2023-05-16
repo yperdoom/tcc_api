@@ -316,6 +316,13 @@ module.exports.getAllClients = async (requisition, response, next) => {
 
   const manager = await getManager('user_id', managerUserId)
 
+  if (!manager) {
+    return response.send({
+      success: false,
+      message: 'Usuário não encontrado!'
+    })
+  }
+
   const clients = await getClient('manager_id', manager[0].manager_id)
 
   if (!clients) {
@@ -323,6 +330,15 @@ module.exports.getAllClients = async (requisition, response, next) => {
       success: false,
       message: 'Nenhum usuário encontrado!'
     })
+  }
+
+  for (let i = 0; i < clients.length; i++) {
+    const user = await getUser('user_id', clients[i].user_id)
+
+    clients[i] = {
+      ...clients[i],
+      ...user[0]
+    }
   }
 
   return response.send({
