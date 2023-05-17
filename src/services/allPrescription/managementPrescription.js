@@ -63,7 +63,7 @@ module.exports = ({
   },
   getAll: async (filter, search = '') => {
     try {
-      filter.$text = { name: search }
+      // filter.$text = { name: search }
       return await Prescription.find(filter).sort({ created_at: -1 }).lean()
     } catch (error) {
       Logger.error({

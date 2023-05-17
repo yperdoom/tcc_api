@@ -186,7 +186,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   }
   await managementPrescription.openConnection()
 
-  const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id }, search)
+  const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id })
 
   await managementPrescription.closeConnection()
 
