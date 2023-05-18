@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4030:4030"
+    restart: always
+    volumes:
+      - "./src:/home/app/src"
+    network_mode: "bridge"
+    command: npm start
