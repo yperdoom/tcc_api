@@ -5,10 +5,30 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+    # depends_on:
+    #   - database
     ports:
       - "4030:4030"
     restart: always
+    # environment:
+    #   POSTGRES_DB: nutritional
+    #   POSTGRES_HOST: 10.1.1.7
+    #   POSTGRES_USER: postgres
+    #   POSTGRES_PASSWORD: 903546
+    #   DATABASE_URL: postgresql://postgres:903546@postgres:5432/nutritional
     volumes:
       - "./src:/home/app/src"
     network_mode: "bridge"
     command: npm start
+
+  # database:
+  #   image: postgres
+  #   restart: always
+  #   ports:
+  #     - "35432:5432"
+  #   network_mode: "host"
+  #   environment:
+  #     POSTGRES_DB: nutritional
+  #     POSTGRES_HOST: localhost
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: 903546

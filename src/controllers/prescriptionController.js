@@ -4,7 +4,7 @@ const agController = require('./agController')
 
 const getFood = require('../services/food/getFood')
 const getClient = require('../services/client/getClient')
-const managementPrescription = require('../services/allPrescription/managementPrescription')
+const managementPrescription = require('../services/prescription/managementPrescription')
 
 module.exports.create = async (requisition, response, next) => {
   const { body, auth } = requisition

@@ -34,9 +34,10 @@ module.exports = ({
 
     if (error.local) { message.local = error.local }
 
-    if (count === 3) {
+    if (count < 3) {
       console.log(color.red, `count: ${count} :: `, error)
     }
+    console.log(color.reset)
     console.log(color.red, message)
     console.log(color.reset)
   },

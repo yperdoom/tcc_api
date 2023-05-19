@@ -1,6 +1,5 @@
 const Logger = require('../../../src/controllers/loggerController')
 const { Pool } = require('pg')
-require('dotenv/config')
 
 const {
   PGUSER,
@@ -28,6 +27,7 @@ module.exports.connect = async () => {
     global.connection = pool
     return pool.connect()
   } catch (error) {
+    console.log(error)
     Logger.error({
       ...error,
       type: 'database-error',
