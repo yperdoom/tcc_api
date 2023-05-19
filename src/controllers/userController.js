@@ -306,7 +306,7 @@ module.exports.getManager = async (requisition, response, next) => {
     message: 'Usuário encontrado.',
     body: {
       ...user[0],
-      manager: manager[0]
+      ...manager[0]
     }
   })
 }
