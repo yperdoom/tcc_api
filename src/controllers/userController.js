@@ -202,6 +202,7 @@ module.exports.modifyManager = async (requisition, response, next) => {
   const { body } = requisition
 
   const fields = verifyFields(body, [
+    'manager_id',
     'name',
     'phone',
     'birthday',
@@ -215,7 +216,7 @@ module.exports.modifyManager = async (requisition, response, next) => {
   body.updated_at = time.now()
 
   const user = await modifyUser(userId, body)
-  const manager = await modifyManager(userId, body)
+  const manager = await modifyManager(body.manager_id, body)
 
   if (!user) {
     return response.send({
