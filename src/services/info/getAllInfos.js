@@ -10,7 +10,7 @@ module.exports = async () => {
   let res = {}
 
   try {
-    const query = 'SELECT * FROM infos'
+    const query = 'SELECT * FROM infos ORDER BY name'
 
     res = await client.query(query)
   } catch (error) {
