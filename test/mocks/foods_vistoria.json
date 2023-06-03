@@ -1,0 +1,38 @@
+[
+  {
+    "food_id": 1,
+    "name": "arroz",
+    "description": "arroz cozido",
+    "type": "grão",
+    "color": "branco",
+    "weight": 150,
+    "calorie": 192,
+    "protein": 3.75,
+    "lipid": 0.30,
+    "carbohydrate": 42.15
+  },
+  {
+    "food_id": 2,
+    "name": "feijão",
+    "description": "feijão cozido",
+    "type": "grão",
+    "color": "preto",
+    "weight": 120,
+    "calorie": 91.20,
+    "protein": 5.76,
+    "lipid": 0.60,
+    "carbohydrate": 16.32
+  },
+  {
+    "food_id": 3,
+    "name": "filé de frango",
+    "description": "filé de frango cozido",
+    "type": "carne",
+    "color": "branco",
+    "weight": 160,
+    "calorie": 254.4,
+    "protein": 51.2,
+    "lipid": 4,
+    "carbohydrate": 0
+  }
+]

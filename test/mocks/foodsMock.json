@@ -6,10 +6,10 @@
     "type": "grão",
     "color": "branco",
     "weight": 100,
-    "calorie": 129,
+    "calorie": 128,
     "protein": 2.5,
-    "lipid": 0.23,
-    "carbohydrate": 28.18
+    "lipid": 0.2,
+    "carbohydrate": 28.1
   },
   {
     "food_id": 2,
@@ -18,10 +18,10 @@
     "type": "grão",
     "color": "preto",
     "weight": 100,
-    "calorie": 103,
-    "protein": 6.6,
+    "calorie": 76,
+    "protein": 4.8,
     "lipid": 0.5,
-    "carbohydrate": 14.6
+    "carbohydrate": 13.6
   },
   {
     "food_id": 3,
@@ -30,9 +30,9 @@
     "type": "carne",
     "color": "branco",
     "weight": 100,
-    "calorie": 165,
-    "protein": 31.02,
-    "lipid": 3.57,
+    "calorie": 159,
+    "protein": 32,
+    "lipid": 2.5,
     "carbohydrate": 0
   }
 ]
