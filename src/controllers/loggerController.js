@@ -43,6 +43,7 @@ module.exports = ({
   },
   saveLog: async (generationInfo, parameters) => {
     const document = {
+      informations: 'testes com a quantidade de geração máxima',
       ...generationInfo,
       parameters
     }

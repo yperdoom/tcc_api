@@ -10,10 +10,14 @@ const individualSchema = new Schema({
 })
 
 const generationLogSchema = new Schema({
-  generation: [individualSchema],
-  individual: individualSchema,
+  bestFitness: Number,
+  informations: String,
+  great: individualSchema,
+  good: individualSchema,
   averageFitnessGeneration: Number,
   countGeneration: Number,
+  foods: [],
+  meal: {},
   parameters: {}
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
