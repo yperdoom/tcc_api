@@ -73,7 +73,7 @@ module.exports.newAdapter = async (foods, meal) => {
   }
   await Logger.openConnectToSaveLogs()
 
-  await Logger.saveLog({
+  const objToSave = {
     bestFitness: individual?.fitness ?? bestIndividual.fitness,
     great: individual,
     good: bestIndividual,
@@ -81,7 +81,9 @@ module.exports.newAdapter = async (foods, meal) => {
     countGeneration: (generationCounter),
     foods,
     meal
-  }, parameters)
+  }
+
+  await Logger.saveLog(objToSave, parameters)
 
   console.log('melhor: ', bestIndividual)
   console.log('excelente: ', individual)

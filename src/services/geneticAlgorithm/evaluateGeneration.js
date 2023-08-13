@@ -24,6 +24,13 @@ module.exports = async (foods, generation, meal) => {
       carbohydrateSum += foods[foodIterator].carbohydrate * (percentage / 100)
       lipidSum += foods[foodIterator].lipid * (percentage / 100)
     }
+
+    /**
+     * aqui irá a função que irá considerar os pesos informados
+     * para cnstruir uma punição para os cromossomos que tiverem
+     * diferentes com relação aos pesos estabelecidos
+     */
+
     const quantityCalorieMultiplier = (calorieSum * 100) / meal.recommended_calorie
     const quantityProteinMultiplier = (proteinSum * 100) / meal.recommended_protein
     const quantityCarbohydrateMultiplier = (carbohydrateSum * 100) / meal.recommended_carbohydrate
