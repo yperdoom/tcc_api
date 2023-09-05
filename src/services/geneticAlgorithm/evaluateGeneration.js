@@ -25,6 +25,16 @@ module.exports = async (foods, generation, meal) => {
       lipidSum += foods[foodIterator].lipid * (percentage / 100)
     }
 
+    meal.division = {
+      protein: 40,
+      carbohydrate: 30,
+      lipid: 30
+    }
+
+    // calcular aqui a divisão atual do resultado
+    // comparar com a divisão da refeição
+    // atribuir uma punição no *individual.fitness* de acordo com a diferença
+
     /**
      * aqui irá a função que irá considerar os pesos informados
      * para cnstruir uma punição para os cromossomos que tiverem
