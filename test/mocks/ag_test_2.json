@@ -4,12 +4,12 @@
     "name": "almoço",
     "type": "almoço",
     "recommended_calorie": 537.6,
-    "recommended_protein": 60.71,
+    "recommended_protein": 70.0,
     "recommended_lipid": 4.9,
-    "recommended_carbohydrate": 58.47,
+    "recommended_carbohydrate": 45.0,
     "division": {
-      "protein": 35,
-      "carbohydrate": 35,
+      "protein": 40,
+      "carbohydrate": 30,
       "lipid": 30
     }
   },

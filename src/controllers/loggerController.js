@@ -1,6 +1,5 @@
 const color = require('../services/factory/terminalColors')
-const GeneratioLog = require('../../config/database/mongo/models/GenerationLog')
-const mongoConnection = require('../../config/database/mongo/mongoConnection')
+const mongoOperator = require('../../config/database/mongo/mongoOperator')
 
 module.exports = ({
   log: async (log) => {
@@ -14,9 +13,7 @@ module.exports = ({
 
     if (log.body) { message.body = log.body }
 
-    console.log(color.blue)
-    await console.log(message)
-    console.log(color.reset)
+    console.log(color.blue, message)
   },
   error: async (error) => {
     const message = {}
@@ -41,19 +38,13 @@ module.exports = ({
     console.log(color.red, message)
     console.log(color.reset)
   },
-  saveLog: async (generationInfo, parameters) => {
+  saveLog: async (generationInfo, params) => {
     const document = {
       informations: 'testes com a quantidade de geração máxima',
       ...generationInfo,
-      parameters
+      params
     }
 
-    await GeneratioLog.create(document)
+    await mongoOperator.new('generationlog', document)
   },
-  openConnectToSaveLogs: async () => {
-    await mongoConnection.connect()
-  },
-  closeConnection: async () => {
-    await mongoConnection.disconnect()
-  }
 })

@@ -1,6 +1,6 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
-const time = require('../factory/getTimeNow')
+const time = require('../factory/getTime')
 const infosMock = require('../../../pre_save/infosMock.json')
 
 module.exports = async () => {

@@ -1,7 +1,7 @@
 const Logger = require('../../controllers/loggerController')
 const database = require('../../../config/database/postgres/pgConnection')
 const password = require('../../../config/auth/functions/password')
-const time = require('../factory/getTimeNow')
+const time = require('../factory/getTime')
 
 const { DateTime } = require('luxon')
 

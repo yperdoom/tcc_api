@@ -1,6 +1,6 @@
 const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
-const agController = require('./agController')
+const agController = require('../../algorithm/algorithmController')
 
 const getFood = require('../services/food/getFood')
 const getClient = require('../services/client/getClient')
@@ -119,7 +119,7 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
-  const individual = await agController.newAdapter(meal.foods, meal)
+  const individual = await agController(meal.foods, meal)
 
   const nutrients = await _calculateNutrients({ quantity: individual.chromosome, foods: meal.foods })
 

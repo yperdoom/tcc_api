@@ -1,5 +1,5 @@
 const verifyFields = require('../services/factory/verifyFields')
-const time = require('../services/factory/getTimeNow')
+const time = require('../services/factory/getTime')
 
 const createInfo = require('../services/info/createInfo')
 const modifyInfo = require('../services/info/modifyInfo')

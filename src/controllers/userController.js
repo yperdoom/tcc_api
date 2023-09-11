@@ -5,7 +5,7 @@ const crypt = require('../../config/auth/functions/password')
 
 // factoryes services
 const verifyFields = require('../services/factory/verifyFields')
-const time = require('../services/factory/getTimeNow')
+const time = require('../services/factory/getTime')
 const setUserToTokenize = require('../services/factory/setUserToTokenize')
 
 // user services
