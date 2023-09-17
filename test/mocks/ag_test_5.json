@@ -3,14 +3,14 @@
     "meal_id": 1,
     "name": "almoço",
     "type": "almoço",
-    "recommended_calorie": 537.6,
-    "recommended_protein": 60.71,
-    "recommended_lipid": 4.9,
-    "recommended_carbohydrate": 58.47,
+    "recommended_calorie": 1272.5,
+    "recommended_protein": 129.3,
+    "recommended_lipid": 10.25,
+    "recommended_carbohydrate": 145.3,
     "division": {
-      "protein": 35,
-      "carbohydrate": 35,
-      "lipid": 30
+      "protein": 45,
+      "carbohydrate": 51,
+      "lipid": 4
     }
   },
   "foods": [

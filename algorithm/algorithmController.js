@@ -6,7 +6,6 @@ const setRouletteRange = require('./russian_roulette/setRouletteRange')
 const russianRoulette = require('./russianRoulette')
 const crossoverProcess = require('./crossoverProcess')
 const mutateChromosome = require('./mutation_functions/mutateChromosome')
-const Logger = require('../src/controllers/loggerController')
 
 module.exports = async (foods, meal, params) => {
   let stopLoop = false
@@ -69,13 +68,12 @@ module.exports = async (foods, meal, params) => {
     meal
   }
 
-  await Logger.saveLog(objToSave, params)
-
   // console.log('melhor: ', bestIndividual)
   // console.log('excelente: ', individual)
   // console.log(generationCounter)
 
   return {
-    ...objToSave
+    log: objToSave,
+    params
   }
 }

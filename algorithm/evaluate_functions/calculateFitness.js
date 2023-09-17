@@ -1,4 +1,4 @@
-module.exports = (sumOfNutrients, meal) => {
+module.exports = async (sumOfNutrients, meal) => {
   const quantityCalorieMultiplier = (sumOfNutrients.calories * 100) / meal.recommended_calorie
   const quantityProteinMultiplier = (sumOfNutrients.proteins * 100) / meal.recommended_protein
   const quantityCarbohydrateMultiplier = (sumOfNutrients.carbohydrates * 100) / meal.recommended_carbohydrate
@@ -21,5 +21,6 @@ module.exports = (sumOfNutrients, meal) => {
   const proteinsDiference = divisionProtein + divisionCarbohydrate + divisionLipid
 
   const fitness = calorieDiference + proteinsDiference
+
   return { fitness, divisionOfProteins }
 }

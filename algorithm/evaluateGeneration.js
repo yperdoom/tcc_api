@@ -1,3 +1,4 @@
+const { addListener } = require('../config/database/mongo/models/GenerationLog')
 const calculateFitness = require('./evaluate_functions/calculateFitness')
 const getPercentageOfProteins = require('./evaluate_functions/getPercentageOfProteins')
 
@@ -6,15 +7,15 @@ module.exports = async (foods, generation, meal, params) => {
   let averageFitnessGeneration = 0
   let chromosomeExcellent = null
   let bestChromosome = { fitness: 100 }
+  const newGeneration = []
 
   // Percorre a geração iterando por cada cromossomo presente nela
-  generation.forEach((individual) => {
-    const sumOfNutrients = getPercentageOfProteins(foods, individual)
-
-    const { fitness, divisionOfProteins } = calculateFitness(sumOfNutrients, meal)
+  for (const individual of generation) {
+    const sumOfNutrients = await getPercentageOfProteins(foods, individual)
+    const { fitness, divisionOfProteins } = await calculateFitness(sumOfNutrients, meal)
     individual.fitness = fitness
 
-    averageFitnessGeneration += individual.fitness
+    averageFitnessGeneration = averageFitnessGeneration + fitness
 
     if (Math.abs(individual.fitness) <= bestChromosome.fitness) {
       bestChromosome = {
@@ -36,13 +37,13 @@ module.exports = async (foods, generation, meal, params) => {
       }
     }
 
-    return individual
-  })
+    newGeneration.push(individual)
+  }
 
   averageFitnessGeneration = averageFitnessGeneration / params.SIZE_GENERATION
 
   return {
-    generation,
+    generation: newGeneration,
     individual: chromosomeExcellent,
     bestChromosome,
     averageFitnessGeneration

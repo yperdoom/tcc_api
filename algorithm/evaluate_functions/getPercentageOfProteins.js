@@ -1,4 +1,4 @@
-module.exports = (foods, individual) => {
+module.exports = async (foods, individual) => {
   // Variável que será usada para a soma de porcentagens de calorias
   let calorieSum = 0
   let proteinSum = 0

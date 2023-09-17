@@ -3,14 +3,14 @@
     "meal_id": 1,
     "name": "almoço",
     "type": "almoço",
-    "recommended_calorie": 537.6,
-    "recommended_protein": 60.71,
-    "recommended_lipid": 4.9,
-    "recommended_carbohydrate": 58.47,
+    "recommended_calorie": 328.2,
+    "recommended_protein": 23.2,
+    "recommended_lipid": 2,
+    "recommended_carbohydrate": 44.0,
     "division": {
-      "protein": 35,
-      "carbohydrate": 35,
-      "lipid": 30
+      "protein": 33,
+      "carbohydrate": 63,
+      "lipid": 4
     }
   },
   "foods": [
@@ -49,6 +49,18 @@
       "protein": 32,
       "lipid": 2.5,
       "carbohydrate": 0
+    },
+    {
+      "food_id": 4,
+      "name": "batata doce",
+      "description": "batata doce cozido",
+      "type": "verdura",
+      "color": "branco",
+      "weight": 100,
+      "calorie": 76.75,
+      "protein": 0.64,
+      "lipid": 0.08,
+      "carbohydrate": 18.42
     }
   ]
 }

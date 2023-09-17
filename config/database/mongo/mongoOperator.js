@@ -6,11 +6,15 @@ module.exports = ({
   getOne: async (model, filter) => { },
   getAll: async (model) => { },
   new: async (model, document) => {
-    // await mongo.connect()
-    // const response = await mng[model].create(document)
-    // await mongo.disconnect()
-    // return responsse
+    const response = await mng[model].create(document)
+    return response
   },
   put: async (model, filter, document) => { },
   delete: async (model, filter) => { },
+  connect: async () => {
+    await mongo.connect()
+  },
+  closeConnect: async () => {
+    await mongo.disconnect()
+  }
 })
