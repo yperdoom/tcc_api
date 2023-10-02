@@ -3,22 +3,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const individualSchema = new Schema({
-  chromosome: Array,
-  fitness: Number,
-  rouletteRange: Array
-})
-
 const generationLogSchema = new Schema({
-  bestFitness: Number,
-  informations: String,
-  great: individualSchema,
-  good: individualSchema,
-  averageFitnessGeneration: Number,
-  countGeneration: Number,
-  foods: [],
-  meal: {},
-  parameters: {}
+  bestFit: Number,
+  averageFits: Number,
+  averageBestFits: Number,
+  averageGenerations: Number,
+  tests: Number,
+  information: String,
+  params: {}
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   id: false,

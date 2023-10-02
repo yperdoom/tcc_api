@@ -29,21 +29,33 @@ module.exports = async (foods, meal, params) => {
   while (stopLoop === false && generationCounter <= params.MAX_GENERATIONS) {
     generationCounter += 1
 
-    const sortedGeneration = await sortGeneration(evaluated.generation, params)
-    const rouledGeneration = await setRouletteRange(sortedGeneration, params)
     const newGeneration = []
+    const sortedGeneration = await sortGeneration(evaluated.generation, params)
+    if (params.MUTATION_LEVEL === 3) {
+      const rouledGeneration = await setRouletteRange(sortedGeneration, params)
 
-    while (newGeneration.length < params.SIZE_GENERATION) {
-      const fatherGeneration = await russianRoulette(rouledGeneration, true)
-      const mother = await russianRoulette(fatherGeneration.generation)
+      while (newGeneration.length < params.SIZE_GENERATION) {
+        const fatherGeneration = await russianRoulette(rouledGeneration, true)
+        const mother = await russianRoulette(fatherGeneration.generation)
 
-      const sons = await crossoverProcess(fatherGeneration.chromosome, mother, params)
+        const sons = await crossoverProcess(fatherGeneration.chromosome, mother, params)
 
-      if (newGeneration.length > params.SIZE_GENERATION) break
-      newGeneration.push(await mutateChromosome(sons.fatherSon, params))
+        if (newGeneration.length > params.SIZE_GENERATION) break
+        newGeneration.push(await mutateChromosome(sons.fatherSon, params))
 
-      if (newGeneration.length > params.SIZE_GENERATION) break
-      newGeneration.push(await mutateChromosome(sons.motherSon, params))
+        if (newGeneration.length > params.SIZE_GENERATION) break
+        newGeneration.push(await mutateChromosome(sons.motherSon, params))
+      }
+    } else {
+      for (let i = evaluated.generation.length - 1; newGeneration.length < params.SIZE_GENERATION; i--) {
+        const sons = await crossoverProcess(sortedGeneration[i], sortedGeneration[i - 1], params)
+
+        if (newGeneration.length > params.SIZE_GENERATION) break
+        newGeneration.push(await mutateChromosome(sons.fatherSon, params))
+
+        if (newGeneration.length > params.SIZE_GENERATION) break
+        newGeneration.push(await mutateChromosome(sons.motherSon, params))
+      }
     }
 
     evaluated = await evaluateGeneration(preparedFoods, newGeneration, meal, params)
