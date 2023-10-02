@@ -8,7 +8,7 @@ module.exports = (foods, params) => {
   // Percorre iterando no indivíduo até a quantidade máxima de comidas informada
   for (let foodIterator = 0; foodIterator < foods.length; foodIterator++) {
     // Gera um número aleatório entre 0 e o tamanho máximo do cromossomo declarado no env
-    const random = Math.floor(Math.random() * params.MAX_GENERATE_CHROMOSOME_SIZE)
+    const random = Math.floor(Math.random() * params.MAX_CHROMOSOME_SIZE)
 
     // adiciona o número gerado no cromossomo do indivíduo atual
     individual.chromosome.push(random)

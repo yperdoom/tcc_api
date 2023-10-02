@@ -94,6 +94,7 @@ const runTest = async (mocks, countOfTests, params) => {
 
   for (const mock of mocks) {
     for (let i = 0; i < countOfTests; i++) {
+      params.MAX_CHROMOSOME_SIZE = 500
       const res = await agController(mock.foods, mock.meal, params)
 
       console.log('best :: ', res.log.bestFitness)

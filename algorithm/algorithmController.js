@@ -37,7 +37,6 @@ module.exports = async (foods, meal, params) => {
     const sortedGeneration = await sortGeneration(evaluated.generation, params)
 
     if (params.REMAKE_GENERATION) {
-
       delete params.REMAKE_GENERATION
 
       newGeneration = await remakeGeneration(sortedGeneration, params)
@@ -51,20 +50,26 @@ module.exports = async (foods, meal, params) => {
 
           const sons = await crossoverProcess(fatherGeneration.chromosome, mother, params)
 
-          if (newGeneration.length > params.SIZE_GENERATION) break
+          if (newGeneration.length >= params.SIZE_GENERATION) break
           newGeneration.push(await mutateChromosome(sons.fatherSon, params))
 
-          if (newGeneration.length > params.SIZE_GENERATION) break
+          if (newGeneration.length >= params.SIZE_GENERATION) break
           newGeneration.push(await mutateChromosome(sons.motherSon, params))
         }
       } else {
-        for (let i = evaluated.generation.length - 1; newGeneration.length < params.SIZE_GENERATION; i--) {
-          const sons = await crossoverProcess(sortedGeneration[i], sortedGeneration[i - 1], params)
+        const newGen2 = [] 
+        for (let crom of sortedGeneration){
+          if (newGen2.length >= params.SIZE_GENERATION) break
+          newGen2.push(crom)
+        }
 
-          if (newGeneration.length > params.SIZE_GENERATION) break
+        for (let i = evaluated.generation.length - 1; newGeneration.length < params.SIZE_GENERATION; i--) {
+          const sons = await crossoverProcess(newGen2[i], newGen2[i - 1], params)
+
+          if (newGeneration.length >= params.SIZE_GENERATION) break
           newGeneration.push(await mutateChromosome(sons.fatherSon, params))
 
-          if (newGeneration.length > params.SIZE_GENERATION) break
+          if (newGeneration.length >= params.SIZE_GENERATION) break
           newGeneration.push(await mutateChromosome(sons.motherSon, params))
         }
       }
