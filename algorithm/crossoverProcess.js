@@ -18,6 +18,9 @@ module.exports = async (fatherChromosome, motherChromosome, params) => {
       case 3:
         chromosomes = crossoverRandom(fatherSon, motherSon, lengthOfChromosome)
         break;
+      case 4:
+        chromosomes = crossoverRandom(fatherSon, motherSon, lengthOfChromosome)
+        break;
 
       default:
         throw new Error('error level of crossover undefined')
@@ -71,6 +74,26 @@ const crossoverRandom = (fatherSon, motherSon, lengthOfChromosome) => {
   motherBuffer.push(...motherSon.chromosome)
 
   const cutoff = Math.floor(Math.random() * lengthOfChromosome)
+
+  for (let i = cutoff; i < lengthOfChromosome; i++) {
+    motherSon.chromosome[i] = fatherBuffer[i]
+    fatherSon.chromosome[i] = motherBuffer[i]
+  }
+
+  return {
+    fatherSon,
+    motherSon
+  }
+}
+
+const crossoverFull = (fatherSon, motherSon, lengthOfChromosome) => {
+  const fatherBuffer = []
+  const motherBuffer = []
+
+  fatherBuffer.push(...fatherSon.chromosome)
+  motherBuffer.push(...motherSon.chromosome)
+
+  const cutoff = 0
 
   for (let i = cutoff; i < lengthOfChromosome; i++) {
     motherSon.chromosome[i] = fatherBuffer[i]

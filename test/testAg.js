@@ -37,20 +37,20 @@ const test2 = async (countOfTests, params, mocks) => {
   }
   // await Logger.saveLog(objToSave, params)
 
-  console.log('bestFit :: ', bestFit)
-  console.log('averageFits :: ', averageFits)
-  console.log('averageBestFits :: ', averageBestFits)
-  console.log('averageGenerations :: ', averageGenerations)
-  console.log('quantidade de testes feitos :: ', tests)
-
+  console.log(objToSave)
+  // console.log('bestFit :: ', bestFit)
+  // console.log('averageFits :: ', averageFits)
+  // console.log('averageBestFits :: ', averageBestFits)
+  // console.log('averageGenerations :: ', averageGenerations)
+  // console.log('quantidade de testes feitos :: ', tests)
 }
 
 const test1 = async (testCount, countOfTests, params, mocks) => {
   // for (let evaluateCount = 0; evaluateCount < 2; evaluateCount++) {
-  for (let crossoverCount = 0; crossoverCount < 4; crossoverCount++) {
+  for (let crossoverCount = 0; crossoverCount < 5; crossoverCount++) {
     params.CROSSOVER_LEVEL = crossoverCount
 
-    for (let mutationCount = 0; mutationCount < 4; mutationCount++) {
+    for (let mutationCount = 0; mutationCount < 5; mutationCount++) {
       params.MUTATION_LEVEL = mutationCount
 
       const {
@@ -67,7 +67,7 @@ const test1 = async (testCount, countOfTests, params, mocks) => {
         averageBestFits,
         averageGenerations,
         tests,
-        information: `teste ${testCount}`
+        information: `teste 2/${testCount}`
       }
       await Logger.saveLog(objToSave, params)
 
@@ -96,7 +96,8 @@ const runTest = async (mocks, countOfTests, params) => {
     for (let i = 0; i < countOfTests; i++) {
       const res = await agController(mock.foods, mock.meal, params)
 
-      // console.log(res.log.bestFitness)
+      console.log('best :: ', res.log.bestFitness)
+      console.log('average ::', res.log.averageFitnessGeneration)
       averageFits += res.log.averageFitnessGeneration
       averageBestFits += res.log.bestFitness
       averageGenerations += res.log.countGeneration
@@ -111,9 +112,9 @@ const runTest = async (mocks, countOfTests, params) => {
     console.log(tic + restOfTic)
   }
 
-  averageFits = averageFits / (countOfTests * mocks.length)
-  averageBestFits = averageBestFits / (countOfTests * mocks.length)
-  averageGenerations = averageGenerations / (countOfTests * mocks.length)
+  averageFits = averageFits / tests
+  averageBestFits = averageBestFits / tests
+  averageGenerations = averageGenerations / tests
 
   return {
     bestFit,

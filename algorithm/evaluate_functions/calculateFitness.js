@@ -12,9 +12,9 @@ module.exports = async (sumOfNutrients, meal) => {
     lipid: (100 * quantityLipidMultiplier) / quantityEquivalentTotal
   }
 
-  const divisionProtein = Math.abs((divisionOfProteins.protein) - meal.division.protein) / 5
-  const divisionCarbohydrate = Math.abs((divisionOfProteins.carbohydrate) - meal.division.carbohydrate) / 5
-  const divisionLipid = Math.abs((divisionOfProteins.lipid) - (meal.division.lipid / 2)) / 5
+  const divisionProtein = Math.abs((divisionOfProteins.protein) - (meal?.division.protein | 0)) / 5
+  const divisionCarbohydrate = Math.abs((divisionOfProteins.carbohydrate) - (meal?.division.carbohydrate | 0)) / 5
+  const divisionLipid = Math.abs((divisionOfProteins.lipid) - ((meal?.division.lipid | 0) / 2)) / 5
 
   const calorieDiference = Math.abs(quantityCalorieMultiplier - 100)
 
