@@ -14,10 +14,11 @@ module.exports = async (foods, meal, params) => {
   let individual = null
   let bestIndividual = null
   let averageFitnessGeneration = null
+  let generationCounter = 1
 
   const preparedFoods = await prepareQuantityFood(foods)
   const generation = await generateGeneration(preparedFoods, params)
-  let evaluated = await evaluateGeneration(preparedFoods, generation, meal, params)
+  let evaluated = await evaluateGeneration(preparedFoods, generation, meal, generationCounter, params)
 
   if (evaluated.individual) {
     individual = evaluated.individual
@@ -27,7 +28,6 @@ module.exports = async (foods, meal, params) => {
   averageFitnessGeneration = evaluated.averageFitnessGeneration
   bestIndividual = { ...evaluated.bestChromosome, generation: 1 }
 
-  let generationCounter = 1
   while (stopLoop === false && generationCounter <= params.MAX_GENERATIONS) {
     generationCounter += 1
 
@@ -75,7 +75,7 @@ module.exports = async (foods, meal, params) => {
       }
     }
 
-    evaluated = await evaluateGeneration(preparedFoods, newGeneration, meal, params)
+    evaluated = await evaluateGeneration(preparedFoods, newGeneration, meal, generationCounter, params)
 
     if (evaluated.individual) {
       individual = evaluated.individual

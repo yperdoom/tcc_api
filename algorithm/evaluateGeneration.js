@@ -3,7 +3,7 @@ const calculateFitness = require('./evaluate_functions/calculateFitness')
 const getPercentageOfProteins = require('./evaluate_functions/getPercentageOfProteins')
 
 // Função que irá avaliar a geração de cromossomos informada
-module.exports = async (foods, generation, meal, params) => {
+module.exports = async (foods, generation, meal, generationCounter, params) => {
   let averageFitnessGeneration = 0
   let chromosomeExcellent = null
   let bestChromosome = { fitness: 100 }
@@ -23,7 +23,8 @@ module.exports = async (foods, generation, meal, params) => {
         fitness: individual.fitness,
         rouletteRange: individual.rouletteRange,
         divisionOfProteins,
-        sumOfNutrients
+        sumOfNutrients,
+        bestGenerationOn: generationCounter
       }
     }
 
