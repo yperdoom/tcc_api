@@ -1,8 +1,6 @@
 const prescriptionController = require('../controllers/prescriptionController')
 
 module.exports = (api) => {
-  // api.get('/prescription', prescriptionController.getAll)
-
   api.get('/prescription/:prescription_id', prescriptionController.getOne)
 
   api.get('/prescriptions/:user_id', prescriptionController.getByUser)

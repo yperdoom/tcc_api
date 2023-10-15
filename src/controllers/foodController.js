@@ -1,11 +1,6 @@
 const verifyFields = require('../services/factory/verifyFields')
-const time = require('../services/factory/getTime')
 
-const createFood = require('../services/food/createFood')
-const modifyFood = require('../services/food/modifyFood')
-const deleteFood = require('../services/food/deleteFood')
-const getFood = require('../services/food/getFood')
-const getAllFoods = require('../services/food/getAllFoods')
+const Food = require('../services/food/managementFood')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
@@ -28,10 +23,7 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.created_at = time.now()
-  body.updated_at = time.now()
-
-  const food = await createFood(body)
+  const food = await Food.create(body)
 
   if (!food) {
     return response.send({
@@ -69,9 +61,7 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  body.updated_at = time.now()
-
-  const food = await modifyFood(foodId, body)
+  const food = await Food.update({ _id: foodId }, body)
 
   if (!food) {
     return response.send({
@@ -90,7 +80,7 @@ module.exports.modify = async (requisition, response, next) => {
 module.exports.delete = async (requisition, response, next) => {
   const foodId = requisition.params.food_id
 
-  const food = await deleteFood(foodId)
+  const food = await Food.delete({ _id: foodId })
 
   if (!food) {
     return response.send({
@@ -108,7 +98,7 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getFood = async (requisition, response, next) => {
   const foodId = requisition.params.food_id
 
-  const food = await getFood('food_id', foodId)
+  const food = await Food.getOne({ _id: foodId })
 
   if (!food) {
     return response.send({
@@ -125,7 +115,7 @@ module.exports.getFood = async (requisition, response, next) => {
 }
 
 module.exports.getAll = async (requisition, response, next) => {
-  const foods = await getAllFoods()
+  const foods = await Food.getAll()
 
   if (!foods) {
     return response.send({

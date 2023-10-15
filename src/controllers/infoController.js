@@ -1,5 +1,4 @@
 const verifyFields = require('../services/factory/verifyFields')
-const time = require('../services/factory/getTime')
 
 const createInfo = require('../services/info/createInfo')
 const modifyInfo = require('../services/info/modifyInfo')
@@ -18,9 +17,6 @@ module.exports.create = async (requisition, response, next) => {
   if (!fields.success) {
     return response.send(fields)
   }
-
-  body.created_at = time.now()
-  body.updated_at = time.now()
 
   const info = await createInfo(body)
 
@@ -50,8 +46,6 @@ module.exports.modify = async (requisition, response, next) => {
   if (!fields.success) {
     return response.send(fields)
   }
-
-  body.updated_at = time.now()
 
   const info = await modifyInfo(infoId, body)
 
@@ -90,7 +84,7 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getInfo = async (requisition, response, next) => {
   const infoId = requisition.params.info_id
 
-  const info = await getInfo('info_id', infoId)
+  const info = await getInfo(infoId)
 
   if (!info) {
     return response.send({

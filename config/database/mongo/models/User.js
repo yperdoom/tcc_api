@@ -12,11 +12,6 @@ const clientSchema = new Schema({
   manager_id: { type: mongoose.SchemaTypes.ObjectId },
 })
 
-const managerSchema = new Schema({
-  document: String,
-  user_id: { type: mongoose.SchemaTypes.ObjectId }
-})
-
 const UserSchema = new Schema({
   name: String,
   email: String,
@@ -27,7 +22,6 @@ const UserSchema = new Schema({
   city: String,
   state: String,
   birthday: Date,
-  manager: managerSchema,
   client: clientSchema
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
@@ -36,7 +30,8 @@ const UserSchema = new Schema({
 })
 
 UserSchema.index({ name: 'text' })
-UserSchema.index({ 'manager.user_id': 1 })
+UserSchema.index({ email: 1 })
+UserSchema.index({ scope: 1 })
 UserSchema.index({ 'client.manager_id': 1 })
 
 

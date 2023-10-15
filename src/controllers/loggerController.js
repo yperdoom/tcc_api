@@ -45,6 +45,6 @@ module.exports = ({
       params
     }
 
-    await mongoOperator.new('generationlog', document)
+    await mongoOperator.new('genlog', document)
   },
 })

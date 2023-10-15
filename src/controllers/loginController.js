@@ -15,7 +15,7 @@ module.exports.login = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const user = await getUser('email', body.email)
+  const user = await getUser(body.email)
 
   if (!user) {
     return response.send({
@@ -24,7 +24,7 @@ module.exports.login = async (requisition, response, next) => {
     })
   }
 
-  const pass = await crypt.comparePassword(body.password, user[0].password)
+  const pass = await crypt.comparePassword(body.password, user.password)
 
   if (!pass) {
     return response.send({
@@ -34,11 +34,11 @@ module.exports.login = async (requisition, response, next) => {
   }
 
   const objectToTokenize = {
-    user_id: user[0].user_id,
-    name: user[0].name,
-    email: user[0].email,
-    scope: user[0].scope,
-    phone: user[0].phone
+    user_id: user.user_id,
+    name: user.name,
+    email: user.email,
+    scope: user.scope,
+    phone: user.phone
   }
 
   const token = createTokenJWT(objectToTokenize)
@@ -46,8 +46,8 @@ module.exports.login = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Login bem sucedido.',
-    scope: user[0].scope,
-    userId: user[0].user_id,
+    scope: user.scope,
+    userId: user.user_id,
     token
   })
 }

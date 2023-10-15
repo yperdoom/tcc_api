@@ -46,9 +46,9 @@ module.exports.create = async (requisition, response, next) => {
 
   for (const mealIndex in payload.meals) {
     for (const foodId in payload.meals[mealIndex].foods) {
-      const food = await getFood('food_id', payload.meals[mealIndex].foods[foodId])
+      const food = await getFood({_id: payload.meals[mealIndex].foods[foodId]})
 
-      payload.meals[mealIndex].foods[foodId] = food[0]
+      payload.meals[mealIndex].foods[foodId] = food
     }
   }
 

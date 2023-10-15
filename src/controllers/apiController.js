@@ -1,4 +1,5 @@
 const { init } = require('../../config/database/postgres/models')
+const { initMongo } = require('../../config/database/postgres/models')
 
 require('dotenv/config')
 const { API_IN_FUNCTION } = process.env
@@ -12,7 +13,8 @@ module.exports.status = async (requisition, response, next) => {
 }
 
 module.exports.init = async (requisition, response, next) => {
-  const res = await init()
+  // const res = await init()
+  const res = await initMongo()
 
   if (!res.success) {
     return response.send({
