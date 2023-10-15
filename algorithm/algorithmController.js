@@ -15,6 +15,7 @@ module.exports = async (foods, meal, params) => {
   let bestIndividual = null
   let averageFitnessGeneration = null
   let generationCounter = 1
+  // const generationToSave = []
 
   const preparedFoods = await prepareQuantityFood(foods)
   const generation = await generateGeneration(preparedFoods, params)
@@ -24,6 +25,8 @@ module.exports = async (foods, meal, params) => {
     individual = evaluated.individual
     stopLoop = true
   }
+
+  // generationToSave.push(evaluated.generationToSave)
 
   averageFitnessGeneration = evaluated.averageFitnessGeneration
   bestIndividual = { ...evaluated.bestChromosome, generation: 1 }
@@ -57,8 +60,8 @@ module.exports = async (foods, meal, params) => {
           newGeneration.push(await mutateChromosome(sons.motherSon, params))
         }
       } else {
-        const newGen2 = [] 
-        for (let crom of sortedGeneration){
+        const newGen2 = []
+        for (let crom of sortedGeneration) {
           if (newGen2.length >= params.SIZE_GENERATION) break
           newGen2.push(crom)
         }
@@ -77,6 +80,8 @@ module.exports = async (foods, meal, params) => {
 
     evaluated = await evaluateGeneration(preparedFoods, newGeneration, meal, generationCounter, params)
 
+    generationToSave.push(evaluated.generationToSave)
+
     if (evaluated.individual) {
       individual = evaluated.individual
       stopLoop = true
@@ -87,14 +92,17 @@ module.exports = async (foods, meal, params) => {
       bestIndividual = { ...evaluated.bestChromosome, generation: generationCounter }
     }
   }
+
   const objToSave = {
     bestFitness: individual?.fitness ?? bestIndividual.fitness,
     great: individual,
     good: bestIndividual,
+    goodGenerationOn: bestIndividual.bestGenerationOn,
     averageFitnessGeneration,
     countGeneration: (generationCounter),
     foods,
-    meal
+    meal,
+    // generationToSave
   }
 
   // console.log('melhor: ', bestIndividual)

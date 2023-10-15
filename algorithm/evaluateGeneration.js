@@ -8,6 +8,7 @@ module.exports = async (foods, generation, meal, generationCounter, params) => {
   let chromosomeExcellent = null
   let bestChromosome = { fitness: 100 }
   const newGeneration = []
+  // const generationToSave = []
 
   // Percorre a geração iterando por cada cromossomo presente nela
   for (const individual of generation) {
@@ -38,6 +39,7 @@ module.exports = async (foods, generation, meal, generationCounter, params) => {
       }
     }
 
+    generationToSave.push(individual.fitness)
     newGeneration.push(individual)
   }
 
@@ -47,6 +49,7 @@ module.exports = async (foods, generation, meal, generationCounter, params) => {
     generation: newGeneration,
     individual: chromosomeExcellent,
     bestChromosome,
-    averageFitnessGeneration
+    averageFitnessGeneration,
+    generationToSave
   }
 }

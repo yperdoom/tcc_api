@@ -9,6 +9,8 @@ const generationLogSchema = new Schema({
   averageBestFits: Number,
   averageGenerations: Number,
   tests: Number,
+  goodGenerationOn: Number,
+  generations: [],
   information: String,
   params: {}
 }, {

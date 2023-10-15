@@ -6,7 +6,7 @@ const { connect, closeConnect } = require('../config/database/mongo/mongoOperato
 
 const initTest = async () => {
   let testCount = 1
-  let countOfTests = 30
+  let countOfTests = 1
   let params = getAgParamsByEnv()
 
   await connect()
@@ -24,8 +24,10 @@ const test2 = async (countOfTests, params, mocks) => {
     averageFits,
     averageBestFits,
     averageGenerations,
-    tests
-  } = await runTest(mocks, countOfTests, params)
+    tests,
+    goodGenerationOn,
+    // generations
+  } = await runTest([mocks[0]], countOfTests, params)
 
   const objToSave = {
     bestFit,
@@ -33,6 +35,8 @@ const test2 = async (countOfTests, params, mocks) => {
     averageBestFits,
     averageGenerations,
     tests,
+    goodGenerationOn,
+    // generations,
     information: 'teste 17'
   }
   // await Logger.saveLog(objToSave, params)
@@ -58,7 +62,9 @@ const test1 = async (testCount, countOfTests, params, mocks) => {
         averageFits,
         averageBestFits,
         averageGenerations,
-        tests
+        tests,
+        goodGenerationOn
+        // generations
       } = await runTest(mocks, countOfTests, params)
 
       const objToSave = {
@@ -67,6 +73,7 @@ const test1 = async (testCount, countOfTests, params, mocks) => {
         averageBestFits,
         averageGenerations,
         tests,
+        goodGenerationOn,
         information: `teste 2/${testCount}`
       }
       await Logger.saveLog(objToSave, params)
@@ -76,7 +83,7 @@ const test1 = async (testCount, countOfTests, params, mocks) => {
       console.log('bestFit :: ', bestFit)
       console.log('averageFits :: ', averageFits)
       console.log('averageBestFits :: ', averageBestFits)
-      console.log('averageGenerations :: ', averageGenerations)
+      console.log('goodGenerationOn :: ', goodGenerationOn)
       console.log('quantidade de testes feitos :: ', tests)
     }
   }
@@ -88,22 +95,26 @@ const runTest = async (mocks, countOfTests, params) => {
   let averageFits = 0
   let averageBestFits = 0
   let averageGenerations = 0
+  let goodGenerationOn = 0
   let tic = '|'
   let restOfTic = '                    |'
   let tests = 0
+  // let generations = []
 
   for (const mock of mocks) {
     for (let i = 0; i < countOfTests; i++) {
       params.MAX_CHROMOSOME_SIZE = 500
       const res = await agController(mock.foods, mock.meal, params)
 
-      console.log('best :: ', res.log.bestFitness)
-      console.log('average ::', res.log.averageFitnessGeneration)
+      // console.log('best :: ', res.log.bestFitness)
+      // console.log('average ::', res.log.averageFitnessGeneration)
       averageFits += res.log.averageFitnessGeneration
       averageBestFits += res.log.bestFitness
       averageGenerations += res.log.countGeneration
+      goodGenerationOn += res.log.goodGenerationOn
 
       if (res.log.bestFitness < bestFit) {
+        // generations = res.log.generationToSave
         bestFit = res.log.bestFitness
       }
     }
@@ -116,13 +127,16 @@ const runTest = async (mocks, countOfTests, params) => {
   averageFits = averageFits / tests
   averageBestFits = averageBestFits / tests
   averageGenerations = averageGenerations / tests
+  goodGenerationOn = goodGenerationOn / tests
 
   return {
     bestFit,
     averageFits,
     averageBestFits,
     averageGenerations,
-    tests
+    tests,
+    goodGenerationOn,
+    // generations
   }
 }
 
