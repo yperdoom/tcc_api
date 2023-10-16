@@ -14,10 +14,11 @@ module.exports = ({
   get: async (filter, projection = '') => {
     return mongoOperator.get(model, filter, projection)
   },
+
   initAdminUser: async () => {
     const user = require('../../../pre_save/adminUser.json')
     const password = require('../../../config/auth/functions/password')
     user.password = await password.hashPassword(user.password)
-    await mongoOperator.new(model, user, true)
+    await mongoOperator.new(model, user)
   }
 })

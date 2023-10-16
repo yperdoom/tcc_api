@@ -38,7 +38,7 @@ module.exports = ({
         carbohydrate: _refactorNutrients(foods[i].carbohydrate_g),
       }
 
-      const res = await mongoOperator.new(model, payload, true)
+      const res = await mongoOperator.new(model, payload)
       if (!res) { break }
     }
 

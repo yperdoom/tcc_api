@@ -24,6 +24,6 @@ module.exports = ({
   initInfos: async () => {
     const infos = require('../../../pre_save/infosMock.json')
 
-    await mongoOperator.new(model, infos, true) // apenas testando ele
+    await mongoOperator.new(model, infos)
   },
 })

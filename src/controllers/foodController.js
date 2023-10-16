@@ -1,3 +1,4 @@
+const mongoOperator = require('../../config/database/mongo/mongoOperator')
 const verifyFields = require('../services/factory/verifyFields')
 
 const Food = require('../services/managments/food')
@@ -23,7 +24,9 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await mongoOperator.connect()
   const food = await Food.create(body)
+  await mongoOperator.disconnect()
 
   if (!food) {
     return response.send({
@@ -61,7 +64,9 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await mongoOperator.connect()
   const food = await Food.update({ _id: foodId }, body)
+  await mongoOperator.disconnect()
 
   if (!food) {
     return response.send({
@@ -80,7 +85,9 @@ module.exports.modify = async (requisition, response, next) => {
 module.exports.delete = async (requisition, response, next) => {
   const foodId = requisition.params.food_id
 
+  await mongoOperator.connect()
   const food = await Food.delete({ _id: foodId })
+  await mongoOperator.disconnect()
 
   if (!food) {
     return response.send({
@@ -98,7 +105,9 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getFood = async (requisition, response, next) => {
   const foodId = requisition.params.food_id
 
+  await mongoOperator.connect()
   const food = await Food.getOne({ _id: foodId })
+  await mongoOperator.disconnect()
 
   if (!food) {
     return response.send({
@@ -115,7 +124,9 @@ module.exports.getFood = async (requisition, response, next) => {
 }
 
 module.exports.getAll = async (requisition, response, next) => {
+  await mongoOperator.connect()
   const foods = await Food.getAll()
+  await mongoOperator.disconnect()
 
   if (!foods) {
     return response.send({

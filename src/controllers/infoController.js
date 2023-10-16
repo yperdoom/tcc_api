@@ -1,3 +1,4 @@
+const mongoOperator = require('../../config/database/mongo/mongoOperator')
 const verifyFields = require('../services/factory/verifyFields')
 
 const Info = require('../services/managments/info')
@@ -14,7 +15,9 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await mongoOperator.connect()
   const info = await Info.create(body)
+  await mongoOperator.disconnect()
 
   if (!info) {
     return response.send({
@@ -43,7 +46,9 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await mongoOperator.connect()
   const info = await Info.update({ _id: infoId }, body)
+  await mongoOperator.disconnect()
 
   if (!info) {
     return response.send({
@@ -62,7 +67,9 @@ module.exports.modify = async (requisition, response, next) => {
 module.exports.delete = async (requisition, response, next) => {
   const infoId = requisition.params.info_id
 
+  await mongoOperator.connect()
   const info = await Info.delete({ _id: infoId })
+  await mongoOperator.disconnect()
 
   if (!info) {
     return response.send({
@@ -80,7 +87,9 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getInfo = async (requisition, response, next) => {
   const infoId = requisition.params.info_id
 
+  await mongoOperator.connect()
   const info = await Info.getOne({ _id: infoId })
+  await mongoOperator.disconnect()
 
   if (!info) {
     return response.send({
@@ -97,7 +106,9 @@ module.exports.getInfo = async (requisition, response, next) => {
 }
 
 module.exports.getAll = async (requisition, response, next) => {
+  await mongoOperator.connect()
   const infos = await Info.getAll()
+  await mongoOperator.disconnect()
 
   if (!infos) {
     return response.send({

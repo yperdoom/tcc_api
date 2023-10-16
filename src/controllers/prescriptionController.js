@@ -5,6 +5,7 @@ const agController = require('../../algorithm/algorithmController')
 const { get: getFood } = require('../services/managments/food')
 const { get: getClient } = require('../services/managments/user')
 const Prescription = require('../services/managments/prescription')
+const mongoOperator = require('../../config/database/mongo/mongoOperator')
 
 module.exports.create = async (requisition, response, next) => {
   const { body, auth } = requisition
@@ -44,6 +45,7 @@ module.exports.create = async (requisition, response, next) => {
     is_adapted_prescription: false
   }
 
+  await mongoOperator.connect()
   for (const mealIndex in payload.meals) {
     for (const foodId in payload.meals[mealIndex].foods) {
       const food = await getFood({ _id: payload.meals[mealIndex].foods[foodId] })
@@ -53,6 +55,7 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   const prescription = await Prescription.create(payload)
+  await mongoOperator.disconnect()
 
   if (!prescription) {
     return response.send({
@@ -86,6 +89,7 @@ module.exports.adapter = async (requisition, response, next) => {
     return response.send(fields)
   }
 
+  await mongoOperator.connect()
   const prescription = await Prescription.getOne({ _id: body.prescriptionId })
 
   let meal = {}
@@ -143,6 +147,7 @@ module.exports.adapter = async (requisition, response, next) => {
   }
 
   const prescriptionCreated = await Prescription.create(payload)
+  await mongoOperator.disconnect()
 
   if (!prescriptionCreated) {
     return response.send({
@@ -165,6 +170,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   let search = null
   if (requisition.query) { search = requisition.query.search }
 
+  await mongoOperator.connect()
   const client = await getClient({ _id: userId })
 
   if (!client) {
@@ -175,6 +181,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   }
 
   const prescriptions = await Prescription.get({ client_id: client._id })
+  await mongoOperator.disconnect()
 
   if (!prescriptions) {
     return response.send({
@@ -196,7 +203,9 @@ module.exports.getByUser = async (requisition, response, next) => {
 module.exports.getOne = async (requisition, response, next) => {
   const prescriptionId = requisition.params.prescription_id
 
+  await mongoOperator.connect()
   const prescriptions = await Prescription.getOne({ _id: prescriptionId })
+  await mongoOperator.disconnect()
 
   if (!prescriptions) {
     return response.send({
