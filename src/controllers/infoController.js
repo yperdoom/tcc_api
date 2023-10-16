@@ -1,6 +1,6 @@
 const verifyFields = require('../services/factory/verifyFields')
 
-const Info = require('../services/managments/managementInfo')
+const Info = require('../services/managments/info')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition

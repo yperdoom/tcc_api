@@ -8,7 +8,7 @@ const verifyFields = require('../services/factory/verifyFields')
 const setUserToTokenize = require('../services/factory/setUserToTokenize')
 
 // user services
-const User = require('../services/user/managementUser')
+const User = require('../services/managments/user')
 
 module.exports.createClient = async (requisition, response, next) => {
   const { body } = requisition

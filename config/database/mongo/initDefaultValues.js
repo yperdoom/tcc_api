@@ -1,8 +1,8 @@
 const Logger = require('../../../src/controllers/loggerController')
 
-const { initAdminUser } = require('../../../src/services/user/managementUser')
-const { initFoods } = require('../../../src/services/food/managementFood')
-const { initInfos } = require('../../../src/services/info/managementInfo')
+const { initAdminUser } = require('../../../src/services/managments/user')
+const { initFoods } = require('../../../src/services/managments/food')
+const { initInfos } = require('../../../src/services/managments/info')
 
 module.exports.initMongo = async () => {
   const response = await _initDefaultValues()
