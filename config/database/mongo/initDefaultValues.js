@@ -9,7 +9,7 @@ module.exports.initMongo = async () => {
   const response = await _initDefaultValues()
 
   if (response.success) {
-    Logger.log({ message: 'Tabelas iniciadas com sucesso' })
+    Logger.log({ message: 'Dados inseridos com sucesso' })
     return { success: true }
   }
   return response
