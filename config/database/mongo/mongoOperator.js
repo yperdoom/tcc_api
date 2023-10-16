@@ -1,3 +1,4 @@
+const Logger = require('../../../src/controllers/loggerController')
 const mongo = require('./mongoConnection')
 const mng = require('./mongooseRedirect')
 
@@ -30,6 +31,7 @@ module.exports = ({
     await mongo.connect()
   },
   disconnect: async () => {
-    await mongo.disconnect()
+    // await mongo.disconnect()
+    Logger.log({ message: 'UEPAAA' })
   }
 })

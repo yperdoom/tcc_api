@@ -11,10 +11,10 @@ let conn = null
 module.exports.connect = async () => {
   if (conn == null) {
     try {
-      conn = await mongoose.connect(MONGO_ENDPOINT)
+      conn = mongoose.connect(MONGO_ENDPOINT)
     } catch (error) {
       Logger.error({
-        error,
+        ...error,
         type: 'database-error',
         local: 'mongo-connect'
       })
@@ -27,10 +27,10 @@ module.exports.connect = async () => {
 
 module.exports.disconnect = async () => {
   try {
-    return await mongoose.disconnect(MONGO_ENDPOINT)
+    mongoose.disconnect(MONGO_ENDPOINT)
   } catch (error) {
     Logger.error({
-      error,
+      ...error,
       type: 'database-error',
       local: 'mongo-disconnect'
     })
