@@ -2,7 +2,6 @@ const agController = require('../algorithm/algorithmController')
 const getAgParamsByEnv = require('../src/services/factory/getAgParamsByEnv')
 const loadingMockFiles = require('./loadingMockFiles')
 const Logger = require('../src/controllers/loggerController')
-const { connect, closeConnect } = require('../config/database/mongo/mongoOperator')
 
 const initTest = async () => {
   let testCount = 1

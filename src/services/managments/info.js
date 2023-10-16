@@ -3,7 +3,7 @@ const model = 'info'
 
 module.exports = ({
   create: async (document) => {
-    await mongoOperator.new(model, document)
+    return mongoOperator.new(model, document)
   },
   update: async (filter, document) => {
     return mongoOperator.put(model, filter, document)
@@ -14,13 +14,16 @@ module.exports = ({
   get: async (filter, projection = '') => {
     return mongoOperator.get(model, filter, projection)
   },
+  getAll: async () => {
+    return mongoOperator.getAll(model)
+  },
   delete: async (filter) => {
-    await mongoOperator.delete(model, filter)
+    return mongoOperator.delete(model, filter)
   },
 
   initInfos: async () => {
     const infos = require('../../../pre_save/infosMock.json')
 
-    await mongoOperator.new(model, infos)
+    await mongoOperator.new(model, infos) // apenas testando ele
   },
 })

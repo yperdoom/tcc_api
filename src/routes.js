@@ -15,10 +15,6 @@ api.get('/status', apiController.status)
 api.post('/login', loginController.login)
 api.all('/*', authentication)
 
-const mo = require('../config/database/mongo/mongoOperator')
-
-await mo.connect()
-
 const loadingRouteFiles = async (files) => {
   if (!files) {
     files = []

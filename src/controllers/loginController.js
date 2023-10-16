@@ -2,7 +2,7 @@ const createTokenJWT = require('../../config/auth/functions/createTokenJWT')
 const crypt = require('../../config/auth/functions/password')
 
 const verifyFields = require('../services/factory/verifyFields')
-const getUser = require('../services/user/getUser')
+const { get: getUser } = require('../services/managments/user')
 
 module.exports.login = async (requisition, response, next) => {
   const body = requisition.body
@@ -15,7 +15,7 @@ module.exports.login = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const user = await getUser(body.email)
+  const user = await getUser({email: body.email})
 
   if (!user) {
     return response.send({

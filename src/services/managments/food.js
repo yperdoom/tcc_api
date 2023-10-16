@@ -1,24 +1,25 @@
 
 const mongoOperator = require('../../../config/database/mongo/mongoOperator')
+const model = 'food'
 
 module.exports = ({
   create: async (document) => {
-    await mongoOperator.new('food', document)
+    return mongoOperator.new(model, document)
   },
   update: async (filter, document) => {
-    return mongoOperator.put('food', filter, document)
+    return mongoOperator.put(model, filter, document)
   },
   getOne: async (filter, projection = '') => {
-    return mongoOperator.getOne('food', filter, projection)
+    return mongoOperator.getOne(model, filter, projection)
   },
   get: async (filter, projection = '') => {
-    return mongoOperator.get('food', filter, projection)
+    return mongoOperator.get(model, filter, projection)
   },
   getAll: async () => {
-    return mongoOperator.getAll('food')
+    return mongoOperator.getAll(model)
   },
   delete: async (filter) => {
-    await mongoOperator.delete('food', filter)
+    return mongoOperator.delete(model, filter)
   },
 
   initFoods: async () => {
@@ -36,7 +37,7 @@ module.exports = ({
         carbohydrate: _refactorNutrients(foods[i].carbohydrate_g),
       }
 
-      const res = await mongoOperator.new('food', payload)
+      const res = await mongoOperator.new(model, payload)
       if (!res) { break }
     }
   },

@@ -1,10 +1,6 @@
 const verifyFields = require('../services/factory/verifyFields')
 
-const createInfo = require('../services/info/createInfo')
-const modifyInfo = require('../services/info/modifyInfo')
-const deleteInfo = require('../services/info/deleteInfo')
-const getInfo = require('../services/info/getInfo')
-const getAllInfos = require('../services/info/getAllInfos')
+const Info = require('../services/managments/managementInfo')
 
 module.exports.create = async (requisition, response, next) => {
   const { body } = requisition
@@ -18,7 +14,7 @@ module.exports.create = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const info = await createInfo(body)
+  const info = await Info.create(body)
 
   if (!info) {
     return response.send({
@@ -30,7 +26,7 @@ module.exports.create = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Informação criada.',
-    body: info[0]
+    body: info
   })
 }
 
@@ -47,7 +43,7 @@ module.exports.modify = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  const info = await modifyInfo(infoId, body)
+  const info = await Info.update({ _id: infoId }, body)
 
   if (!info) {
     return response.send({
@@ -59,14 +55,14 @@ module.exports.modify = async (requisition, response, next) => {
   return response.send({
     success: true,
     message: 'Informação modificada.',
-    body: info[0]
+    body: info
   })
 }
 
 module.exports.delete = async (requisition, response, next) => {
   const infoId = requisition.params.info_id
 
-  const info = await deleteInfo(infoId)
+  const info = await Info.delete({ _id: infoId })
 
   if (!info) {
     return response.send({
@@ -84,7 +80,7 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getInfo = async (requisition, response, next) => {
   const infoId = requisition.params.info_id
 
-  const info = await getInfo(infoId)
+  const info = await Info.getOne({ _id: infoId })
 
   if (!info) {
     return response.send({
@@ -96,12 +92,12 @@ module.exports.getInfo = async (requisition, response, next) => {
   response.send({
     success: true,
     message: 'Informação encontrada.',
-    body: info[0]
+    body: info
   })
 }
 
 module.exports.getAll = async (requisition, response, next) => {
-  const infos = await getAllInfos()
+  const infos = await Info.getAll()
 
   if (!infos) {
     return response.send({

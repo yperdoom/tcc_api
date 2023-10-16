@@ -2,9 +2,9 @@ const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
 const agController = require('../../algorithm/algorithmController')
 
-const getFood = require('../services/food/getFood')
-const getClient = require('../services/client/getClient')
-const managementPrescription = require('../services/prescription/managementPrescription')
+const { get: getFood } = require('../services/managments/food')
+const { get: getClient } = require('../services/managments/user')
+const Prescription = require('../services/managments/prescription')
 
 module.exports.create = async (requisition, response, next) => {
   const { body, auth } = requisition
@@ -46,17 +46,13 @@ module.exports.create = async (requisition, response, next) => {
 
   for (const mealIndex in payload.meals) {
     for (const foodId in payload.meals[mealIndex].foods) {
-      const food = await getFood({_id: payload.meals[mealIndex].foods[foodId]})
+      const food = await getFood({ _id: payload.meals[mealIndex].foods[foodId] })
 
       payload.meals[mealIndex].foods[foodId] = food
     }
   }
 
-  await managementPrescription.openConnection()
-
-  const prescription = await managementPrescription.create(payload)
-
-  await managementPrescription.closeConnection()
+  const prescription = await Prescription.create(payload)
 
   if (!prescription) {
     return response.send({
@@ -90,9 +86,7 @@ module.exports.adapter = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  await managementPrescription.openConnection()
-
-  const prescription = await managementPrescription.getOne({ _id: body.prescriptionId })
+  const prescription = await Prescription.getOne({ _id: body.prescriptionId })
 
   let meal = {}
   prescription.meals.forEach(mealActual => {
@@ -102,8 +96,6 @@ module.exports.adapter = async (requisition, response, next) => {
   })
 
   if (!meal) {
-    await managementPrescription.closeConnection()
-
     return response.send({
       success: false,
       message: 'Refeição não encontrada!'
@@ -111,7 +103,6 @@ module.exports.adapter = async (requisition, response, next) => {
   }
 
   if (body.foods.length !== meal.food_amount) {
-    await managementPrescription.closeConnection()
 
     return response.send({
       success: false,
@@ -151,9 +142,7 @@ module.exports.adapter = async (requisition, response, next) => {
     manager_id: prescription.manager_id
   }
 
-  const prescriptionCreated = await managementPrescription.create(payload)
-
-  await managementPrescription.closeConnection()
+  const prescriptionCreated = await Prescription.create(payload)
 
   if (!prescriptionCreated) {
     return response.send({
@@ -176,7 +165,7 @@ module.exports.getByUser = async (requisition, response, next) => {
   let search = null
   if (requisition.query) { search = requisition.query.search }
 
-  const client = await getClient('user_id', userId)
+  const client = await getClient({ _id: userId })
 
   if (!client) {
     return response.send({
@@ -184,11 +173,8 @@ module.exports.getByUser = async (requisition, response, next) => {
       message: 'Cliente não encontrado!'
     })
   }
-  await managementPrescription.openConnection()
 
-  const prescriptions = await managementPrescription.getAll({ client_id: client[0].client_id })
-
-  await managementPrescription.closeConnection()
+  const prescriptions = await Prescription.get({ client_id: client._id })
 
   if (!prescriptions) {
     return response.send({
@@ -210,11 +196,7 @@ module.exports.getByUser = async (requisition, response, next) => {
 module.exports.getOne = async (requisition, response, next) => {
   const prescriptionId = requisition.params.prescription_id
 
-  await managementPrescription.openConnection()
-
-  const prescriptions = await managementPrescription.getOne({ _id: prescriptionId })
-
-  await managementPrescription.closeConnection()
+  const prescriptions = await Prescription.getOne({ _id: prescriptionId })
 
   if (!prescriptions) {
     return response.send({
