@@ -2,7 +2,7 @@ const createTokenJWT = require('../../config/auth/functions/createTokenJWT')
 const crypt = require('../../config/auth/functions/password')
 const mongoOperator = require('../../config/database/mongo/mongoOperator')
 const verifyFields = require('../services/factory/verifyFields')
-const { get: getUser } = require('../services/managments/user')
+const { getOne: getUser } = require('../services/managments/user')
 
 module.exports.login = async (requisition, response, next) => {
   const body = requisition.body

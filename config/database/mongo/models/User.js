@@ -3,15 +3,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const clientSchema = new Schema({
-  age: Number,
-  height: Number,
-  weight: Number,
-  fat_percentage: Number,
-  sex: String,
-  manager_id: { type: mongoose.SchemaTypes.ObjectId },
-})
-
 const UserSchema = new Schema({
   name: String,
   email: String,
@@ -22,7 +13,14 @@ const UserSchema = new Schema({
   city: String,
   state: String,
   birthday: Date,
-  client: clientSchema
+  client: {
+    age: Number,
+    height: Number,
+    weight: Number,
+    fat_percentage: Number,
+    sex: String,
+    manager_id: { type: mongoose.SchemaTypes.ObjectId },
+  }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   id: false,

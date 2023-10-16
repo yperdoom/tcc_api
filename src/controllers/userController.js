@@ -50,7 +50,7 @@ module.exports.createClient = async (requisition, response, next) => {
     manager_id: body.manager_id
   }
 
-  const dataUser = await User.create(body)
+  const { _doc: dataUser } = await User.create(body)
   await mongoOperator.disconnect()
 
   if (!dataUser) {
@@ -99,7 +99,7 @@ module.exports.createManager = async (requisition, response, next) => {
   const objectToToken = setUserToTokenize(body)
   const token = createTokenJWT(objectToToken)
 
-  const dataUser = await User.create(body)
+  const { _doc: dataUser } = await User.create(body)
   await mongoOperator.disconnect()
 
   return response.send({
