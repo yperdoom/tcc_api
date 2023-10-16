@@ -3,40 +3,22 @@ const mongoOperator = require('../../config/database/mongo/mongoOperator')
 
 module.exports = ({
   log: async (log) => {
-    const message = {}
+    const type = color.blue
 
-    if (log.message) { message.message = log.message }
-
-    if (log.type) { message.type = log.type }
-
-    if (log.local) { message.local = log.local }
-
-    if (log.body) { message.body = log.body }
-
-    console.log(color.blue, message)
+    if (log.message) { print('message: ' + log.message, type) }
+    if (log.type) { print('type: ' + log.type, type) }
+    if (log.local) { print('local: ' + log.local, type) }
+    if (log.body) { print('body: ' + log.body, type) }
   },
   error: async (error) => {
-    const message = {}
-    let count = 0
+    const type = color.red
 
-    if (error.code) { message.code = error.code } else { count += 1 }
-
-    if (error.address) { message.address = error.address } else { count += 1 }
-
-    if (error.detail) { message.detail = error.detail } else { count += 1 }
-
-    if (error.message) { message.message = error.message }
-
-    if (error.type) { message.type = error.type }
-
-    if (error.local) { message.local = error.local }
-
-    if (count < 3) {
-      console.log(color.red, `count: ${count} :: `, error)
-    }
-    console.log(color.reset)
-    console.log(color.red, message)
-    console.log(color.reset)
+    if (error.message) { print('message: ' + error.message, type) }
+    if (error.type) { print('type: ' + error.type, type) }
+    if (error.local) { print('local: ' + error.local, type) }
+    if (error.code) { print('code: ' + error.code, type) }
+    if (error.address) { print('address: ' + error.address, type) }
+    if (error.detail) { print('detail: ' + error.detail, type) }
   },
   saveLog: async (generationInfo, params) => {
     const document = {
@@ -48,3 +30,7 @@ module.exports = ({
     await mongoOperator.new('genlog', document)
   },
 })
+
+const print = (message, type) => {
+  console.log(type, message)
+}

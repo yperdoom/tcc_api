@@ -1,5 +1,5 @@
 const { init } = require('../../config/database/postgres/models')
-const { initMongo } = require('../../config/database/postgres/models')
+const { initMongo } = require('../../config/database/mongo/initDefaultValues')
 
 require('dotenv/config')
 const { API_IN_FUNCTION } = process.env

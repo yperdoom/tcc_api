@@ -25,6 +25,7 @@ module.exports = ({
   initFoods: async () => {
     const foods = require('../../../pre_save/foodsMock.json')
 
+
     for (let i = 0; i < foods.length; i++) {
       const payload = {
         name: _refactorName(foods[i].description),
@@ -37,9 +38,10 @@ module.exports = ({
         carbohydrate: _refactorNutrients(foods[i].carbohydrate_g),
       }
 
-      const res = await mongoOperator.new(model, payload)
+      const res = await mongoOperator.new(model, payload, true)
       if (!res) { break }
     }
+
   },
 })
 

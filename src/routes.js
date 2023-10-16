@@ -8,7 +8,7 @@ const apiController = require('./controllers/apiController')
 const { readdir } = require('fs').promises
 const routesDirectory = './src/routes'
 
-// api.get('/init', apiController.init)
+api.get('/init', apiController.init)
 api.get('/ping', apiController.ping)
 api.get('/status', apiController.status)
 

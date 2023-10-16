@@ -17,7 +17,7 @@ module.exports = ({
   initAdminUser: async () => {
     const user = require('../../../pre_save/adminUser.json')
     const password = require('../../../config/auth/functions/password')
-    user.password = password.hashPassword(user.password)
-    await mongoOperator.new(model, user)
+    user.password = await password.hashPassword(user.password)
+    await mongoOperator.new(model, user, true)
   }
 })
