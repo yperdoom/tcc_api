@@ -1,18 +1,22 @@
 const Logger = require('../../../src/controllers/loggerController')
 const mongo = require('./mongoConnection')
 const mng = require('./mongooseRedirect')
+const options = {
+  new: true,
+  lean: true
+}
 
 module.exports = ({
   get: async (model, filter, projection) => {
-    const response = await mng[model].find(filter).select(projection).lean()
+    const response = await mng[model].find(filter, {}, options).select(projection)
     return response
   },
   getOne: async (model, filter, projection) => {
-    const response = await mng[model].findOne(filter).select(projection).lean()
+    const response = await mng[model].findOne(filter, {}, options).select(projection)
     return response
   },
   getAll: async (model, projection) => {
-    const response = await mng[model].find().select(projection).lean()
+    const response = await mng[model].find({}, {}, options).select(projection)
     return response
   },
   new: async (model, document) => {
@@ -20,7 +24,7 @@ module.exports = ({
     return response
   },
   put: async (model, filter, document) => {
-    const response = await mng[model].updateOne(filter, { $set: document })
+    const response = await mng[model].findOneAndUpdate(filter, { $set: document }, options)
     return response
   },
   delete: async (model, filter) => {

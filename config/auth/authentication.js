@@ -1,8 +1,9 @@
 'use strict'
 
+const mongoOperator = require('../database/mongo/mongoOperator')
 const decodeTokenJwt = require('./functions/decodeTokenJWT')
 
-module.exports.authentication = (requisition, response, next) => {
+module.exports.authentication = async (requisition, response, next) => {
   const token = requisition.headers.authorization
 
   if (!token) {
@@ -12,10 +13,11 @@ module.exports.authentication = (requisition, response, next) => {
     })
   }
   requisition.auth = decodeTokenJwt(token.replace('Bearer ', ''))
-
+  
   if (!requisition.auth) {
     return response.send({ success: false, message: 'Invalid token' })
   }
+  mongoOperator.connect()
 
   next()
 }

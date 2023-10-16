@@ -3,7 +3,6 @@ const crypt = require('../../config/auth/functions/password')
 const verifyFields = require('../services/factory/verifyFields')
 const setUserToTokenize = require('../services/factory/setUserToTokenize')
 const User = require('../services/managments/user')
-const mongoOperator = require('../../config/database/mongo/mongoOperator')
 
 module.exports.createClient = async (requisition, response, next) => {
   const { body } = requisition
@@ -26,7 +25,6 @@ module.exports.createClient = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  await mongoOperator.connect()
   const verifyEmailExists = await User.getOne({ email: body.email })
   if (verifyEmailExists) {
     return response.send({
@@ -51,7 +49,6 @@ module.exports.createClient = async (requisition, response, next) => {
   }
 
   const { _doc: dataUser } = await User.create(body)
-  await mongoOperator.disconnect()
 
   if (!dataUser) {
     return response.send({
@@ -83,7 +80,6 @@ module.exports.createManager = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  await mongoOperator.connect()
   const verifyEmailExists = await User.getOne({ email: body.email })
   if (verifyEmailExists) {
     return response.send({
@@ -100,7 +96,6 @@ module.exports.createManager = async (requisition, response, next) => {
   const token = createTokenJWT(objectToToken)
 
   const { _doc: dataUser } = await User.create(body)
-  await mongoOperator.disconnect()
 
   return response.send({
     success: true,
@@ -113,24 +108,7 @@ module.exports.modifyClient = async (requisition, response, next) => {
   const userId = requisition.params.user_id
   const { body } = requisition
 
-  const fields = verifyFields(body, [
-    'name',
-    'phone',
-    'birthday',
-    'age',
-    'height',
-    'weight',
-    'fat_percentage',
-    'sex'
-  ])
-
-  if (!fields.success) {
-    return response.send(fields)
-  }
-
-  await mongoOperator.connect()
   const user = await User.update({ _id: userId }, body)
-  await mongoOperator.disconnect()
 
   if (!user) {
     return response.send({
@@ -152,20 +130,7 @@ module.exports.modifyManager = async (requisition, response, next) => {
   const userId = requisition.params.user_id
   const { body } = requisition
 
-  const fields = verifyFields(body, [
-    'name',
-    'phone',
-    'birthday',
-    'document'
-  ])
-
-  if (!fields.success) {
-    return response.send(fields)
-  }
-
-  await mongoOperator.connect()
   const user = await User.update({ _id: userId }, body)
-  await mongoOperator.disconnect()
 
   if (!user) {
     return response.send({
@@ -187,7 +152,6 @@ module.exports.delete = async (requisition, response, next) => {
   const userId = requisition.params.user_id
   let scope = requisition.body.scope
 
-  await mongoOperator.connect()
 
   if (!scope) {
     const user = await User.getOne({ _id: userId })
@@ -201,8 +165,8 @@ module.exports.delete = async (requisition, response, next) => {
     })
   }
 
-  const user = await deleteUser(userId)
-  await mongoOperator.disconnect()
+  const user = await User.delete({ _id: userId })
+
 
   if (!user) {
     return response.send({
@@ -220,9 +184,8 @@ module.exports.delete = async (requisition, response, next) => {
 module.exports.getClient = async (requisition, response, next) => {
   const userId = requisition.params.user_id
 
-  await mongoOperator.connect()
   const user = await User.getOne({ _id: userId })
-  await mongoOperator.disconnect()
+
 
   if (!user) {
     return response.send({
@@ -243,9 +206,8 @@ module.exports.getClient = async (requisition, response, next) => {
 module.exports.getManager = async (requisition, response, next) => {
   const userId = requisition.params.user_id
 
-  await mongoOperator.connect()
   const user = await User.getOne({ _id: userId })
-  await mongoOperator.disconnect()
+
 
   if (!user) {
     return response.send({
@@ -266,9 +228,8 @@ module.exports.getManager = async (requisition, response, next) => {
 module.exports.getAllClients = async (requisition, response, next) => {
   const managerUserId = requisition.params.manager_user_id
 
-  await mongoOperator.connect()
   const clients = await User.get({ 'client.manager_id': managerUserId })
-  await mongoOperator.disconnect()
+
 
   if (!clients) {
     return response.send({
@@ -288,9 +249,8 @@ module.exports.getAllClients = async (requisition, response, next) => {
 }
 
 module.exports.getAllManagers = async (requisition, response, next) => {
-  await mongoOperator.connect()
   const managers = await User.get({ scope: 'manager' })
-  await mongoOperator.disconnect()
+
 
   if (!managers) {
     return response.send({

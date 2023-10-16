@@ -39,7 +39,7 @@ module.exports = async (foods, generation, meal, generationCounter, params) => {
       }
     }
 
-    generationToSave.push(individual.fitness)
+    // generationToSave.push(individual.fitness)
     newGeneration.push(individual)
   }
 
@@ -49,7 +49,7 @@ module.exports = async (foods, generation, meal, generationCounter, params) => {
     generation: newGeneration,
     individual: chromosomeExcellent,
     bestChromosome,
-    averageFitnessGeneration,
-    generationToSave
+    averageFitnessGeneration
+    // generationToSave
   }
 }

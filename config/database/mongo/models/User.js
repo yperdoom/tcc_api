@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     weight: Number,
     fat_percentage: Number,
     sex: String,
-    manager_id: { type: mongoose.SchemaTypes.ObjectId },
+    manager_id: String,
   }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },

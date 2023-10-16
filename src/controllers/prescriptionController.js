@@ -1,11 +1,10 @@
 const verifyFields = require('../services/factory/verifyFields')
 const verifyPrescriptionFields = require('../services/factory/verifyPrescriptionFields')
 const agController = require('../../algorithm/algorithmController')
-
 const { get: getFood } = require('../services/managments/food')
-const { get: getClient } = require('../services/managments/user')
+const { getOne: getClient } = require('../services/managments/user')
 const Prescription = require('../services/managments/prescription')
-const mongoOperator = require('../../config/database/mongo/mongoOperator')
+const getAgParamsByEnv = require('../services/factory/getAgParamsByEnv')
 
 module.exports.create = async (requisition, response, next) => {
   const { body, auth } = requisition
@@ -39,23 +38,22 @@ module.exports.create = async (requisition, response, next) => {
   }
 
   const payload = {
-    ...body.prescription,
     ...body,
     token: auth,
     is_adapted_prescription: false
   }
 
-  await mongoOperator.connect()
-  for (const mealIndex in payload.meals) {
-    for (const foodId in payload.meals[mealIndex].foods) {
-      const food = await getFood({ _id: payload.meals[mealIndex].foods[foodId] })
+  for (let i = 0; i < payload.meals.length; i++) {
+    const foods = await getFood({ _id: { $in: payload.meals[i].foods } }, '-created_at -updated_at')
 
-      payload.meals[mealIndex].foods[foodId] = food
+    for (let j = 0; j < foods.length; j++) {
+      foods[j]._id = foods[j]._id.toString()
     }
+
+    payload.meals[i].foods = foods
   }
 
   const prescription = await Prescription.create(payload)
-  await mongoOperator.disconnect()
 
   if (!prescription) {
     return response.send({
@@ -89,7 +87,6 @@ module.exports.adapter = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  await mongoOperator.connect()
   const prescription = await Prescription.getOne({ _id: body.prescriptionId })
 
   let meal = {}
@@ -114,17 +111,19 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
-  const individual = await agController(meal.foods, meal)
-
-  const nutrients = await _calculateNutrients({ quantity: individual.chromosome, foods: meal.foods })
+  const params = getAgParamsByEnv()
+  const individual = await agController(meal.foods, meal, params)
+  const nutrients = await _calculateNutrients(individual.chromosome, meal.foods)
 
   const payload = {
     meals: [
       {
+        individual,
         name: 'Refeição adaptada: ' + body.name,
         type: body.type,
         countGenerations: individual.generationCounter,
         foods: meal.foods,
+        quantity: individual.chromosome,
         fitness: individual.fitness,
         ...nutrients,
         recommended_calorie: meal.recommended_calorie,
@@ -147,7 +146,6 @@ module.exports.adapter = async (requisition, response, next) => {
   }
 
   const prescriptionCreated = await Prescription.create(payload)
-  await mongoOperator.disconnect()
 
   if (!prescriptionCreated) {
     return response.send({
@@ -170,7 +168,6 @@ module.exports.getByUser = async (requisition, response, next) => {
   let search = null
   if (requisition.query) { search = requisition.query.search }
 
-  await mongoOperator.connect()
   const client = await getClient({ _id: userId })
 
   if (!client) {
@@ -181,7 +178,6 @@ module.exports.getByUser = async (requisition, response, next) => {
   }
 
   const prescriptions = await Prescription.get({ client_id: client._id })
-  await mongoOperator.disconnect()
 
   if (!prescriptions) {
     return response.send({
@@ -203,11 +199,9 @@ module.exports.getByUser = async (requisition, response, next) => {
 module.exports.getOne = async (requisition, response, next) => {
   const prescriptionId = requisition.params.prescription_id
 
-  await mongoOperator.connect()
-  const prescriptions = await Prescription.getOne({ _id: prescriptionId })
-  await mongoOperator.disconnect()
+  const prescription = await Prescription.getOne({ _id: prescriptionId })
 
-  if (!prescriptions) {
+  if (!prescription) {
     return response.send({
       success: false,
       message: 'Nenhuma prescrição encontrada!'
@@ -218,20 +212,20 @@ module.exports.getOne = async (requisition, response, next) => {
     success: true,
     message: 'Prescrição(s) encontrada(s).',
     body: {
-      prescriptions
+      ...prescription
     }
   })
 }
 
-const _calculateNutrients = async (payload) => {
+const _calculateNutrients = async (quantity, foods) => {
   let calorie = 0
   let protein = 0
   let lipid = 0
   let carbohydrate = 0
 
-  payload.foods.forEach((food, index) => {
-    const foodQuantity = food.weight || food.portion || food.mililiter
-    const percentage = ((payload.quantity[index] * 100) / foodQuantity) / 100
+  foods.forEach((food, index) => {
+    const foodQuantity = quantity[index]
+    const percentage = ((quantity[index] * 100) / foodQuantity) / 100
 
     calorie += food.calorie * percentage
     protein += food.protein * percentage

@@ -3,26 +3,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const foodSchema = new Schema({
-  _id: { type: mongoose.SchemaTypes.ObjectId },
-  name: String,
-  description: String,
-  type: String,
-  color: String,
-  weight: Number,
-  portion: Number,
-  mililiter: Number,
-  calorie: Number,
-  carbohydrate: Number,
-  protein: Number,
-  lipid: Number
-})
-
 const mealSchema = new Schema({
   name: String,
   type: String,
   countGenerations: Number,
-  foods: [foodSchema],
+  foods: [],
+  individual: {},
+  quantity: [],
   fitness: Number,
   calorie: Number,
   carbohydrate: Number,
@@ -48,8 +35,8 @@ const PrescriptionSchema = new Schema({
   recommended_lipid: Number,
   is_adapted_prescription: Boolean,
   meal_amount: Number,
-  client_id: Number,
-  manager_id: Number,
+  client_id: String,
+  manager_id: String,
   token: {
     user_id: Number,
     name: String,

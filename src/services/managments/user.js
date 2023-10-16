@@ -14,6 +14,9 @@ module.exports = ({
   get: async (filter, projection = '') => {
     return mongoOperator.get(model, filter, projection)
   },
+  delete: async (filter) => {
+    return mongoOperator.delete(model, filter)
+  },
 
   initAdminUser: async () => {
     const user = require('../../../pre_save/adminUser.json')

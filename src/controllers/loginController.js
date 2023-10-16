@@ -15,9 +15,7 @@ module.exports.login = async (requisition, response, next) => {
     return response.send(fields)
   }
 
-  await mongoOperator.connect()
   const user = await getUser({ email: body.email })
-  await mongoOperator.disconnect()
 
   if (!user) {
     return response.send({

@@ -80,7 +80,7 @@ module.exports = async (foods, meal, params) => {
 
     evaluated = await evaluateGeneration(preparedFoods, newGeneration, meal, generationCounter, params)
 
-    generationToSave.push(evaluated.generationToSave)
+    // generationToSave.push(evaluated.generationToSave)
 
     if (evaluated.individual) {
       individual = evaluated.individual
@@ -93,6 +93,7 @@ module.exports = async (foods, meal, params) => {
     }
   }
 
+  /*----- AG TEST RETURNS -----
   const objToSave = {
     bestFitness: individual?.fitness ?? bestIndividual.fitness,
     great: individual,
@@ -105,12 +106,15 @@ module.exports = async (foods, meal, params) => {
     // generationToSave
   }
 
-  // console.log('melhor: ', bestIndividual)
-  // console.log('excelente: ', individual)
-  // console.log(generationCounter)
+  console.log('melhor: ', bestIndividual)
+  console.log('excelente: ', individual)
+  console.log(generationCounter)
 
   return {
     log: objToSave,
     params
   }
+  */
+
+  return individual ?? bestIndividual
 }
