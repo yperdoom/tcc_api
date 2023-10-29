@@ -7,12 +7,9 @@ const { getOne: getUser } = require('../services/managments/user')
 module.exports.login = async (requisition, response, next) => {
   const body = requisition.body
 
-  const fields = verifyFields(body, [
-    'email',
-    'password'
-  ])
-  if (!fields.success) {
-    return response.send(fields)
+  const {email, password} = body
+  if (email.length <= 5 || password.length <=3) {
+    return response.send({success: false, message: 'Campos incompletos\n\n\nConfira a digitação do e-mail e senha e tente novamente'})
   }
 
   const user = await getUser({ email: body.email })
