@@ -6,10 +6,12 @@ WORKDIR /home/app
 
 ADD package.json /home/app
 
-RUN npm install
-
 ADD . /home/app
+
+RUN rm -r node_modules
+
+RUN npm install
 
 EXPOSE 4030
 
-CMD ["npm", "start"]
+CMD npm start
