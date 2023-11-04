@@ -249,7 +249,6 @@ module.exports.getAllClients = async (requisition, response, next) => {
 }
 
 module.exports.getAllManagers = async (requisition, response, next) => {
-  console.log('comecei')
   const managers = await User.get({ scope: 'manager' })
 
   if (!managers) {
