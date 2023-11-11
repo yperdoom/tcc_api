@@ -7,12 +7,9 @@ const { getOne: getUser } = require('../services/managments/user')
 module.exports.login = async (requisition, response, next) => {
   const body = requisition.body
 
-  const {email, password} = body
-  if (email.length <= 5 || password.length <=3) {
-    return response.send({success: false, message: 'Campos incompletos\n\n\nConfira a digitação do e-mail e senha e tente novamente'})
-  }
+  const { email, password } = body
 
-  const user = await getUser({ email: body.email })
+  const user = await getUser({ email })
 
   if (!user) {
     return response.send({
@@ -21,7 +18,7 @@ module.exports.login = async (requisition, response, next) => {
     })
   }
 
-  const pass = await crypt.comparePassword(body.password, user.password)
+  const pass = await crypt.comparePassword(password, user.password)
 
   if (!pass) {
     return response.send({
