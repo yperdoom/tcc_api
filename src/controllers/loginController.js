@@ -40,7 +40,7 @@ module.exports.login = async (requisition, response, next) => {
     message: 'Login bem sucedido.',
     scope: user.scope,
     userId: user._id,
-    managerId: user.manager_id,
+    managerId: user.client.manager_id,
     token
   })
 }
