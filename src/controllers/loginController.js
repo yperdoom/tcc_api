@@ -7,7 +7,7 @@ module.exports.login = async (requisition, response, next) => {
 
   const { email, password } = body
 
-  const user = await getUser({ email })
+  const user = await getUser({ email }, 'password name email scope phone client.manager_id')
 
   if (!user) {
     return response.send({
@@ -40,6 +40,7 @@ module.exports.login = async (requisition, response, next) => {
     message: 'Login bem sucedido.',
     scope: user.scope,
     userId: user._id,
+    managerId: user.manager_id,
     token
   })
 }
