@@ -17,5 +17,13 @@ module.exports.authentication = async (requisition, response, next) => {
     return response.send({ success: false, message: 'Invalid token' })
   }
 
+  const userId = requisition?.params?.user_id
+
+  if (userId) {
+    if (typeof userId != String || userId.length > 0) {
+      return response.send({ success: false, message: 'Invalid user' })
+    }
+  }
+
   next()
 }
