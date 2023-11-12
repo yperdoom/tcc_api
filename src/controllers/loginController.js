@@ -1,7 +1,5 @@
 const createTokenJWT = require('../../config/auth/functions/createTokenJWT')
 const crypt = require('../../config/auth/functions/password')
-const mongoOperator = require('../../config/database/mongo/mongoOperator')
-const verifyFields = require('../services/factory/verifyFields')
 const { getOne: getUser } = require('../services/managments/user')
 
 module.exports.login = async (requisition, response, next) => {
@@ -28,7 +26,7 @@ module.exports.login = async (requisition, response, next) => {
   }
 
   const objectToTokenize = {
-    user_id: user.user_id,
+    user_id: user._id,
     name: user.name,
     email: user.email,
     scope: user.scope,
@@ -41,7 +39,7 @@ module.exports.login = async (requisition, response, next) => {
     success: true,
     message: 'Login bem sucedido.',
     scope: user.scope,
-    userId: user.user_id,
+    userId: user._id,
     token
   })
 }
