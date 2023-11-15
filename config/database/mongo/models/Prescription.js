@@ -53,6 +53,6 @@ const PrescriptionSchema = new Schema({
 PrescriptionSchema.index({ user_id: 1 })
 PrescriptionSchema.index({ client_id: 1 })
 PrescriptionSchema.index({ manager_id: 1 })
-PrescriptionSchema.index({ name: 'text' })
+PrescriptionSchema.index({ name: 'text' }, { default_language: 'pt-br' })
 
 module.exports = mongoose.model('Prescription', PrescriptionSchema)

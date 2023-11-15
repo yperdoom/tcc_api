@@ -1,4 +1,4 @@
-const prepareQuantityFood = require('../src/services/food/prepareQuantityFood')
+const prepareQuantityFood = require('../src/factory/prepareQuantityFood')
 const generateGeneration = require('./generateGeneration')
 const evaluateGeneration = require('./evaluateGeneration')
 const sortGeneration = require('./russian_roulette/sortGeneration')
@@ -39,6 +39,7 @@ module.exports = async (foods, meal, params) => {
     let newGeneration = []
     const sortedGeneration = await sortGeneration(evaluated.generation, params)
 
+    // Não é mais utilizado, foi testado para refazer a geração, mas os resultados não foram suficientes
     if (params.REMAKE_GENERATION) {
       delete params.REMAKE_GENERATION
 

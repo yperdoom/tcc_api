@@ -21,6 +21,6 @@ const FoodSchema = new Schema({
   versionKey: false
 })
 
-FoodSchema.index({ name: 'text' })
+FoodSchema.index({ name: 'text' }, { default_language: 'pt-br' })
 
 module.exports = mongoose.model('Food', FoodSchema)
