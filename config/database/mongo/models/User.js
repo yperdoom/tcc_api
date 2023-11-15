@@ -27,7 +27,7 @@ const UserSchema = new Schema({
   versionKey: false
 })
 
-UserSchema.index({ name: 'text' })
+UserSchema.index({ name: 'text' }, { default_language: 'pt-br' })
 UserSchema.index({ email: 1 })
 UserSchema.index({ scope: 1 })
 UserSchema.index({ 'client.manager_id': 1 })

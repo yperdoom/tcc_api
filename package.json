@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/api.js",
+    "start": "nodemon src/server.js",
     "testFoods": "node src/services/food/initFoods.js",
     "test": "nodemon test/testAg.js"
   },

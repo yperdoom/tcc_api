@@ -1,6 +1,6 @@
 'use strict'
 
-const Logger = require('../../../src/controllers/loggerController')
+const Logger = require('../../../src/api/loggerController')
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
 const { AUTH_SECRET } = process.env

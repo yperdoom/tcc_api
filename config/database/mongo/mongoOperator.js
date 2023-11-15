@@ -1,4 +1,4 @@
-const Logger = require('../../../src/controllers/loggerController')
+const Logger = require('../../../src/api/loggerController')
 const mongo = require('./mongoConnection')
 const mng = require('./mongooseRedirect')
 const options = {
@@ -17,9 +17,9 @@ module.exports = ({
     const response = await mng[model].findOne(filter, {}, options).select(projection)
     return response
   },
-  getAll: async (model, projection) => {
+  getAll: async (query, model, projection) => {
     await mongo.connect()
-    const response = await mng[model].find({}, {}, options).select(projection)
+    const response = await mng[model].find(query, {}, options).select(projection)
     return response
   },
   new: async (model, document) => {
