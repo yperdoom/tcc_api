@@ -38,7 +38,7 @@ const PrescriptionSchema = new Schema({
   client_id: String,
   manager_id: String,
   token: {
-    user_id: Number,
+    user_id: String,
     name: String,
     email: String,
     scope: String,
