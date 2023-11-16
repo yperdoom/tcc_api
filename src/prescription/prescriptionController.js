@@ -103,14 +103,6 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
-  if (body.foods.length !== meal.food_amount) {
-
-    return response.send({
-      success: false,
-      message: 'O número de alimentos não condiz com a receita!'
-    })
-  }
-
   const params = getAgParamsByEnv()
   const individual = await agController(meal.foods, meal, params)
   const nutrients = await _calculateNutrients(individual.chromosome, meal.foods)
