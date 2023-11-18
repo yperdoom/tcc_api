@@ -71,10 +71,18 @@ module.exports = async (foods, meal, params) => {
           const sons = await crossoverProcess(newGen2[i], newGen2[i - 1], params)
 
           if (newGeneration.length >= params.SIZE_GENERATION) break
-          newGeneration.push(await mutateChromosome(sons.fatherSon, params))
+          if (sons?.fatherSon) {
+            newGeneration.push(await mutateChromosome(sons.fatherSon, params))
+          }
 
           if (newGeneration.length >= params.SIZE_GENERATION) break
-          newGeneration.push(await mutateChromosome(sons.motherSon, params))
+          if (sons?.motherSon) {
+            newGeneration.push(await mutateChromosome(sons.motherSon, params))
+          }
+
+          if (!sons) {
+            newGeneration.push(await mutateChromosome(newGen2[i], params))
+          }
         }
       }
     }

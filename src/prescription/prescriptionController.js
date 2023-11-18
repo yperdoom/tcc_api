@@ -103,8 +103,20 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
+  const foodsToSearch = []
+
+  for (const food of body.foods) {
+    const foodToSearch = {
+      _id: food.toString()
+    }
+
+    foodsToSearch.push(foodToSearch)
+  }
+
+  const foods = await getFood({ $or: foodsToSearch })
+
   const params = getAgParamsByEnv()
-  const individual = await agController(meal.foods, meal, params)
+  const individual = await agController(foods, meal, params)
   const nutrients = await _calculateNutrients(individual.chromosome, meal.foods)
 
   const payload = {

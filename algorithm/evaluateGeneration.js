@@ -6,7 +6,7 @@ const getPercentageOfProteins = require('./evaluate_functions/getPercentageOfPro
 module.exports = async (foods, generation, meal, generationCounter, params) => {
   let averageFitnessGeneration = 0
   let chromosomeExcellent = null
-  let bestChromosome = { fitness: 100 }
+  let bestChromosome = { fitness: 1000 }
   const newGeneration = []
   // const generationToSave = []
 
