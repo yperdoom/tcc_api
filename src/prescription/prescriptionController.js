@@ -103,6 +103,10 @@ module.exports.adapter = async (requisition, response, next) => {
     })
   }
 
+  if (body.division) {
+    meal.division = body.division
+  }
+
   const foodsToSearch = []
 
   for (const food of body.foods) {
@@ -117,7 +121,7 @@ module.exports.adapter = async (requisition, response, next) => {
 
   const params = getAgParamsByEnv()
   const individual = await agController(foods, meal, params)
-  const nutrients = await _calculateNutrients(individual.chromosome, meal.foods)
+  const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
 
   const payload = {
     meals: [
@@ -126,22 +130,23 @@ module.exports.adapter = async (requisition, response, next) => {
         name: 'Refeição adaptada: ' + body.name,
         type: body.type,
         countGenerations: individual.generationCounter,
-        foods: meal.foods,
+        foods: qFoods,
         quantity: individual.chromosome,
         fitness: individual.fitness,
         ...nutrients,
-        recommended_calorie: meal.recommended_calorie,
-        recommended_carbohydrate: meal.recommended_carbohydrate,
-        recommended_protein: meal.recommended_protein,
-        recommended_lipid: meal.recommended_lipid,
+        // recommended_calorie: meal.recommended_calorie,
+        // recommended_carbohydrate: meal.recommended_carbohydrate,
+        // recommended_protein: meal.recommended_protein,
+        // recommended_lipid: meal.recommended_lipid,
         food_amount: meal.food_amount
       }
     ],
     name: 'Adaptação: ' + body.name,
-    recommended_calorie: meal.recommended_calorie,
-    recommended_carbohydrate: meal.recommended_carbohydrate,
-    recommended_protein: meal.recommended_protein,
-    recommended_lipid: meal.recommended_lipid,
+    ...nutrients,
+    // recommended_calorie: meal.recommended_calorie,
+    // recommended_carbohydrate: meal.recommended_carbohydrate,
+    // recommended_protein: meal.recommended_protein,
+    // recommended_lipid: meal.recommended_lipid,
     is_adapted_prescription: true,
     meal_amount: 1,
     token: auth,
@@ -231,11 +236,13 @@ const _calculateNutrients = async (quantity, foods) => {
   let protein = 0
   let lipid = 0
   let carbohydrate = 0
+  let newFoods = []
 
   foods.forEach((food, index) => {
     const foodQuantity = quantity[index]
     const percentage = ((quantity[index] * 100) / foodQuantity) / 100
 
+    newFoods.push({ ...food, weight: quantity[index] })
     calorie += food.calorie * percentage
     protein += food.protein * percentage
     lipid += food.lipid * percentage
@@ -243,9 +250,12 @@ const _calculateNutrients = async (quantity, foods) => {
   })
 
   return {
-    calorie,
-    protein,
-    lipid,
-    carbohydrate
+    nutrients: {
+      recommended_calorie: calorie,
+      recommended_carbohydrate: carbohydrate,
+      recommended_protein: protein,
+      recommended_lipid: lipid
+    },
+    qFoods: newFoods
   }
 }
