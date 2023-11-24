@@ -5,6 +5,7 @@ const { get: getFood } = require('../food/foodService')
 const { getOne: getClient } = require('../user/userService')
 const Prescription = require('./prescriptionService')
 const getAgParamsByEnv = require('../factory/getAgParamsByEnv')
+const terminalColors = require('../factory/terminalColors')
 
 module.exports.create = async (requisition, response, next) => {
   const { body, auth } = requisition
@@ -180,8 +181,6 @@ module.exports.getByUser = async (requisition, response, next) => {
     query.name = { $regex: params.find }
   }
 
-  if (requisition.query) { search = requisition.query.search }
-
   const client = await getClient(query)
 
   if (!client) {
@@ -239,10 +238,26 @@ const _calculateNutrients = async (quantity, foods) => {
   let newFoods = []
 
   foods.forEach((food, index) => {
-    const foodQuantity = quantity[index]
-    const percentage = ((quantity[index] * 100) / foodQuantity) / 100
+    const foodQuantityReference = food.quantity
+    console.log('foodQuantityReference :: ', foodQuantityReference)
+    const algorithmFoodQuantity = quantity[index]
+    console.log('algorithmFoodQuantity :: ', algorithmFoodQuantity)
+    const percentage = ((algorithmFoodQuantity * 100) / foodQuantityReference) / 100
+    console.log('percentage :: ', percentage)
 
-    newFoods.push({ ...food, weight: quantity[index] })
+    console.log(terminalColors.cian, 'ANTES ::')
+    console.log('calorie ::', food.calorie)
+    console.log('carbohydrate ::', food.protein)
+    console.log('protein ::', food.lipid)
+    console.log('lipid ::', food.carbohydrate)
+
+    console.log(terminalColors.red, 'DEPOIS ::')
+    console.log('calorie ::', food.calorie * percentage)
+    console.log('carbohydrate ::', food.protein * percentage)
+    console.log('protein ::', food.lipid * percentage)
+    console.log('lipid ::', food.carbohydrate * percentage)
+
+    newFoods.push({ ...food, weight: algorithmFoodQuantity })
     calorie += food.calorie * percentage
     protein += food.protein * percentage
     lipid += food.lipid * percentage
