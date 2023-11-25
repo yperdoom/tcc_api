@@ -143,7 +143,6 @@ module.exports.adapter = async (requisition, response, next) => {
       }
     ],
     name: 'Adaptação: ' + body.name,
-    ...nutrients,
     recommended_calorie: meal.recommended_calorie,
     recommended_carbohydrate: meal.recommended_carbohydrate,
     recommended_protein: meal.recommended_protein,
