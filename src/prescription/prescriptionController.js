@@ -144,10 +144,10 @@ module.exports.adapter = async (requisition, response, next) => {
     ],
     name: 'Adaptação: ' + body.name,
     ...nutrients,
-    // recommended_calorie: meal.recommended_calorie,
-    // recommended_carbohydrate: meal.recommended_carbohydrate,
-    // recommended_protein: meal.recommended_protein,
-    // recommended_lipid: meal.recommended_lipid,
+    recommended_calorie: meal.recommended_calorie,
+    recommended_carbohydrate: meal.recommended_carbohydrate,
+    recommended_protein: meal.recommended_protein,
+    recommended_lipid: meal.recommended_lipid,
     is_adapted_prescription: true,
     meal_amount: 1,
     token: auth,
@@ -266,10 +266,10 @@ const _calculateNutrients = async (quantity, foods) => {
 
   return {
     nutrients: {
-      recommended_calorie: calorie,
-      recommended_carbohydrate: carbohydrate,
-      recommended_protein: protein,
-      recommended_lipid: lipid
+      calorie,
+      carbohydrate,
+      protein,
+      lipid
     },
     qFoods: newFoods
   }
