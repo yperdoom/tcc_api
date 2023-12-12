@@ -129,7 +129,6 @@ module.exports.readapter = async (requisition, response, next) => {
 
   const { prescription, foods, meal, params } = await _prepareAdapter(body)
 
-
   const individual = await agController(foods, meal, params)
   const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
 
