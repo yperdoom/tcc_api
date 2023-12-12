@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "nodemon src/server.js",
     "testFoods": "node src/services/food/initFoods.js",
     "test": "nodemon test/testAg.js"
   },
@@ -23,6 +23,7 @@
     "pg": "^8.8.0"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
     "standard": "^17.0.0"
   }
 }
