@@ -75,6 +75,111 @@ module.exports.create = async (requisition, response, next) => {
 module.exports.adapter = async (requisition, response, next) => {
   const { body, auth } = requisition
 
+  const { prescription, foods, meal, params } = await _prepareAdapter(body)
+
+  const individual = await agController(foods, meal, params)
+  const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
+
+  const payload = {
+    meals: [
+      {
+        individual,
+        name: 'Refeição adaptada: ' + body.name,
+        type: body.type,
+        countGenerations: individual.generationCounter,
+        foods: qFoods,
+        quantity: individual.chromosome,
+        fitness: individual.fitness,
+        ...nutrients,
+        food_amount: meal.food_amount
+      }
+    ],
+    name: 'Adaptação: ' + body.name,
+    recommended_calorie: meal.recommended_calorie,
+    recommended_carbohydrate: meal.recommended_carbohydrate,
+    recommended_protein: meal.recommended_protein,
+    recommended_lipid: meal.recommended_lipid,
+    is_adapted_prescription: true,
+    meal_amount: 1,
+    token: auth,
+    client_id: prescription.client_id,
+    manager_id: prescription.manager_id
+  }
+
+  const prescriptionCreated = await Prescription.create(payload)
+
+  if (!prescriptionCreated) {
+    return response.send({
+      success: false,
+      message: 'Não foi possível adaptar esta prescrição!'
+    })
+  }
+
+  return response.send({
+    success: true,
+    message: 'Prescrição adaptada.',
+    body: {
+      ...prescriptionCreated._doc
+    }
+  })
+}
+
+module.exports.readapter = async (requisition, response, next) => {
+  const { body, auth } = requisition
+
+  const { prescription, foods, meal, params } = await _prepareAdapter(body)
+
+
+  const individual = await agController(foods, meal, params)
+  const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
+
+  const payload = {
+    meals: [
+      {
+        individual,
+        name: 'Refeição adaptada: ' + body.name,
+        type: body.type,
+        countGenerations: individual.generationCounter,
+        foods: qFoods,
+        quantity: individual.chromosome,
+        fitness: individual.fitness,
+        ...nutrients,
+        food_amount: meal.food_amount
+      }
+    ],
+    name: 'Adaptação: ' + body.name,
+    recommended_calorie: meal.recommended_calorie,
+    recommended_carbohydrate: meal.recommended_carbohydrate,
+    recommended_protein: meal.recommended_protein,
+    recommended_lipid: meal.recommended_lipid,
+    is_adapted_prescription: true,
+    meal_amount: 1,
+    token: auth,
+    client_id: prescription.client_id,
+    manager_id: prescription.manager_id
+  }
+
+  const prescriptionCreated = await Prescription.create(payload)
+
+  if (!prescriptionCreated) {
+    return response.send({
+      success: false,
+      message: 'Não foi possível adaptar esta prescrição!'
+    })
+  }
+
+  Prescription.delete({ _id: body.prescriptionId })
+
+  return response.send({
+    success: true,
+    message: 'Prescrição adaptada.',
+    body: {
+      ...prescriptionCreated._doc
+    }
+  })
+}
+
+const _prepareAdapter = async (body) => {
   const fields = verifyFields(body, [
     'foods',
     'prescriptionId',
@@ -121,55 +226,8 @@ module.exports.adapter = async (requisition, response, next) => {
   const foods = await getFood({ $or: foodsToSearch })
 
   const params = getAgParamsByEnv()
-  const individual = await agController(foods, meal, params)
-  const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
 
-  const payload = {
-    meals: [
-      {
-        individual,
-        name: 'Refeição adaptada: ' + body.name,
-        type: body.type,
-        countGenerations: individual.generationCounter,
-        foods: qFoods,
-        quantity: individual.chromosome,
-        fitness: individual.fitness,
-        ...nutrients,
-        // recommended_calorie: meal.recommended_calorie,
-        // recommended_carbohydrate: meal.recommended_carbohydrate,
-        // recommended_protein: meal.recommended_protein,
-        // recommended_lipid: meal.recommended_lipid,
-        food_amount: meal.food_amount
-      }
-    ],
-    name: 'Adaptação: ' + body.name,
-    recommended_calorie: meal.recommended_calorie,
-    recommended_carbohydrate: meal.recommended_carbohydrate,
-    recommended_protein: meal.recommended_protein,
-    recommended_lipid: meal.recommended_lipid,
-    is_adapted_prescription: true,
-    meal_amount: 1,
-    token: auth,
-    client_id: prescription.client_id,
-    manager_id: prescription.manager_id
-  }
-
-  const prescriptionCreated = await Prescription.create(payload)
-
-  if (!prescriptionCreated) {
-    return response.send({
-      success: false,
-      message: 'Não foi possível adaptar esta prescrição!'
-    })
-  }
-
-  return response.send({
-    success: true,
-    message: 'Prescrição adaptada.',
-    body: {
-      ...prescriptionCreated._doc
-    }
-  })
+  return { prescription, foods, meal, params }
 }
 
 module.exports.getByUser = async (requisition, response, next) => {

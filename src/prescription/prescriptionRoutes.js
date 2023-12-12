@@ -9,7 +9,7 @@ module.exports = (api) => {
 
   api.post('/prescription/adapter', prescriptionController.adapter)
 
-  // api.put('/prescription/:prescription_id', prescriptionController.modify)
+  api.put('/prescription/readapter', prescriptionController.readapter)
 
   // api.delete('/prescription/:prescription_id', prescriptionController.delete)
 
