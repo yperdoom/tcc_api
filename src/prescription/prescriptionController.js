@@ -75,7 +75,7 @@ module.exports.create = async (requisition, response, next) => {
 module.exports.adapter = async (requisition, response, next) => {
   const { body, auth } = requisition
 
-  const { prescription, foods, meal, params } = await _prepareAdapter(body)
+  const { prescription, foods, meal, params } = await _prepareAdapter(body, response)
 
   const individual = await agController(foods, meal, params)
   const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
@@ -127,7 +127,7 @@ module.exports.adapter = async (requisition, response, next) => {
 module.exports.readapter = async (requisition, response, next) => {
   const { body, auth } = requisition
 
-  const { prescription, foods, meal, params } = await _prepareAdapter(body)
+  const { prescription, foods, meal, params } = await _prepareAdapter(body, response)
 
   const individual = await agController(foods, meal, params)
   const { nutrients, qFoods } = await _calculateNutrients(individual.chromosome, foods)
@@ -178,7 +178,7 @@ module.exports.readapter = async (requisition, response, next) => {
   })
 }
 
-const _prepareAdapter = async (body) => {
+const _prepareAdapter = async (body, response) => {
   const fields = verifyFields(body, [
     'foods',
     'prescriptionId',
