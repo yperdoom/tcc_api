@@ -1,0 +1,7 @@
+ssh -i "ec2_tcc.pem" ubuntu@ec2-18-231-39-76.sa-east-1.compute.amazonaws.com
+
+ssh -i "tcc_key_par.pem" ubuntu@ec2-15-228-204-129.sa-east-1.compute.amazonaws.com
+
+jobs
+
+docker-compose up &

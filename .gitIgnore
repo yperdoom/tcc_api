@@ -1,7 +1,6 @@
 # node files
 /node_modules
 /package-lock.json
-/connect.txt
-/.env
+/api_taco_conversion/package-lock.json
 
 *.pem
